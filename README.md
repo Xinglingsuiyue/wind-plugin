@@ -15,7 +15,12 @@
 
 #### 使用说明
 
-1.  <table><tr><td>功能指令</td><td>功能描述</td><td>所需权限</td></tr><tr><td>才字诀</td><td>只要以你开头的句子艾特了机器人或者没有艾特别人就会将你换成你才</td><td>所有人</td></tr></table>
+<table>
+<tr><td>功能指令</td><td>功能描述</td><td>所需权限</td></tr>
+<tr><td>才字诀</td><td>只要以你开头的句子艾特了机器人或者没有艾特别人就会将你换成你才</td><td>所有人</td></tr>
+<tr><td></td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td></tr>
+</table>
 2.  xxxx
 3.  xxxx
 
@@ -28,7 +33,6 @@
 
 
 #### 特技
-<a href='http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=BWtOJkAHVX20OlQqgAIPn7UID9LtigSg&group_code=893157055'>893157055</a>
 
 1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
 2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
