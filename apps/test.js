@@ -8,8 +8,8 @@ import common from'../../../lib/common/common.js'
 export class slander extends plugin {
     constructor() {
         super({
-            name: '戳我',
-            dsc: '快去捉弄你的群友吧',
+            name: '小测试',
+            dsc: '小测试',
             /** https://oicqjs.github.io/oicq/#events */
             event: 'message',
             priority: 1,
@@ -22,6 +22,7 @@ export class slander extends plugin {
         })
     }
     async test(e){
-        e.reply("abc")
+        logger.info('[wind-plugin]', e.msg);
+        e.reply("test");
     }
 }
