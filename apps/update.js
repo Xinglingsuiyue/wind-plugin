@@ -67,7 +67,7 @@ export class update extends plugin {
         this.oldCommitId = await this.getcommitId("wind-plugin");
         uping = true;
         let ret = await this.execSync(command);
-        this.uping = false;
+        uping = false;
 
         if (ret.error) {
             logger.mark(`${this.e.logFnc} 更新失败：wind-plugin`);
