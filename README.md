@@ -15,12 +15,7 @@
 
 #### 使用说明
 
-<table>
-<tr><td>功能指令</td><td>功能描述</td><td>所需权限</td></tr>
-<tr><td>才字诀</td><td>只要以你开头的句子艾特了机器人或者没有艾特别人就会将你换成你才</td><td>所有人</td></tr>
-<tr><td></td><td></td><td></td></tr>
-<tr><td></td><td></td><td></td></tr>
-</table>
+1.  xxxx
 2.  xxxx
 3.  xxxx
 
