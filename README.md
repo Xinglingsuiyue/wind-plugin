@@ -9,9 +9,10 @@
 
 #### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+```
+git clone https://gitee.com/wind-trace-typ/wind-plugin.git ./plugins/wind-plugin
+```
+
 
 #### 使用说明
 
