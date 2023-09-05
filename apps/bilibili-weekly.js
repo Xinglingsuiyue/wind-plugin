@@ -20,7 +20,7 @@ export class slander extends plugin {
         })
     }
     async bilibili(e){
-        logger.info('[用户命令]', e.msg);
+        logger.info('[wind-plugin]', e.msg);
         let num;
         let url;
         let numreg = /[1-9][0-9]{4,12}/;

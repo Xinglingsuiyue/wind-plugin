@@ -20,7 +20,7 @@ export class slander extends plugin {
         })
     }
     async bilibilihot(e){
-        logger.info('[用户命令]', e.msg);
+        logger.info('[wind-plugin]', e.msg);
         let url=bilibilihot
         let res = await fetch(url).catch((err) => logger.error(err));
         if (!res) {

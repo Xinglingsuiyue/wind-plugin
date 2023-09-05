@@ -20,7 +20,7 @@ export class slander extends plugin {
         })
     }
     async tiktokhot(e){
-        logger.info('[用户命令]', e.msg);
+        logger.info('[wind-plugin]', e.msg);
         let url=tiktokhot
         let res = await fetch(url).catch((err) => logger.error(err));
         if (!res) {
