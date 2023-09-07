@@ -1,0 +1,241 @@
+import plugin from '../../../lib/plugins/plugin.js'
+import fs from 'fs';
+import YAML from "yaml";
+import{segment}from'oicq';
+import moment from "moment"
+const currentTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+let path = process.cwd().replace(/\\/g, '/')
+const dirpath=path+'/plugins/wind-plugin/resources/xiuxian-data'
+var filename='xiuxian'
+if (filename.indexOf(".json") == -1) {//如果文件名不包含.json
+    filename = filename + ".json";//添加.json
+}
+let Template = {//创建该用户
+    "experience": 0,
+    "level": 0,
+    "levelname": '凡人',
+    "Privilege": 0,
+};
+const levelname=['练气期','筑基期','金丹期','元婴期','化神期','合体期','大乘期','渡劫期','人仙境','地仙境','天仙境','金仙境','大罗金仙境','准仙帝','仙帝','天人五衰境','圣人','大帝','至强大帝']
+let cdtime_exercise = 10 * 60 //命令间隔时间，单位分钟，这是修炼的冷却时间#初始为10分钟
+let cdtime_break = 5 * 60//命令间隔时间，单位分钟，这是突破的冷却时间#初始为5分钟
+export class xiuxian extends plugin {//修炼
+    constructor() {
+        super({
+            /** 功能名称 */
+            name: '轻量修炼',
+            /** 功能描述 */
+            dsc: '轻量修仙',
+            event: 'message',
+            /** 优先级，数字越小等级越高 */
+            priority: -999,
+            rule: [
+                {
+                    /** 命令正则匹配 */
+                    reg: "^#?查看境界$", //匹配消息正则，命令正则
+                    /** 执行方法 */
+                    fnc: 'view'
+                },
+                {
+                    /** 命令正则匹配 */
+                    reg: "^#?(修炼|修仙|服用丹药)$", //匹配消息正则，命令正则
+                    /** 执行方法 */
+                    fnc: 'xiuxian'
+                },
+                {
+                    /** 命令正则匹配 */
+                    reg: "^#?突破$", //匹配消息正则，命令正则
+                    /** 执行方法 */
+                    fnc: 'break'
+                },
+                {
+                    /** 命令正则匹配 */
+                    reg: "^#?境界列表$", //匹配消息正则，命令正则
+                    /** 执行方法 */
+                    fnc: 'list'
+                }
+            ]
+        })
+    }
+    async view(e){
+        console.log("[wind-plugin]", e.msg);
+        let user_id = e.user_id;
+        if (!fs.existsSync(dirpath)) {//如果文件夹不存在
+            fs.mkdirSync(dirpath);//创建文件夹
+        }
+        if (!fs.existsSync(dirpath + "/" + filename)) {//如果文件不存在
+            fs.writeFileSync(dirpath + "/" + filename, JSON.stringify({//创建文件
+            }));
+        }
+        const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));//读取文件
+        if (!json.hasOwnProperty(user_id)||json[user_id].level==0) {//如果文件夹不存在
+            e.reply([segment.at(e.user_id), '您还是凡人，请通过#修炼和#突破开启你的仙途']);
+            return
+        }
+        e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的内力为:${json[user_id].experience}`]);
+    }
+    async list(e) {
+        let msg = levelname[0] + '\n';
+        for (let j = 0; j < 19; j++) {
+            msg = msg + levelname[j] + '\n'
+        }
+        msg+='欸嘿!到大帝境界后别努力了,至强你达不到的doge!!\n后期修行困难可以选择#服用丹药,有40%的成功率.\n'
+        e.reply(msg);
+    }
+    async xiuxian(e){
+        console.log("[wind-plugin]", e.msg);
+        let user_id = e.user_id;
+        if (!fs.existsSync(dirpath)) {//如果文件夹不存在
+            fs.mkdirSync(dirpath);//创建文件夹
+        }
+        if (!fs.existsSync(dirpath + "/" + filename)) {//如果文件不存在
+            fs.writeFileSync(dirpath + "/" + filename, JSON.stringify({//创建文件
+            }));
+        }
+        const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));//读取文件
+        if (!json.hasOwnProperty(user_id)) {//如果json中不存在该用户
+            json[user_id] = Template
+        }
+        const date = new Date();
+        let experience_ = 0
+        let hours = date.getHours()
+        let pills = Math.random() * 100
+        if (e.msg.includes('丹药')) {
+            if (pills > 60) {
+                json[user_id].experience += 10
+                e.reply([segment.at(user_id),
+                    `\n服用丹药成功，你获得了10点内力！\n你的内力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
+            }
+            else {
+                json[user_id].experience -= 3
+                e.reply([segment.at(user_id),
+                    `\n没有得到祝福，你服用丹药失败，走火入魔损失了3点内力！\n你的内力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
+            }
+        }
+        else{
+            experience_ = Math.round(1 + 2 * Math.random())
+            json[user_id].experience += experience_
+            e.reply([segment.at(user_id),
+                `\n你获得了${experience_}点内力。\n你的内力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
+        }
+        fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));//写入文件
+    }
+    async break(e){
+        console.log("[wind-plugin]", e.msg);
+        let user_id = e.user_id;
+        if (!fs.existsSync(dirpath)) {//如果文件夹不存在
+            fs.mkdirSync(dirpath);//创建文件夹
+        }
+        if (!fs.existsSync(dirpath + "/" + filename)) {//如果文件不存在
+            fs.writeFileSync(dirpath + "/" + filename, JSON.stringify({//创建文件
+            }));
+        }
+        const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));//读取文件
+        if (!json.hasOwnProperty(user_id)) {//如果json中不存在该用户
+            json[user_id] = Template
+        }
+        if (json[user_id].experience < 5) json[user_id].level = 0
+        else if (json[user_id].experience < 10 && json[user_id].level >= 1) {
+            e.reply(`修为不足,还差${10 - json[user_id].experience},请再接再厉`)
+            return
+        }
+        else if (json[user_id].experience < 20 && json[user_id].level >= 2) {
+            e.reply(`修为不足,还差${20 - json[user_id].experience},请再接再厉`)
+            return
+        }
+        else if (json[user_id].experience < 30 && json[user_id].level >= 3) {
+            e.reply(`修为不足,还差${30 - json[user_id].experience},请再接再厉`)
+            return
+        }
+        else if (json[user_id].experience < 40 && json[user_id].level >= 4) {
+            e.reply(`修为不足,还差${40 - json[user_id].experience},请再接再厉`)
+            return
+        }
+
+        else if (json[user_id].experience < 55 && json[user_id].level >= 5) {
+            e.reply(`修为不足,还差${55 - json[user_id].experience},请再接再厉`)
+            return
+        }
+        else if (json[user_id].experience < 70 && json[user_id].level >= 6) {
+            e.reply(`修为不足,还差${70 - json[user_id].experience},请再接再厉`)
+            return
+        }
+        else if (json[user_id].experience < 85 && json[user_id].level >= 7) {
+            e.reply(`修为不足,还差${85 - json[user_id].experience},请再接再厉`)
+            return
+        }
+        else if (json[user_id].experience < 100 && json[user_id].level >= 8) {
+            e.reply(`修为不足,还差${100 - json[user_id].experience},请再接再厉`)
+            return
+        }
+
+        else if (json[user_id].experience < 125 && json[user_id].level >= 9) {
+            e.reply(`修为不足,还差${125 - json[user_id].experience},请再接再厉`)
+            return
+        }
+        else if (json[user_id].experience < 150 && json[user_id].level >= 10) {
+            e.reply(`修为不足,还差${150 - json[user_id].experience},请再接再厉`)
+            return
+        }
+        else if (json[user_id].experience < 175 && json[user_id].level >= 11) {
+            e.reply(`修为不足,还差${175 - json[user_id].experience},请再接再厉`)
+            return
+        }
+        else if (json[user_id].experience < 200 && json[user_id].level >= 12) {
+            e.reply(`修为不足,还差${200 - json[user_id].experience},请再接再厉`)
+            return
+        }
+
+        else if (json[user_id].experience < 230 && json[user_id].level >= 13) {
+            e.reply(`修为不足,还差${230 - json[user_id].experience},请再接再厉`)
+            return
+        }
+        else if (json[user_id].experience < 260 && json[user_id].level >= 14) {
+            e.reply(`修为不足,还差${260 - json[user_id].experience},请再接再厉`)
+            return
+        }
+        else if (json[user_id].experience < 290 && json[user_id].level >= 15) {
+            e.reply(`修为不足,还差${290 - json[user_id].experience},请再接再厉`)
+            return
+        }
+        else if (json[user_id].experience < 320 && json[user_id].level >= 16) {
+            e.reply(`修为不足,还差${320 - json[user_id].experience},请再接再厉`)
+            return
+        }
+        else if (json[user_id].experience >= 320 && json[user_id].level > 16 + Math.floor((json[user_id].experience - 320) / 80)) {
+            e.reply(`修为不足,还差${(Math.floor(json[user_id].experience / 80) * 80 + 80) - json[user_id].experience},请再接再厉`)
+            return
+        }
+        if (json[user_id].experience < 1) {
+            json[user_id].experience = 0
+        }
+        if (json[user_id].level < 16) { var gailv = 100 - json[user_id].level * 2 }
+        else { var gailv = 68 - json[user_id].level * 0.05 }
+        e.reply(`当前境界${json[user_id].levelname},需要时间${3 * (json[user_id].level + 1)}s,突破成功概率${gailv},开始突破......`)
+        let i = Math.random() * 100
+        if (i > gailv) {
+            setTimeout(() => {//延迟5秒
+                e.reply('突破失败，请努力修行')
+            }, 3 * (json[user_id].level + 1));//设置延时
+        }
+        else{
+            json[user_id].level++
+            for(let j=0;j<17;j++){
+                if(json[user_id].level == j) json[user_id].levelname = levelname[j];
+            }
+            if (json[user_id].level > 16 && json[user_id].level < 42) {
+                let level_name = json[user_id].level - 16
+                json[user_id].levelname = levelname[16] + `第${level_name}境`
+            }
+            if (json[user_id].level > 41 && json[user_id].level < 2001) {
+                let level_name = json[user_id].level - 41
+                json[user_id].levelname = levelname[17] + `${level_name}重天`
+            }
+            if (json[user_id].level > 2000) json[user_id].levelname = levelname[18]
+        }
+        setTimeout(() => {//延迟5秒
+            e.reply(`突破成功，当前境界${json[user_id].levelname}`)
+        }, 3000 * (json[user_id].level + 1));//设置延时
+        fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));//写入文件
+    }
+}
