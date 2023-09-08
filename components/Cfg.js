@@ -2,7 +2,7 @@ import fs from 'fs'
 import lodash from 'lodash'
 import YAML from 'yaml'
 
-let app = "TianRu-plugin"
+let app = "wind-plugin"
 const _path = process.cwd()
 const _cfgPath = `${_path}/plugins/${app}/components/`
 let cfg = {}
@@ -28,7 +28,7 @@ const getConfig = function (name) {
 try {
   if (fs.existsSync(_cfgPath + 'cfg.json')) {
     cfg = JSON.parse(fs.readFileSync(_cfgPath + 'cfg.json', 'utf8')) || {}
-    cfg.expands = getConfig('TianRu', 'expand')
+    cfg.expands = getConfig('wind', 'expand')
   }
 } catch (e) {
   // do nth

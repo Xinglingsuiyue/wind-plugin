@@ -10,7 +10,7 @@ export class help extends plugin {
 	constructor() {
 		super({
 			name: '[wind-plugin]帮助',
-			dsc: '天如帮助',
+			dsc: 'wind帮助',
 			event: 'message',
 			priority: 100,
 			rule: [
