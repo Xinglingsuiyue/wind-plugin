@@ -1,10 +1,16 @@
 # wind-plugin
 
-#### 介绍
-尝试写一些无用的功能
+### 访问量
 
-#### 软件架构
-软件架构说明
+[![访问量](https://profile-counter.glitch.me/wind-plugin/count.svg)](https://gitee.com/wind-trace-typ/wind-plugin)
+
+#### 介绍
+
+1.  各大平台热搜榜单
+此功能使用了一些免费的api获取各种信息，如群头像，空间头像，哔哩哔哩、抖音、微博、今日头条、知乎、百度等平台的热搜榜单，二次元图，电脑二次元壁纸，手机二次元壁纸，动漫头像等
+
+2.  轻量修仙
+此功能适合大部分群聊使用，不会像其他修仙插件那样玩法过多容易刷屏，仅仅只有修炼突破等功能。
 
 
 #### 安装教程
@@ -16,23 +22,24 @@ git clone https://gitee.com/wind-trace-typ/wind-plugin.git ./plugins/wind-plugin
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+| 指令  | 功能描述  |
+|---|---|
+| wind帮助  | 获取帮助菜单  |
+| bilibili周榜/哔哩哔哩周榜  | 获取哔哩哔哩周榜信息和链接，后跟数字也可自定义期数  |
+| bilibili热搜/bilibili热搜榜/哔哩哔哩热搜  | 获取bilibili热搜榜单  |
+| 抖音热搜/抖音热搜榜/tiktok热搜  | 获取抖音热搜榜单  |
+| 微博热搜/微博热搜榜 | 获取微博热搜榜单  |
+| 知乎热搜/知乎热搜榜 | 获取知乎热搜榜单  |
+| 今日头条热搜/今日头条热搜榜 | 获取今日头条热搜榜单  |
+| 今日头条新闻/今日头条热点新闻 | 获取今日头条热点新闻  |
+| 修仙/修炼  | 修炼增加自身灵力  |
+| 突破  | 突破自身境界  |
+| 服用丹药  | 使用丹药获取灵力  |
+| 查看境界  | 查看自身境界  |
+| 修仙境界列表  | 修仙境界列表  |
 
 #### 参与贡献
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+1.  作者qq：[459521475](https://tenapi.cn/v2/qqcard?qq=459521475)
+2.  交流群：[761464165](https://qm.qq.com/cgi-bin/qm/qr?k=HUsXvhqzxSiGUCKQclf3NbcXp5gsC4h3&jump_from=webapi&authKey=/PHLSFBIFLvTOJTrtzNdaF1xmdkjglqVD4U8w90CBDJoGpDPqsGkUSzHSET7/Ykh)
+3.  部分代码来自[miao-plugin](https://gitee.com/yoimiya-kokomi/miao-plugin),[TianRu-plugin](https://gitee.com/HDTianRu/TianRu-plugin),[akasha-terminal-plugin](https://gitee.com/go-farther-and-farther/akasha-terminal-plugin),特此声明感谢
