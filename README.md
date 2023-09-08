@@ -12,8 +12,10 @@
 2.  其他
 暂时只有菜谱查询的功能，可以教你如何做菜
 
-2.  轻量修仙
+3.  轻量修仙
 此功能适合大部分群聊使用，不会像其他修仙插件那样玩法过多容易刷屏，仅仅只有修炼突破等功能。
+
+4.  更多功能仍在咕咕咕
 
 
 #### 安装教程
@@ -44,7 +46,7 @@ git clone https://gitee.com/wind-trace-typ/wind-plugin.git ./plugins/wind-plugin
 
 #### wind帮助
 
-![输入图片说明](resources/help/728d7fa18e4802e865840d5d87a0386c.gif)
+
 
 #### 参与贡献
 
