@@ -1,14 +1,14 @@
-/**
-* 请注意，系统不会读取help_default.js ！！！！
-* 【请勿直接修改此文件，且可能导致后续冲突】
+import { Version } from '../../components/index.js'
+/*
+* 此配置文件为系统使用，请勿修改，否则可能无法正常使用
 *
-* 如需自定义可将文件【复制】一份，并重命名为 help.js
+* 如需自定义配置请复制修改上一级help_default.js
 *
 * */
 
 export const helpCfg = {
-  title: 'wind帮助',
-  subTitle: 'Yunzai-Bot & wind-plugin',
+  title: 'wind-plugin帮助',
+  subTitle: `${Version.name} & wind-plugin`,
   columnCount: 3,
   colWidth: 265,
   theme: 'all',
