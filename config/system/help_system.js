@@ -46,6 +46,13 @@ export const helpList = [{
     title: '今日头条新闻/今日头条热点新闻',
     desc: '今日头条热点新闻'
   }]
+},{
+  group:其他
+  list:[{
+    icon: 18
+    title: '做菜/order/菜谱+菜名+数量'
+    desc: '搜索菜谱'
+  }]
 }, {
   group: '轻量修仙',
   list: [{
@@ -57,7 +64,7 @@ export const helpList = [{
     title: '查看境界',
     desc: '查看自身境界'
   }, {
-    icon: 18,
+    icon: 30,
     title: '服用丹药',
     desc: '使用丹药增加自身灵力'
   }, {
