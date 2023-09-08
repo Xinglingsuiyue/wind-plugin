@@ -38,6 +38,10 @@ git clone https://gitee.com/wind-trace-typ/wind-plugin.git ./plugins/wind-plugin
 | 查看境界  | 查看自身境界  |
 | 修仙境界列表  | 修仙境界列表  |
 
+#### wind帮助
+
+![输入图片说明](resources/help/46afc009dff5015a3e298ab4515bc121_720.gif)
+
 #### 参与贡献
 
 1.  作者qq：[459521475](https://tenapi.cn/v2/qqcard?qq=459521475)
