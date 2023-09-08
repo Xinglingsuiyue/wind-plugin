@@ -3,22 +3,21 @@ import fs from 'fs';
 import YAML from "yaml";
 import{segment}from'oicq';
 import moment from "moment"
-const currentTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
 let path = process.cwd().replace(/\\/g, '/')
 const dirpath=path+'/plugins/wind-plugin/resources/xiuxian-data'
 var filename='xiuxian'
 if (filename.indexOf(".json") == -1) {//如果文件名不包含.json
     filename = filename + ".json";//添加.json
 }
-let Template = {//创建该用户
+let new_data = {//创建该用户
     "experience": 0,
     "level": 0,
     "levelname": '凡人',
     "Privilege": 0,
 };
 const levelname=['练气期','筑基期','金丹期','元婴期','化神期','合体期','大乘期','渡劫期','人仙境','地仙境','天仙境','金仙境','大罗金仙境','准仙帝','仙帝','天人五衰境','圣人','大帝','至强大帝']
-let cdtime_exercise = 10 * 60 //命令间隔时间，单位分钟，这是修炼的冷却时间#初始为10分钟
-let cdtime_break = 5 * 60//命令间隔时间，单位分钟，这是突破的冷却时间#初始为5分钟
+const cdtime_xiuxian = 10 * 60 //修炼的冷却时间,初始为10分钟
+const cdtime_break = 5 * 60 //突破的冷却时间,初始为5分钟
 export class xiuxian extends plugin {//修炼
     constructor() {
         super({
@@ -44,18 +43,48 @@ export class xiuxian extends plugin {//修炼
                 },
                 {
                     /** 命令正则匹配 */
-                    reg: "^#?突破$", //匹配消息正则，命令正则
+                    reg: "^#?(闭关)?突破$", //匹配消息正则，命令正则
                     /** 执行方法 */
                     fnc: 'break'
                 },
                 {
                     /** 命令正则匹配 */
-                    reg: "^#?境界列表$", //匹配消息正则，命令正则
+                    reg: "^#?(修仙|修炼)?境界列表$", //匹配消息正则，命令正则
                     /** 执行方法 */
                     fnc: 'list'
                 }
             ]
         })
+    }
+    async xxsetCd (seconds = 60) {
+        let ext = new Date() * 1 + seconds * 1000
+        await redis.set(`wind:xiuxian-cd:${this.user_id}`, ext + '', { EX: seconds })
+    }
+    async xxinCd () {
+        let ext = await redis.get(`wind:xiuxian-cd:${this.user_id}`)
+        if (!ext || isNaN(ext)) {
+            return false
+        }
+        let cd = (new Date() * 1) - ext
+        if (cd < 0 && Math.abs(cd) < 100 * 60 * 1000) {
+            return Math.ceil(0 - cd / 1000)
+        }
+        return false
+    }
+    async brsetCd (seconds = 60) {
+        let ext = new Date() * 1 + seconds * 1000
+        await redis.set(`wind:break-cd:${this.user_id}`, ext + '', { EX: seconds })
+    }
+    async brinCd () {
+        let ext = await redis.get(`wind:break-cd:${this.user_id}`)
+        if (!ext || isNaN(ext)) {
+            return false
+        }
+        let cd = (new Date() * 1) - ext
+        if (cd < 0 && Math.abs(cd) < 100 * 60 * 1000) {
+            return Math.ceil(0 - cd / 1000)
+        }
+        return false
     }
     async view(e){
         console.log("[wind-plugin]", e.msg);
@@ -72,11 +101,11 @@ export class xiuxian extends plugin {//修炼
             e.reply([segment.at(e.user_id), '您还是凡人，请通过#修炼和#突破开启你的仙途']);
             return
         }
-        e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的内力为:${json[user_id].experience}`]);
+        e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`]);
     }
     async list(e) {
         let msg = levelname[0] + '\n';
-        for (let j = 0; j < 19; j++) {
+        for (let j = 0; j < levelname.length; j++) {
             msg = msg + levelname[j] + '\n'
         }
         msg+='欸嘿!到大帝境界后别努力了,至强你达不到的doge!!\n后期修行困难可以选择#服用丹药,有40%的成功率.\n'
@@ -85,6 +114,11 @@ export class xiuxian extends plugin {//修炼
     async xiuxian(e){
         console.log("[wind-plugin]", e.msg);
         let user_id = e.user_id;
+        let cdtime=await this.xxinCd();
+        if(cdtime){
+            return await e.reply(`修炼失败，还有${cdtime}秒cd`)
+        }
+        await this.xxsetCd(cdtime_xiuxian);
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
             fs.mkdirSync(dirpath);//创建文件夹
         }
@@ -94,7 +128,7 @@ export class xiuxian extends plugin {//修炼
         }
         const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));//读取文件
         if (!json.hasOwnProperty(user_id)) {//如果json中不存在该用户
-            json[user_id] = Template
+            json[user_id] = new_data
         }
         const date = new Date();
         let experience_ = 0
@@ -104,25 +138,30 @@ export class xiuxian extends plugin {//修炼
             if (pills > 60) {
                 json[user_id].experience += 10
                 e.reply([segment.at(user_id),
-                    `\n服用丹药成功，你获得了10点内力！\n你的内力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
+                    `\n服用丹药成功，你获得了10点灵力！\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
             }
             else {
                 json[user_id].experience -= 3
                 e.reply([segment.at(user_id),
-                    `\n没有得到祝福，你服用丹药失败，走火入魔损失了3点内力！\n你的内力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
+                    `\n服用失败，由于大量丹毒你损失了3点灵力！\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
             }
         }
         else{
             experience_ = Math.round(1 + 2 * Math.random())
             json[user_id].experience += experience_
             e.reply([segment.at(user_id),
-                `\n你获得了${experience_}点内力。\n你的内力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
+                `\n你获得了${experience_}点灵力。\n你的内力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
         }
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));//写入文件
     }
     async break(e){
         console.log("[wind-plugin]", e.msg);
         let user_id = e.user_id;
+        let cdtime=await this.brinCd();
+        if(cdtime){
+            return await e.reply(`突破失败，还有${cdtime}秒cd`)
+        }
+        await this.brsetCd(cdtime_break);
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
             fs.mkdirSync(dirpath);//创建文件夹
         }
@@ -132,7 +171,7 @@ export class xiuxian extends plugin {//修炼
         }
         const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));//读取文件
         if (!json.hasOwnProperty(user_id)) {//如果json中不存在该用户
-            json[user_id] = Template
+            json[user_id] = new_data
         }
         if (json[user_id].experience < 5) json[user_id].level = 0
         else if (json[user_id].experience < 10 && json[user_id].level >= 1) {
