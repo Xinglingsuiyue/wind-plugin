@@ -46,7 +46,7 @@ git clone https://gitee.com/wind-trace-typ/wind-plugin.git ./plugins/wind-plugin
 
 #### wind帮助
 
-
+![wind帮助](resources/help/728d7fa18e4802e865840d5d87a0386c.gif)
 
 #### 参与贡献
 
