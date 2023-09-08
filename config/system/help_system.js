@@ -49,8 +49,8 @@ export const helpList = [{
 },{
   group:其他
   list:[{
-    icon: 18
-    title: '做菜/order/菜谱+菜名+数量'
+    icon: 18,
+    title: '做菜/order/菜谱+菜名+数量',
     desc: '搜索菜谱'
   }]
 }, {
