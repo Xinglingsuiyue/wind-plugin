@@ -100,7 +100,6 @@ export class example extends plugin {
                 a=1
             }
             let forwardMsg = await e.group.makeForwardMsg(MsgList);
-            e.reply(typeof forwardMsg.data);
             forwardMsg.data = forwardMsg.data
                 .replace(/\n/g, '')
                 .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
