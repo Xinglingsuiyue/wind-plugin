@@ -84,8 +84,11 @@ export class xiuxian extends plugin {//修炼
         return false
     }
     async rankings(e){
-        let filename = [e.group_id];
-        let data = fs.readFileSync(dirpath + "/" + filename + ".json");
+        let filename = [e.group_id]+".json";
+        if (!fs.existsSync(dirpath + "/" + filename)) {//如果文件不存在
+            return e.reply("本群暂无修炼者～")
+        }
+        let data = fs.readFileSync(dirpath + "/" + filename);
         let jsonData = JSON.parse(data);
         let userids = Object.keys(jsonData);
         let MsgList = [];
