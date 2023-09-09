@@ -99,12 +99,16 @@ export class example extends plugin {
                 }
                 a=1
             }
-            let forwardMsg = await e.group.makeForwardMsg(MsgList);
+            if(!e.isGroup){
+                let forwardMsg = await e.friend.makeForwardMsg(MsgList);
+            }
+            else{
+                let forwardMsg = await e.group.makeForwardMsg(MsgList);
+            }
             forwardMsg.data = forwardMsg.data
                 .replace(/\n/g, '')
                 .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
                 .replace(/___+/, `<title color="#777777" size="26">${keyword}如何做～～</title>`)
-            e.reply(typeof forwardMsg.data);
             await e.reply(forwardMsg)
         }
         else return e.reply(res.msg)
