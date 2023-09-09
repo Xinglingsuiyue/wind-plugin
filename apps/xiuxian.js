@@ -70,10 +70,10 @@ export class xiuxian extends plugin {//修炼
     }
     async brsetCd (seconds = 60) {
         let ext = new Date() * 1 + seconds * 1000
-        await redis.set(`wind:break-cd:${this.user_id}`, ext + '', { EX: seconds })
+        await redis.set(`wind:break-cd:${this.e.user_id}`, ext + '', { EX: seconds })
     }
     async brinCd () {
-        let ext = await redis.get(`wind:break-cd:${this.user_id}`)
+        let ext = await redis.get(`wind:break-cd:${this.e.user_id}`)
         if (!ext || isNaN(ext)) {
             return false
         }
@@ -180,7 +180,7 @@ export class xiuxian extends plugin {//修炼
             cdtime = 0;
         }
         if (cdtime) {
-            return await e.reply(`修炼失败，还有${cdtime}秒cd`)
+            return await e.reply(`对不起，修炼失败，还有${cdtime}秒cd`)
         }
         await this.xxsetCd(cdtime_xiuxian);
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
@@ -261,7 +261,7 @@ export class xiuxian extends plugin {//修炼
             cdtime = 0;
         }
         if (cdtime) {
-            return await e.reply(`突破失败，还有${cdtime}秒cd`)
+            return await e.reply(`对不起，突破失败，还有${cdtime}秒cd`)
         }
         await this.brsetCd(cdtime_break);
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
