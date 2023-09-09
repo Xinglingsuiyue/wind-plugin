@@ -99,11 +99,12 @@ export class example extends plugin {
                 }
                 a=1
             }
+            let forwardMsg
             if(!e.isGroup){
-                let forwardMsg = await e.friend.makeForwardMsg(MsgList);
+                forwardMsg = await e.friend.makeForwardMsg(MsgList);
             }
             else{
-                let forwardMsg = await e.group.makeForwardMsg(MsgList);
+                forwardMsg = await e.group.makeForwardMsg(MsgList);
             }
             forwardMsg.data = forwardMsg.data
                 .replace(/\n/g, '')
