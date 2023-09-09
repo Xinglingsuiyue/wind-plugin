@@ -41,7 +41,14 @@ export class slander extends plugin {
                     user_id: e.user_id
                 });
             }
-            let forwardMsg = await e.group.makeForwardMsg(MsgList);
+            let forwardMsg
+            if(!e.isGroup){
+                forwardMsg = await e.friend.makeForwardMsg(MsgList);
+            }
+            else{
+                forwardMsg = await e.group.makeForwardMsg(MsgList);
+            }
+            if(typeof forwardMsg.data!='string'){forwardMsg.data = JSON.stringify(forwardMsg.data)}
             forwardMsg.data = forwardMsg.data
                 .replace(/\n/g, '')
                 .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
