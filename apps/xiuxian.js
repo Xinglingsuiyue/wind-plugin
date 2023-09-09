@@ -55,10 +55,10 @@ export class xiuxian extends plugin {//修炼
     }
     async xxsetCd (seconds = 60) {
         let ext = new Date() * 1 + seconds * 1000
-        await redis.set(`wind:xiuxian-cd:${this.user_id}`, ext + '', { EX: seconds })
+        await redis.set(`wind:xiuxian-cd:${this.e.user_id}`, ext + '', { EX: seconds })
     }
     async xxinCd () {
-        let ext = await redis.get(`wind:xiuxian-cd:${this.user_id}`)
+        let ext = await redis.get(`wind:xiuxian-cd:${this.e.user_id}`)
         if (!ext || isNaN(ext)) {
             return false
         }
@@ -70,10 +70,10 @@ export class xiuxian extends plugin {//修炼
     }
     async brsetCd (seconds = 60) {
         let ext = new Date() * 1 + seconds * 1000
-        await redis.set(`wind:break-cd:${this.user_id}`, ext + '', { EX: seconds })
+        await redis.set(`wind:break-cd:${this.e.user_id}`, ext + '', { EX: seconds })
     }
     async brinCd () {
-        let ext = await redis.get(`wind:break-cd:${this.user_id}`)
+        let ext = await redis.get(`wind:break-cd:${this.e.user_id}`)
         if (!ext || isNaN(ext)) {
             return false
         }
