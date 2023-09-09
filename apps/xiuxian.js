@@ -5,12 +5,6 @@ import{segment}from'oicq';
 import moment from "moment"
 let path = process.cwd().replace(/\\/g, '/')
 const dirpath=path+'/plugins/wind-plugin/resources/xiuxian-data'
-let new_data = {//创建新用户
-    "experience": 0,
-    "level": 0,
-    "levelname": '凡人',
-    "Privilege": 0,
-};
 const levelname=['练气期','筑基期','金丹期','元婴期','化神期','合体期','大乘期','渡劫期','人仙境','地仙境','天仙境','金仙境','大罗金仙境','准仙帝','仙帝','天人五衰境','圣人','大帝','至强大帝']
 const master_cd=false //主人是否需要cd
 const cdtime_xiuxian = 10 * 60 //修炼的冷却时间,初始为10分钟
@@ -104,7 +98,7 @@ export class xiuxian extends plugin {//修炼
             const score = jsonData[userid].level * 3 + jsonData[userid].experience;
             console.log(`userid: ${userid}, score: ${score}`);
             MsgList.push({
-                message: ["用户名：",userid,"\n境界：",jsonData[userid].levelname,"\n灵力："+jsonData[userid].experience],
+                message: [segment.image(`https://api.lolimi.cn/api/qt/index?qq=${userid}&key=nuLH2DyvnpH2T2m29OydPElNMB`),"\n用户名：",jsonData[userid].nickname,"\n境界：",jsonData[userid].levelname,"\n灵力："+jsonData[userid].experience],
                 nickname: e.nickname,
                 user_id: e.user_id
             })
@@ -163,6 +157,13 @@ export class xiuxian extends plugin {//修炼
     }
     async xiuxian(e){
         console.log("[wind-plugin]", e.msg);
+        let new_data = {//创建新用户
+            "nickname": e.nickname,
+            "experience": 0,
+            "level": 0,
+            "levelname": '凡人',
+            "Privilege": 0,
+        };
         let filename=[e.group_id]
         if(e.isMaster){
             filename="masterxiuxian";
@@ -237,6 +238,13 @@ export class xiuxian extends plugin {//修炼
     }
     async break(e){
         console.log("[wind-plugin]", e.msg);
+        let new_data = {//创建新用户
+            "nickname": e.nickname,
+            "experience": 0,
+            "level": 0,
+            "levelname": '凡人',
+            "Privilege": 0,
+        };
         let filename=[e.group_id]
         if(e.isMaster){
             filename="masterxiuxian";
