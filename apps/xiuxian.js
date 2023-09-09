@@ -5,17 +5,14 @@ import{segment}from'oicq';
 import moment from "moment"
 let path = process.cwd().replace(/\\/g, '/')
 const dirpath=path+'/plugins/wind-plugin/resources/xiuxian-data'
-var filename='xiuxian'
-if (filename.indexOf(".json") == -1) {//如果文件名不包含.json
-    filename = filename + ".json";//添加.json
-}
-let new_data = {//创建该用户
+let new_data = {//创建新用户
     "experience": 0,
     "level": 0,
     "levelname": '凡人',
     "Privilege": 0,
 };
 const levelname=['练气期','筑基期','金丹期','元婴期','化神期','合体期','大乘期','渡劫期','人仙境','地仙境','天仙境','金仙境','大罗金仙境','准仙帝','仙帝','天人五衰境','圣人','大帝','至强大帝']
+const master_cd=false //主人是否需要cd
 const cdtime_xiuxian = 10 * 60 //修炼的冷却时间,初始为10分钟
 const cdtime_break = 5 * 60 //突破的冷却时间,初始为5分钟
 export class xiuxian extends plugin {//修炼
@@ -31,7 +28,7 @@ export class xiuxian extends plugin {//修炼
             rule: [
                 {
                     /** 命令正则匹配 */
-                    reg: "^#?查看境界$", //匹配消息正则，命令正则
+                    reg: "^#?(我的境界|查看境界)$", //匹配消息正则，命令正则
                     /** 执行方法 */
                     fnc: 'view'
                 },
@@ -52,6 +49,12 @@ export class xiuxian extends plugin {//修炼
                     reg: "^#?(修仙|修炼)?境界列表$", //匹配消息正则，命令正则
                     /** 执行方法 */
                     fnc: 'list'
+                },
+                {
+                    /** 命令正则匹配 */
+                    reg: "^#?排行榜$", //匹配消息正则，命令正则
+                    /** 执行方法 */
+                    fnc: 'rankings'
                 }
             ]
         })
@@ -86,9 +89,56 @@ export class xiuxian extends plugin {//修炼
         }
         return false
     }
+    async rankings(e){
+        let filename = [e.group_id];
+        let data = fs.readFileSync(dirpath + "/" + filename + ".json");
+        let jsonData = JSON.parse(data);
+        let userids = Object.keys(jsonData);
+        let MsgList = [];
+        const sortedUsers = userids.sort((a, b) => {
+            const scoreA = jsonData[a].level * 3 + jsonData[a].experience;
+            const scoreB = jsonData[b].level * 3 + jsonData[b].experience;
+            return scoreB - scoreA;
+        });
+        const scores = sortedUsers.map(userid => {
+            const score = jsonData[userid].level * 3 + jsonData[userid].experience;
+            console.log(`userid: ${userid}, score: ${score}`);
+            MsgList.push({
+                message: ["用户名：",userid,"\n境界：",jsonData[userid].levelname,"\n灵力："+jsonData[userid].experience],
+                nickname: e.nickname,
+                user_id: e.user_id
+            })
+            return score;
+        });
+        console.log(`scores: ${scores}`);
+        const sortedScores = scores.sort((a, b) => b - a);
+        console.log(`sortedScores: ${sortedScores}`);
+        const topTenUserids = sortedScores.reduce((acc, score, index) => {
+            if (index < 10) {
+                const userId = sortedUsers[scores.indexOf(score)];
+                if (!acc.includes(userId)) {
+                    acc.push(userId);
+                }
+            }
+            return acc;
+        }, []);
+        console.log(`topTenUserids: ${topTenUserids}`);
+        let forwardMsg = await e.group.makeForwardMsg(MsgList);
+        if(typeof forwardMsg.data!='string')
+        {forwardMsg.data = JSON.stringify(forwardMsg.data)}
+        forwardMsg.data = forwardMsg.data
+            .replace(/\n/g, '')
+            .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
+            .replace(/___+/, `<title color="#777777" size="26">修仙排行榜～</title>`)
+        await e.reply(forwardMsg)
+    }
     async view(e){
         console.log("[wind-plugin]", e.msg);
         let user_id = e.user_id;
+        let filename=[e.group_id]
+        if(e.isMaster){
+            filename="masterxiuxian.json";
+        }
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
             fs.mkdirSync(dirpath);//创建文件夹
         }
@@ -113,9 +163,19 @@ export class xiuxian extends plugin {//修炼
     }
     async xiuxian(e){
         console.log("[wind-plugin]", e.msg);
+        let filename=[e.group_id]
+        if(e.isMaster){
+            filename="masterxiuxian";
+        }
+        if (filename.indexOf(".json") == -1) {//如果文件名不包含.json
+            filename = filename + ".json";//添加.json
+        }
         let user_id = e.user_id;
-        let cdtime=await this.xxinCd();
-        if(cdtime){
+        let cdtime = await this.xxinCd();
+        if(this.e.isMaster && !master_cd){
+            cdtime = 0;
+        }
+        if (cdtime) {
             return await e.reply(`修炼失败，还有${cdtime}秒cd`)
         }
         await this.xxsetCd(cdtime_xiuxian);
@@ -132,7 +192,6 @@ export class xiuxian extends plugin {//修炼
         }
         const date = new Date();
         let experience_ = 0
-        let hours = date.getHours()
         let pills = Math.random() * 100
         if (e.msg.includes('丹药')) {
             if (pills > 60) {
@@ -153,12 +212,44 @@ export class xiuxian extends plugin {//修炼
                 `\n你获得了${experience_}点灵力。\n你的内力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
         }
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));//写入文件
+        if(e.isMaster){
+            filename=[e.group_id];
+            if (filename.indexOf(".json") == -1) {//如果文件名不包含.json
+                filename = filename + ".json";//添加.json
+            }
+            let user_id = e.user_id;
+            if (!fs.existsSync(dirpath)) {//如果文件夹不存在
+                fs.mkdirSync(dirpath);//创建文件夹
+            }
+            if (!fs.existsSync(dirpath + "/" + filename)) {//如果文件不存在
+                fs.writeFileSync(dirpath + "/" + filename, JSON.stringify({//创建文件
+                }));
+            }
+            const masterjson = JSON.parse(fs.readFileSync(dirpath + "/" + filename));
+            if (!masterjson.hasOwnProperty(user_id)) {//如果json中不存在该用户
+                masterjson[user_id] = new_data
+            }
+            masterjson[user_id].experience=json[user_id].experience;
+            masterjson[user_id].level=json[user_id].level;
+            masterjson[user_id].levelname=json[user_id].levelname;
+            fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(masterjson, null, "\t"));
+        }
     }
     async break(e){
         console.log("[wind-plugin]", e.msg);
+        let filename=[e.group_id]
+        if(e.isMaster){
+            filename="masterxiuxian";
+        }
+        if (filename.indexOf(".json") == -1) {//如果文件名不包含.json
+            filename = filename + ".json";//添加.json
+        }
         let user_id = e.user_id;
-        let cdtime=await this.brinCd();
-        if(cdtime){
+        let cdtime = await this.brinCd();
+        if(this.e.isMaster && !master_cd){
+            cdtime = 0;
+        }
+        if (cdtime) {
             return await e.reply(`突破失败，还有${cdtime}秒cd`)
         }
         await this.brsetCd(cdtime_break);
@@ -276,5 +367,27 @@ export class xiuxian extends plugin {//修炼
             e.reply(`突破成功，当前境界${json[user_id].levelname}`)
         }, 3000 * (json[user_id].level + 1));//设置延时
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));//写入文件
+        if(e.isMaster){
+            filename=[e.group_id];
+            if (filename.indexOf(".json") == -1) {//如果文件名不包含.json
+                filename = filename + ".json";//添加.json
+            }
+            let user_id = e.user_id;
+            if (!fs.existsSync(dirpath)) {//如果文件夹不存在
+                fs.mkdirSync(dirpath);//创建文件夹
+            }
+            if (!fs.existsSync(dirpath + "/" + filename)) {//如果文件不存在
+                fs.writeFileSync(dirpath + "/" + filename, JSON.stringify({//创建文件
+                }));
+            }
+            const masterjson = JSON.parse(fs.readFileSync(dirpath + "/" + filename));
+            if (!masterjson.hasOwnProperty(user_id)) {//如果json中不存在该用户
+                masterjson[user_id] = new_data
+            }
+            masterjson[user_id].experience=json[user_id].experience;
+            masterjson[user_id].level=json[user_id].level;
+            masterjson[user_id].levelname=json[user_id].levelname;
+            fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(masterjson, null, "\t"));
+        }
     }
 }
