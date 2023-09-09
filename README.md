@@ -42,6 +42,7 @@ git clone https://gitee.com/wind-trace-typ/wind-plugin.git ./plugins/wind-plugin
 | 突破  | 突破自身境界  |
 | 服用丹药  | 使用丹药获取灵力  |
 | 查看境界  | 查看自身境界  |
+| 排行榜  | 修仙境界排行榜  |
 | 修仙境界列表  | 修仙境界列表  |
 
 #### wind帮助
