@@ -356,7 +356,7 @@ export class xiuxian extends plugin {//修炼
         let i = Math.random() * 100
         if (i > gailv) {
             setTimeout(() => {//延迟5秒
-                e.reply('突破失败，请努力修行')
+                e.reply('对不起，突破失败，请努力修行')
             }, 3 * (json[user_id].level + 1));//设置延时
         }
         else{
