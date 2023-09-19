@@ -21,7 +21,7 @@ for (let i in files) {
     apps[name] = ret[i].value[Object.keys(ret[i].value)[0]]
 }
 export { apps }
-logger.info(logger.green('------------------'))
+logger.info(logger.blue('------------------'))
 logger.info(logger.green('          .,:,,,                                        .::,,,::.          '))
 logger.info(logger.green('        .::::,,;;,                                  .,;;:,,....:i:         '))
 logger.info(logger.green('        :i,.::::,;i:.      ....,,:::::::::,....   .;i:,.  ......;i.        '))
@@ -59,4 +59,4 @@ logger.info(logger.green('                 .,is1si;:,....................,:;ir1s
 logger.info(logger.green('                    ..:isssssrrii;::::::;;iirsssssr;:..                    '))
 logger.info(logger.green('                         .,::iiirsssssssssrri;;:.                          '))
 logger.info(logger.yellow('                         wind插件加载完毕~~                                 '))
-logger.info(logger.green('------------------'))
+logger.info(logger.blue('------------------'))
