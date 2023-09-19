@@ -6,6 +6,7 @@ import moment from "moment"
 let path = process.cwd().replace(/\\/g, '/')
 const dirpath=path+'/plugins/wind-plugin/resources/xiuxian-data'
 const levelname=['练气期','筑基期','金丹期','元婴期','化神期','合体期','大乘期','渡劫期','人仙境','地仙境','天仙境','金仙境','大罗金仙境','准仙帝','仙帝','天人五衰境','圣人','大帝','至强大帝']
+const level_exp=[10,20,30,40,55,70,85,100,125,150,175,200,230,260,290,320];
 const master_cd=false //主人是否需要cd
 const cdtime_xiuxian = 10 * 60 //修炼的冷却时间,初始为10分钟
 const cdtime_break = 5 * 60 //突破的冷却时间,初始为5分钟
@@ -276,74 +277,13 @@ export class xiuxian extends plugin {//修炼
             json[user_id] = new_data
         }
         if (json[user_id].experience < 5) json[user_id].level = 0
-        else if (json[user_id].experience < 10 && json[user_id].level >= 1) {
-            e.reply(`修为不足,还差${10 - json[user_id].experience},请再接再厉`)
-            return
+        for(let ls=1;ls<17;ls++){
+            if(json[user_id].experience < level_exp[ls] && json[user_id].level >= ls){
+                e.reply(`修为不足,还差${level_exp[ls] - json[user_id].experience},请再接再厉`)
+                return
+            }
         }
-        else if (json[user_id].experience < 20 && json[user_id].level >= 2) {
-            e.reply(`修为不足,还差${20 - json[user_id].experience},请再接再厉`)
-            return
-        }
-        else if (json[user_id].experience < 30 && json[user_id].level >= 3) {
-            e.reply(`修为不足,还差${30 - json[user_id].experience},请再接再厉`)
-            return
-        }
-        else if (json[user_id].experience < 40 && json[user_id].level >= 4) {
-            e.reply(`修为不足,还差${40 - json[user_id].experience},请再接再厉`)
-            return
-        }
-
-        else if (json[user_id].experience < 55 && json[user_id].level >= 5) {
-            e.reply(`修为不足,还差${55 - json[user_id].experience},请再接再厉`)
-            return
-        }
-        else if (json[user_id].experience < 70 && json[user_id].level >= 6) {
-            e.reply(`修为不足,还差${70 - json[user_id].experience},请再接再厉`)
-            return
-        }
-        else if (json[user_id].experience < 85 && json[user_id].level >= 7) {
-            e.reply(`修为不足,还差${85 - json[user_id].experience},请再接再厉`)
-            return
-        }
-        else if (json[user_id].experience < 100 && json[user_id].level >= 8) {
-            e.reply(`修为不足,还差${100 - json[user_id].experience},请再接再厉`)
-            return
-        }
-
-        else if (json[user_id].experience < 125 && json[user_id].level >= 9) {
-            e.reply(`修为不足,还差${125 - json[user_id].experience},请再接再厉`)
-            return
-        }
-        else if (json[user_id].experience < 150 && json[user_id].level >= 10) {
-            e.reply(`修为不足,还差${150 - json[user_id].experience},请再接再厉`)
-            return
-        }
-        else if (json[user_id].experience < 175 && json[user_id].level >= 11) {
-            e.reply(`修为不足,还差${175 - json[user_id].experience},请再接再厉`)
-            return
-        }
-        else if (json[user_id].experience < 200 && json[user_id].level >= 12) {
-            e.reply(`修为不足,还差${200 - json[user_id].experience},请再接再厉`)
-            return
-        }
-
-        else if (json[user_id].experience < 230 && json[user_id].level >= 13) {
-            e.reply(`修为不足,还差${230 - json[user_id].experience},请再接再厉`)
-            return
-        }
-        else if (json[user_id].experience < 260 && json[user_id].level >= 14) {
-            e.reply(`修为不足,还差${260 - json[user_id].experience},请再接再厉`)
-            return
-        }
-        else if (json[user_id].experience < 290 && json[user_id].level >= 15) {
-            e.reply(`修为不足,还差${290 - json[user_id].experience},请再接再厉`)
-            return
-        }
-        else if (json[user_id].experience < 320 && json[user_id].level >= 16) {
-            e.reply(`修为不足,还差${320 - json[user_id].experience},请再接再厉`)
-            return
-        }
-        else if (json[user_id].experience >= 320 && json[user_id].level > 16 + Math.floor((json[user_id].experience - 320) / 80)) {
+        if (json[user_id].experience >= 320 && json[user_id].level > 16 + Math.floor((json[user_id].experience - 320) / 80)) {
             e.reply(`修为不足,还差${(Math.floor(json[user_id].experience / 80) * 80 + 80) - json[user_id].experience},请再接再厉`)
             return
         }
