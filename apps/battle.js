@@ -33,10 +33,10 @@ export class xiuxian extends plugin {//修炼
     }
     async btsetCd (seconds = 60) {
         let ext = new Date() * 1 + seconds * 1000
-        await redis.set(`wind:xiuxian-cd:${this.e.user_id}`, ext + '', { EX: seconds })
+        await redis.set(`wind:battle-cd:${this.e.user_id}`, ext + '', { EX: seconds })
     }
     async btinCd () {
-        let ext = await redis.get(`wind:xiuxian-cd:${this.e.user_id}`)
+        let ext = await redis.get(`wind:battle-cd:${this.e.user_id}`)
         if (!ext || isNaN(ext)) {
             return false
         }
