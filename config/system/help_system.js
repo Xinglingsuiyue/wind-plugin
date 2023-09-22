@@ -76,6 +76,14 @@ export const helpList = [{
     title: '突破/闭关突破',
     desc: '突破境界'
   }, {
+    icon: 138,
+    title: '决斗@群友/pk@群友/battle@群友',
+    desc: '和群友决斗'
+  }, {
+    icon: 157,
+    title: '排行榜',
+    desc: '群内修为排行榜'
+  }, {
     icon: 129,
     title: '修仙境界列表/修炼境界列表',
     desc: '修仙境界列表'
