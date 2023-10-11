@@ -98,7 +98,7 @@ export class xiuxian extends plugin {//修炼
             json[user_id].levelname = levelname[17] + `${level_name}重天`
         }
         if (json[user_id].level > 2000) json[user_id].levelname = levelname[18];
-        fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(masterjson, null, "\t"));
+        fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));
         await e.reply([segment.at(e.user_id),`恭喜您，获得了境界${numret}`]);
         await e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`]);
     }
@@ -122,7 +122,7 @@ export class xiuxian extends plugin {//修炼
         }
         const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));//读取文件
         json[user_id].experience+=numret;
-        fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(masterjson, null, "\t"));
+        fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));
         await e.reply([segment.at(e.user_id),`恭喜您，获得了灵力${numret}`]);
         await e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`]);
     }
