@@ -71,7 +71,7 @@ export class xiuxian extends plugin {//修炼
             return await e.reply("哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈");
         }
         let numreg = /[1-9][0-9]{0,12}/;
-        let numret= numreg.exec(e.toString());
+        let numret= parseInt(numreg.exec(e.toString()));
         let user_id = e.user_id;
         let filename=[e.group_id]
         if(e.isMaster){
@@ -107,7 +107,7 @@ export class xiuxian extends plugin {//修炼
             return await e.reply("哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈");
         }
         let numreg = /[1-9][0-9]{0,12}/;
-        let numret= numreg.exec(e.toString());
+        let numret= parseInt(numreg.exec(e.toString()));
         let user_id = e.user_id;
         let filename=[e.group_id]
         if(e.isMaster){
