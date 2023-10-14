@@ -93,6 +93,7 @@ export class xiuxian extends plugin {//修炼
             if(score>95&&Math.random()<0.1){
                 json[at_id].level=0;
                 json[at_id].experience=0;
+                json[at_id].levelname="凡人"
                 await e.reply("对方与你的差距太大了,对方直接被你抓住没跑掉,你将他打回凡人,从头修炼");
             }
             else if(score>60){
@@ -129,6 +130,28 @@ export class xiuxian extends plugin {//修炼
                 json[user_id].level+=level_user;
                 json[at_id].level-=level_user;
                 json[at_id].experience-=experience_user;
+                for(let j=0;j<17;j++){
+                    if(json[user_id].level == j) json[user_id].levelname = levelname[j];
+                    if(json[at_id].level == j) json[at_id].levelname = levelname[j];
+                }
+                if (json[user_id].level > 16 && json[user_id].level < 42) {
+                    let level_name = json[user_id].level - 16
+                    json[user_id].levelname = levelname[16] + `第${level_name}境`
+                }
+                if (json[user_id].level > 41 && json[user_id].level < 2001) {
+                    let level_name = json[user_id].level - 41
+                    json[user_id].levelname = levelname[17] + `${level_name}重天`
+                }
+                if (json[user_id].level > 2000) json[user_id].levelname = levelname[18];
+                if (json[at_id].level > 16 && json[at_id].level < 42) {
+                    let level_name = json[at_id].level - 16
+                    json[at_id].levelname = levelname[16] + `第${level_name}境`
+                }
+                if (json[at_id].level > 41 && json[at_id].level < 2001) {
+                    let level_name = json[at_id].level - 41
+                    json[at_id].levelname = levelname[17] + `${level_name}重天`
+                }
+                if (json[at_id].level > 2000) json[at_id].levelname = levelname[18];
                 await e.reply(`你忽然觉醒，灵气值和境界提升，成功反杀了对方,\n你提升了${level_user}个境界，获得了${experience_user}点灵力\n对方跌落了${level_user}个境界，丢失了${experience_user}点灵力`);
             }
             else{
@@ -140,6 +163,28 @@ export class xiuxian extends plugin {//修炼
                 json[user_id].level+=level_user;
                 json[at_id].level-=level_at;
                 json[at_id].experience-=experience_at;
+                for(let j=0;j<17;j++){
+                    if(json[user_id].level == j) json[user_id].levelname = levelname[j];
+                    if(json[at_id].level == j) json[at_id].levelname = levelname[j];
+                }
+                if (json[user_id].level > 16 && json[user_id].level < 42) {
+                    let level_name = json[user_id].level - 16
+                    json[user_id].levelname = levelname[16] + `第${level_name}境`
+                }
+                if (json[user_id].level > 41 && json[user_id].level < 2001) {
+                    let level_name = json[user_id].level - 41
+                    json[user_id].levelname = levelname[17] + `${level_name}重天`
+                }
+                if (json[user_id].level > 2000) json[user_id].levelname = levelname[18];
+                if (json[at_id].level > 16 && json[at_id].level < 42) {
+                    let level_name = json[at_id].level - 16
+                    json[at_id].levelname = levelname[16] + `第${level_name}境`
+                }
+                if (json[at_id].level > 41 && json[at_id].level < 2001) {
+                    let level_name = json[at_id].level - 41
+                    json[at_id].levelname = levelname[17] + `${level_name}重天`
+                }
+                if (json[at_id].level > 2000) json[at_id].levelname = levelname[18];
                 await e.reply(`你人品大爆发了，获得天道青睐，成功爆发进阶，反杀了对方,\n你提升了${level_user}个境界，获得了${experience_user}点灵力\n对方跌落了${level_at}个境界，丢失了${experience_at}点灵力`)
             }
         }
@@ -153,6 +198,28 @@ export class xiuxian extends plugin {//修炼
                 json[at_id].level+=level_at;
                 json[user_id].level-=level_user;
                 json[user_id].experience-=experience_user;
+                for(let j=0;j<17;j++){
+                    if(json[user_id].level == j) json[user_id].levelname = levelname[j];
+                    if(json[at_id].level == j) json[at_id].levelname = levelname[j];
+                }
+                if (json[user_id].level > 16 && json[user_id].level < 42) {
+                    let level_name = json[user_id].level - 16
+                    json[user_id].levelname = levelname[16] + `第${level_name}境`
+                }
+                if (json[user_id].level > 41 && json[user_id].level < 2001) {
+                    let level_name = json[user_id].level - 41
+                    json[user_id].levelname = levelname[17] + `${level_name}重天`
+                }
+                if (json[user_id].level > 2000) json[user_id].levelname = levelname[18];
+                if (json[at_id].level > 16 && json[at_id].level < 42) {
+                    let level_name = json[at_id].level - 16
+                    json[at_id].levelname = levelname[16] + `第${level_name}境`
+                }
+                if (json[at_id].level > 41 && json[at_id].level < 2001) {
+                    let level_name = json[at_id].level - 41
+                    json[at_id].levelname = levelname[17] + `${level_name}重天`
+                }
+                if (json[at_id].level > 2000) json[at_id].levelname = levelname[18];
                 await e.reply(`虽然你领先了对方很多个境界，但是对方忽然人品大爆发，获得了天道青睐，你被对面反杀了,\n你跌落了${level_user}个境界，丢失了${experience_user}点灵力\n对方提升了${level_at}个境界，获得了${experience_at}点灵力`);
             }
             else if(score>80){
@@ -162,6 +229,28 @@ export class xiuxian extends plugin {//修炼
                 json[at_id].level+=level_at;
                 json[user_id].level-=level_at;
                 json[user_id].experience-=experience_at;
+                for(let j=0;j<17;j++){
+                    if(json[user_id].level == j) json[user_id].levelname = levelname[j];
+                    if(json[at_id].level == j) json[at_id].levelname = levelname[j];
+                }
+                if (json[user_id].level > 16 && json[user_id].level < 42) {
+                    let level_name = json[user_id].level - 16
+                    json[user_id].levelname = levelname[16] + `第${level_name}境`
+                }
+                if (json[user_id].level > 41 && json[user_id].level < 2001) {
+                    let level_name = json[user_id].level - 41
+                    json[user_id].levelname = levelname[17] + `${level_name}重天`
+                }
+                if (json[user_id].level > 2000) json[user_id].levelname = levelname[18];
+                if (json[at_id].level > 16 && json[at_id].level < 42) {
+                    let level_name = json[at_id].level - 16
+                    json[at_id].levelname = levelname[16] + `第${level_name}境`
+                }
+                if (json[at_id].level > 41 && json[at_id].level < 2001) {
+                    let level_name = json[at_id].level - 41
+                    json[at_id].levelname = levelname[17] + `${level_name}重天`
+                }
+                if (json[at_id].level > 2000) json[at_id].levelname = levelname[18];
                 await e.reply(`对面忽然觉醒，灵气值和境界获得提升，你被对面反杀了,\n你跌落了${level_user}个境界，丢失了${experience_user}点灵力\n对方提升了${level_user}个境界，获得了${experience_user}点灵力`);
             }
             else if(score>60){
@@ -189,8 +278,9 @@ export class xiuxian extends plugin {//修炼
                 await e.reply("你们实力不相上下，激烈斗争后，你赢了对方,你们两个都没有提升")
             }
             else if(score<5&&Math.random()>0.9){
-                json[user_id].level=0;
-                json[user_id].experience=0;
+                json[at_id].level=0;
+                json[at_id].experience=0;
+                json[at_id].levelname="凡人"
                 await e.reply("你们实力相差太过悬殊，你被对面抓起来废了，需要重头修炼了")
             }
             else{
