@@ -90,39 +90,39 @@ export class xiuxian extends plugin {//修炼
         score = sc.toFixed(2);
         await e.reply(`你的境界是${json[user_id].levelname},你的灵力值为${json[user_id].experience},\n对方的境界是${json[at_id].levelname},对方的灵力值为${json[at_id].experience},\n你赢的概率约为${score}%`);
         if(sc>Math.random()){
-            if(sc>0.95&&Math.random()>0.9){
+            if(score>95&&Math.random()<0.1){
                 json[at_id].level=0;
                 json[at_id].experience=0;
                 await e.reply("对方与你的差距太大了,对方直接被你抓住没跑掉,你将他打回凡人,从头修炼");
             }
-            else if(sc>0.6){
+            else if(score>60){
                 await e.reply("对方与你差距较大，你轻松战胜了敌人，你们两个都没有获得提升")
             }
-            else if(sc>0.4&&Math.random()>0.7){
+            else if(score>40&&Math.random()<0.3){
                 experience_at=Math.round(6 + 2 * Math.random());
                 experience_user=experience_at+Math.round(0 + 2 * Math.random());
                 json[at_id].experience+=experience_at;
                 json[user_id].experience+=experience_user;
                 await e.reply(`你们实力不相上下，经过激烈的战斗之后你赢了，你们都获得了一些经验,\n你获得了${experience_user}点灵力\n对方获得了${experience_at}点灵力`);
             }
-            else if(sc>0.4&&Math.random()>0.4){
+            else if(score>40&&Math.random()<0.6){
                 experience_at=Math.round(4 + 2 * Math.random());
                 experience_user=experience_at-Math.round(0 + 2 * Math.random());
                 json[at_id].experience-=experience_at;
                 json[user_id].experience-=experience_user;
                 await e.reply(`你们实力不相上下你打赢了对方，但是你们两个因为消耗巨大导致灵力流失,\n你丢失了${experience_user}点灵力\n对方丢失了${experience_at}点灵力`)
             }
-            else if(sc>0.4){
+            else if(score>40){
                 await e.reply("你们实力不相上下，激烈斗争后，你赢了对方,你们两个都没有提升")
             }
-            else if(sc>0.3){
+            else if(score>30){
                 experience_user=Math.round(10 + 5 * Math.random());
                 experience_at=experience_user+Math.round(0 + 5 * Math.random());
                 json[at_id].experience-=experience_at;
                 json[user_id].experience+=experience_user;
                 await e.reply(`你因机缘巧合打败了对方，获得大量的经验值,\n你获得了${experience_user}点灵力对方丢失了${experience_at}点灵力`)
             }
-            else if(sc>0.2){
+            else if(score>20){
                 level_user=Math.round(0 + 2 * Math.random());
                 experience_user=level_exp[json[user_id].level+level_user]+Math.round(10 + 5 * Math.random())-json[user_id].experience;
                 json[user_id].experience+=experience_user;
@@ -144,7 +144,7 @@ export class xiuxian extends plugin {//修炼
             }
         }
         else{
-            if(sc>0.80){
+            if(score>80){
                 level_at=Math.round(2 + 2 * Math.random());
                 experience_at=level_exp[json[at_id].level+level_at]+Math.round(20 + 5 * Math.random())-json[at_id].experience;
                 level_user=Math.round(0 + 2 * Math.random());
@@ -155,7 +155,7 @@ export class xiuxian extends plugin {//修炼
                 json[user_id].experience-=experience_user;
                 await e.reply(`虽然你领先了对方很多个境界，但是对方忽然人品大爆发，获得了天道青睐，你被对面反杀了,\n你跌落了${level_user}个境界，丢失了${experience_user}点灵力\n对方提升了${level_at}个境界，获得了${experience_at}点灵力`);
             }
-            else if(sc>0.8){
+            else if(score>80){
                 level_at=Math.round(0 + 2 * Math.random());
                 experience_at=level_exp[json[at_id].level+level_at]+Math.round(10 + 5 * Math.random())-json[at_id].experience;
                 json[at_id].experience+=experience_at;
@@ -164,31 +164,31 @@ export class xiuxian extends plugin {//修炼
                 json[user_id].experience-=experience_at;
                 await e.reply(`对面忽然觉醒，灵气值和境界获得提升，你被对面反杀了,\n你跌落了${level_user}个境界，丢失了${experience_user}点灵力\n对方提升了${level_user}个境界，获得了${experience_user}点灵力`);
             }
-            else if(sc>0.6){
+            else if(score>60){
                 experience_at=Math.round(10 + 5 * Math.random());
                 experience_user=experience_user+Math.round(0 + 5 * Math.random());
                 json[at_id].experience+=experience_at;
                 json[user_id].experience-=experience_user;
                 await e.reply(`对方机缘巧合下击败了你，对方获得了大量经验,\n你损失了${experience_user}点灵力,\n对方获得了${experience_at}点灵力`)
             }
-            else if(sc>0.4&&Math.random()>0.7){
+            else if(score>40&&Math.random()>0.7){
                 experience_at=Math.round(6 + 2 * Math.random());
                 experience_user=experience_at+Math.round(0 + 2 * Math.random());
                 json[at_id].experience+=experience_at;
                 json[user_id].experience+=experience_user;
                 await e.reply(`你们实力不相上下，经过激烈的战斗之后你还是输了，但是你们都获得了一些经验\n你获得了${experience_user}点灵力\n对方获得了${experience_at}点灵力`);
             }
-            else if(sc>0.4&&Math.random()>0.4){
+            else if(score>40&&Math.random()>0.4){
                 experience_at=Math.round(4 + 2 * Math.random());
                 experience_user=experience_at-Math.round(0 + 2 * Math.random());
                 json[at_id].experience-=experience_at;
                 json[user_id].experience-=experience_user;
                 await e.reply(`你们实力不相上下你打赢了对方，激烈战斗后你还是输了,\n你丢失了${experience_user}点灵力\n对方丢失了${experience_at}点灵力`);
             }
-            else if(sc>0.4){
+            else if(score>40){
                 await e.reply("你们实力不相上下，激烈斗争后，你赢了对方,你们两个都没有提升")
             }
-            else if(sc<0.05&&Math.random()>0.8){
+            else if(score<5&&Math.random()>0.9){
                 json[user_id].level=0;
                 json[user_id].experience=0;
                 await e.reply("你们实力相差太过悬殊，你被对面抓起来废了，需要重头修炼了")
