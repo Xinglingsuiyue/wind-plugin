@@ -49,7 +49,7 @@ export class xiuxian extends plugin {//修炼
         }
         let numreg = /[1-9][0-9]{0,12}/;
         let numret= parseInt(numreg.exec(e.toString()));
-        let user_id = e.at;
+        let user_id = e.user_id;
         let filename=[e.group_id]
         if(e.at==Cfg.masterQQ){
             return await e.reply(`扣除主人境界${numret}`);
@@ -63,7 +63,7 @@ export class xiuxian extends plugin {//修炼
             }));
         }
         const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));//读取文件
-        json[user_id].level += numret;
+        json[user_id].level -= numret;
         for(let j=0;j<17;j++){
             if(json[user_id].level == j) json[user_id].levelname = levelname[j];
         }
