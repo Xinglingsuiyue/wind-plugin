@@ -68,7 +68,7 @@ export class xiuxian extends plugin {//修炼
     }
     async giveme_level(e){
         if(!e.isMaster){
-            return await e.reply("哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈");
+            return await e.reply("哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡");
         }
         let numreg = /[1-9][0-9]{0,12}/;
         let numret= parseInt(numreg.exec(e.toString()));
@@ -104,7 +104,7 @@ export class xiuxian extends plugin {//修炼
     }
     async giveme_exp(e){
         if(!e.isMaster){
-            return await e.reply("哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈");
+            return await e.reply("哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡");
         }
         let numreg = /[1-9][0-9]{0,12}/;
         let numret= parseInt(numreg.exec(e.toString()));
@@ -286,7 +286,7 @@ export class xiuxian extends plugin {//修炼
             experience_ = Math.round(1 + 2 * Math.random())
             json[user_id].experience += experience_
             e.reply([segment.at(user_id),
-                `\n你获得了${experience_}点灵力。\n你的内力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
+                `\n你获得了${experience_}点灵力。\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
         }
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));//写入文件
         if(e.isMaster){
