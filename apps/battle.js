@@ -63,7 +63,7 @@ export class xiuxian extends plugin {//修炼
             }));
         }
         const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));//读取文件
-        json[user_id].level -= numret;
+        json[user_id].level += numret;
         for(let j=0;j<17;j++){
             if(json[user_id].level == j) json[user_id].levelname = levelname[j];
         }
