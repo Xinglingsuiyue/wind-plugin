@@ -51,7 +51,7 @@ export class xiuxian extends plugin {//修炼
         let numret= parseInt(numreg.exec(e.msg));
         let user_id = e.at;
         let filename=[e.group_id]
-        if(!e.at){
+        if(!e.at||e.at==e.user_id){
             filename="masterxiuxian";
         }
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
@@ -90,7 +90,7 @@ export class xiuxian extends plugin {//修炼
         let numret= parseInt(numreg.exec(e.msg));
         let user_id = e.user_id;
         let filename=[e.group_id]
-        if(!e.at){
+        if(!e.at||e.at==e.user_id){
             filename="masterxiuxian";
         }
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
