@@ -6,7 +6,7 @@ import{segment}from'oicq';
 import moment from "moment"
 let path = process.cwd().replace(/\\/g, '/')
 const dirpath=path+'/plugins/wind-plugin/resources/xiuxian-data'
-const levelname=['练气期','筑基期','金丹期','元婴期','化神期','合体期','大乘期','渡劫期','人仙境','地仙境','天仙境','金仙境','大罗金仙境','准仙帝','仙帝','天人五衰境','圣人','大帝','至强大帝']
+const levelname=['凡人','练气期','筑基期','金丹期','元婴期','化神期','合体期','大乘期','渡劫期','人仙境','地仙境','天仙境','金仙境','大罗金仙境','准仙帝','仙帝','天人五衰境','圣人','大帝','至强大帝']
 const level_exp=[0,10,20,30,40,55,70,85,100,125,150,175,200,230,260,290,320];
 const master_battled=true //主人是否会被别人攻打
 const master_cd=false //主人是否需要cd
@@ -48,11 +48,11 @@ export class xiuxian extends plugin {//修炼
             return await e.reply("哈哈，就凭你也敢对别人的境界动手,🤣👉🏻🤡");
         }
         let numreg = /[1-9][0-9]{0,12}/;
-        let numret= parseInt(numreg.exec(e.toString()));
-        let user_id = e.user_id;
+        let numret= parseInt(numreg.exec(e.msg));
+        let user_id = e.at;
         let filename=[e.group_id]
-        if(e.at==Cfg.masterQQ){
-            return await e.reply(`扣除主人境界${numret}`);
+        if(Cfg.uin.indexOf(e.at) == -1){
+            e.reply(`扣除主人境界${numret}`);
             filename="masterxiuxian.json";
         }
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
@@ -63,8 +63,11 @@ export class xiuxian extends plugin {//修炼
             }));
         }
         const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));//读取文件
+        if(json[user_id].level < numret){
+            numret=json[user_id].level;
+        }
         json[user_id].level -= numret;
-        for(let j=0;j<17;j++){
+        for(let j=0;j<18;j++){
             if(json[user_id].level == j) json[user_id].levelname = levelname[j];
         }
         if (json[user_id].level > 16 && json[user_id].level < 42) {
@@ -73,9 +76,9 @@ export class xiuxian extends plugin {//修炼
         }
         if (json[user_id].level > 41 && json[user_id].level < 2001) {
             let level_name = json[user_id].level - 41
-            json[user_id].levelname = levelname[17] + `${level_name}重天`
+            json[user_id].levelname = levelname[18] + `${level_name}重天`
         }
-        if (json[user_id].level > 2000) json[user_id].levelname = levelname[18];
+        if (json[user_id].level > 2000) json[user_id].levelname = levelname[19];
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));
         await e.reply([segment.at(e.user_id),`您斩落了`,segment.at(e.at),`境界${numret}层`]);
         await e.reply([segment.at(e.user_id),`\n对方的境界是:${json[user_id].levelname},\n对方的灵力为:${json[user_id].experience}`]);
@@ -85,11 +88,11 @@ export class xiuxian extends plugin {//修炼
             return await e.reply("哈哈，就凭你也敢对别人的灵力值动手,🤣👉🏻🤡");
         }
         let numreg = /[1-9][0-9]{0,12}/;
-        let numret= parseInt(numreg.exec(e.toString()));
+        let numret= parseInt(numreg.exec(e.msg));
         let user_id = e.user_id;
         let filename=[e.group_id]
-        if(e.at==Cfg.masterQQ){
-            return await e.reply(`扣除主人灵力${numret}`);
+        if(Cfg.uin.indexOf(e.at) == -1){
+            e.reply(`扣除主人灵力${numret}`);
             filename="masterxiuxian.json";
         }
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
@@ -100,9 +103,12 @@ export class xiuxian extends plugin {//修炼
             }));
         }
         const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));//读取文件
+        if(json[user_id].experience < numret){
+            numret = json[user_id].experience;
+        }
         json[user_id].experience-=numret;
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));
-        await e.reply([segment.at(e.user_id),`您斩落了`,segment.at(e.at),`灵力${numret}`]);
+        await e.reply([segment.at(e.user_id),`您斩落了`,json[userid].nickname,`灵力${numret}点`]);
         await e.reply([segment.at(e.user_id),`\n对方的境界是:${json[user_id].levelname},\n对方的灵力为:${json[user_id].experience}`]);
     }
     async btsetCd (seconds = 60) {
