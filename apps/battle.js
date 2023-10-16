@@ -51,7 +51,7 @@ export class xiuxian extends plugin {//修炼
         let numret= parseInt(numreg.exec(e.msg));
         let user_id = e.at;
         let filename=[e.group_id]
-        if(Cfg.uin.indexOf(e.at) == -1){
+        if(Cfg.masterQQ.indexOf(e.at) == -1){
             e.reply(`扣除主人境界${numret}`);
             filename="masterxiuxian.json";
         }
