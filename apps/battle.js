@@ -52,7 +52,7 @@ export class xiuxian extends plugin {//修炼
         let user_id = e.at;
         let filename=[e.group_id]
         if(!e.at||e.at==e.user_id){
-            filename="masterxiuxian";
+            filename="masterxiuxian.json";
         }
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
             fs.mkdirSync(dirpath);//创建文件夹
@@ -91,7 +91,7 @@ export class xiuxian extends plugin {//修炼
         let user_id = e.user_id;
         let filename=[e.group_id]
         if(!e.at||e.at==e.user_id){
-            filename="masterxiuxian";
+            filename="masterxiuxian.json";
         }
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
             fs.mkdirSync(dirpath);//创建文件夹
