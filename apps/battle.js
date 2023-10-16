@@ -50,7 +50,7 @@ export class xiuxian extends plugin {//修炼
         let numreg = /[1-9][0-9]{0,12}/;
         let numret= parseInt(numreg.exec(e.msg));
         let user_id = e.at;
-        let filename=[e.group_id]
+        let filename=[e.group_id]+".json"
         if(!e.at||e.at==e.user_id){
             filename="masterxiuxian.json";
         }
@@ -89,7 +89,7 @@ export class xiuxian extends plugin {//修炼
         let numreg = /[1-9][0-9]{0,12}/;
         let numret= parseInt(numreg.exec(e.msg));
         let user_id = e.user_id;
-        let filename=[e.group_id]
+        let filename=[e.group_id]+".json"
         if(!e.at||e.at==e.user_id){
             filename="masterxiuxian.json";
         }
