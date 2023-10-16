@@ -108,7 +108,7 @@ export class xiuxian extends plugin {//修炼
         }
         json[user_id].experience-=numret;
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));
-        await e.reply([segment.at(e.user_id),`您斩落了`,json[userid].nickname,`灵力${numret}点`]);
+        await e.reply([segment.at(e.user_id),`您斩落了`,segment.at(e.at),`灵力${numret}点`]);
         await e.reply([segment.at(e.user_id),`\n对方的境界是:${json[user_id].levelname},\n对方的灵力为:${json[user_id].experience}`]);
     }
     async btsetCd (seconds = 60) {
