@@ -83,7 +83,7 @@ export class xiuxian extends plugin {//修炼
         await e.reply([segment.at(e.user_id),`您斩落了`,segment.at(e.at),`境界${numret}层`]);
         await e.reply([segment.at(e.user_id),`\n对方的境界是:${json[user_id].levelname},\n对方的灵力为:${json[user_id].experience}`]);
     }
-    async giveme_exp(e){
+    async de_exp(e){
         if(!e.isMaster){
             return await e.reply("哈哈，就凭你也敢对别人的灵力值动手,🤣👉🏻🤡");
         }
