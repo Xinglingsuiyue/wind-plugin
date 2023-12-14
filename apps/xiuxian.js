@@ -8,7 +8,7 @@ const dirpath=path+'/plugins/wind-plugin/resources/xiuxian-data'
 const levelname=['凡人','练气期','筑基期','金丹期','元婴期','化神期','合体期','大乘期','渡劫期','人仙境','地仙境','天仙境','金仙境','大罗金仙境','准仙帝','仙帝','天人五衰境','圣人','大帝','至强大帝']
 const level_exp=[10,20,30,40,55,70,85,100,125,150,175,200,230,260,290,320];
 const master_cd=false //主人是否需要cd
-const cdtime_xiuxian = 10 * 60 //修炼的冷却时间,初始为10分钟
+const cdtime_xiuxian = 15 * 60 //修炼的冷却时间,初始为15分钟
 const cdtime_break = 5 * 60 //突破的冷却时间,初始为5分钟
 export class xiuxian extends plugin {//修炼
     constructor() {
