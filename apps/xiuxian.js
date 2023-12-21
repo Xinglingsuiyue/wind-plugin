@@ -157,6 +157,7 @@ export class xiuxian extends plugin {//修炼
         return false
     }
     async rankings(e){
+        let id=e.user_id
         if(id.length>12) return await e.reply("暂时还未适配");
         let filename = [e.group_id]+".json";
         if (!fs.existsSync(dirpath + "/" + filename)) {//如果文件不存在
