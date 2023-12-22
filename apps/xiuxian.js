@@ -261,7 +261,7 @@ export class xiuxian extends plugin {//修炼
         }
         msg+='欸嘿!到大帝境界后别努力了,至强你达不到的doge!!\n后期修行困难可以选择#服用丹药,有40%的成功率.\n'
         if(id.length>30){
-			e.reply([msg,btn])
+			return e.reply([msg,btn])
         }
         e.reply(msg);
     }
