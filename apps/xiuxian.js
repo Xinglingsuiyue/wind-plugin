@@ -249,7 +249,7 @@ export class xiuxian extends plugin {//修炼
             return e.reply([segment.at(e.user_id),'您还是凡人，请通过#修炼和#突破开启你的仙途']);
         }
         if(id.length>30){
-			e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`,btn]);
+			return e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`,btn]);
         }
         e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`]);
     }
