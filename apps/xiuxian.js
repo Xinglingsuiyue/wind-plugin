@@ -113,7 +113,7 @@ export class xiuxian extends plugin {//修炼
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));
         await e.reply([segment.at(e.user_id),`恭喜您，获得了境界${numret}层`]);
         if(id.length>30){
-			return await e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`],btn);
+			return await e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`,btn]);
         }
         await e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`]);
     }
