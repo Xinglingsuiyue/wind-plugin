@@ -10,14 +10,6 @@ const level_exp=[10,20,30,40,55,70,85,100,125,150,175,200,230,260,290,320];
 const master_cd=false //主人是否需要cd
 const cdtime_xiuxian = 15 * 60 //修炼的冷却时间,初始为15分钟
 const cdtime_break = 5 * 60 //突破的冷却时间,初始为5分钟
-const btn=segment.button([
-      { text: "修仙", callback: `/修仙` },
-      { text: "突破", callback: `/突破` },
-      { text: "服用丹药", callback: `/服用丹药` },
-    ],[
-      { text: "修仙境界列表", callback: `/修仙境界列表` },
-      { text: "我的境界", callback: `/我的境界` },
-    ])
 export class xiuxian extends plugin {//修炼
     constructor() {
         super({
@@ -74,6 +66,14 @@ export class xiuxian extends plugin {//修炼
             ]
         })
     }
+    const btn=segment.button([
+      { text: "修仙", callback: `/修仙` },
+      { text: "突破", callback: `/突破` },
+      { text: "服用丹药", callback: `/服用丹药` },
+    ],[
+      { text: "修仙境界列表", callback: `/修仙境界列表` },
+      { text: "我的境界", callback: `/我的境界` },
+    ])
     async giveme_level(e){
 		let id=e.user_id
         if(!e.isMaster){
