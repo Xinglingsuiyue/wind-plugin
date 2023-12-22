@@ -235,7 +235,7 @@ export class xiuxian extends plugin {//修炼
         }
         const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));//读取文件
         if (!json.hasOwnProperty(user_id)||json[user_id].level==0) {//如果文件夹不存在
-			if(id.length>30){return await e.reply([segment.at(e.user_id), '您还是凡人，请通过#修炼和#突破开启你的仙途'btn])}
+			if(id.length>30){return await e.reply([segment.at(e.user_id), '您还是凡人，请通过#修炼和#突破开启你的仙途',btn])}
             return e.reply([segment.at(e.user_id), '您还是凡人，请通过#修炼和#突破开启你的仙途']);
         }
         if(id.length>30){return await e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`,btn])}
@@ -303,7 +303,7 @@ export class xiuxian extends plugin {//修炼
             else {
                 json[user_id].experience -= 3
                 if(id.length>30){await e.reply([segment.at(user_id),
-                    `\n服用失败，由于大量丹毒你损失了3点灵力！\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`btn])}
+                    `\n服用失败，由于大量丹毒你损失了3点灵力！\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`,btn])}
                 else{e.reply([segment.at(user_id),
                     `\n服用失败，由于大量丹毒你损失了3点灵力！\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);}
             }
@@ -363,9 +363,7 @@ export class xiuxian extends plugin {//修炼
             cdtime = 0;
         }
         if (cdtime) {
-			if(id.length>30){
-                return await e.reply([`对不起，突破失败，还有${cdtime}秒cd`,🤣👉🏻🤡",btn])
-            }
+			if(id.length>30){return await e.reply([`对不起，突破失败，还有${cdtime}秒cd`,btn])}
             return await e.reply(`对不起，突破失败，还有${cdtime}秒cd`)
         }
         await this.brsetCd(cdtime_break);
