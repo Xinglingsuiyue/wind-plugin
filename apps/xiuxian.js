@@ -10,6 +10,14 @@ const level_exp=[10,20,30,40,55,70,85,100,125,150,175,200,230,260,290,320];
 const master_cd=false //主人是否需要cd
 const cdtime_xiuxian = 15 * 60 //修炼的冷却时间,初始为15分钟
 const cdtime_break = 5 * 60 //突破的冷却时间,初始为5分钟
+const btn=segment.button([
+      { text: "修仙", callback: `/修仙` },
+      { text: "突破", callback: `/突破` },
+      { text: "服用丹药", callback: `/服用丹药` },
+    ],[
+      { text: "修仙境界列表", callback: `/修仙境界列表` },
+      { text: "我的境界", callback: `/我的境界` },
+    ])
 export class xiuxian extends plugin {//修炼
     constructor() {
         super({
@@ -66,18 +74,12 @@ export class xiuxian extends plugin {//修炼
             ]
         })
     }
-    const btn=segment.button([
-      { text: "修仙", callback: `/修仙` },
-      { text: "突破", callback: `/突破` },
-      { text: "服用丹药", callback: `/服用丹药` },
-    ],[
-      { text: "修仙境界列表", callback: `/修仙境界列表` },
-      { text: "我的境界", callback: `/我的境界` },
-    ])
     async giveme_level(e){
 		let id=e.user_id
         if(!e.isMaster){
-			if(id.length>30){return await e.reply(["哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡",btn])}
+			if(id.length>30){
+			return await e.reply(["哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡",btn]);
+			}
             return await e.reply("哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡");
         }
         let numreg = /[1-9][0-9]{0,12}/;
@@ -110,13 +112,17 @@ export class xiuxian extends plugin {//修炼
         if (json[user_id].level > 2000) json[user_id].levelname = levelname[19];
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));
         await e.reply([segment.at(e.user_id),`恭喜您，获得了境界${numret}层`]);
-        if(id.length>30){return await e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`,btn])}
+        if(id.length>30){
+			await e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`],btn);
+        }
         await e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`]);
     }
     async giveme_exp(e){
 		let id=e.user_id
         if(!e.isMaster){
-			if(id.length>30){return await e.reply(["哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡",btn])}
+			if(id.length>30){
+			return await e.reply(["哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡",btn]);
+			}
             return await e.reply("哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡");
         }
         let numreg = /[1-9][0-9]{0,12}/;
@@ -137,7 +143,9 @@ export class xiuxian extends plugin {//修炼
         json[user_id].experience+=numret;
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));
         await e.reply([segment.at(e.user_id),`恭喜您，获得了灵力${numret}点`]);
-        if(id.length>30){return await e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`,btn])}
+        if(id.length>30){
+			await e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`,btn]);
+        }
         await e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`]);
     }
     async xxsetCd (seconds = 60) {
@@ -235,10 +243,14 @@ export class xiuxian extends plugin {//修炼
         }
         const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));//读取文件
         if (!json.hasOwnProperty(user_id)||json[user_id].level==0) {//如果文件夹不存在
-			if(id.length>30){return await e.reply([segment.at(e.user_id), '您还是凡人，请通过#修炼和#突破开启你的仙途',btn])}
-            return e.reply([segment.at(e.user_id), '您还是凡人，请通过#修炼和#突破开启你的仙途']);
+			if(id.length>30){
+				return e.reply([segment.at(e.user_id),"您还是凡人，请通过#修炼和#突破开启你的仙途",btn]);
+			}
+            return e.reply([segment.at(e.user_id),'您还是凡人，请通过#修炼和#突破开启你的仙途']);
         }
-        if(id.length>30){return await e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`,btn])}
+        if(id.length>30){
+			e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`,btn]);
+        }
         e.reply([segment.at(e.user_id),`\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`]);
     }
     async list(e) {
@@ -248,7 +260,9 @@ export class xiuxian extends plugin {//修炼
             msg = msg + levelname[j] + '\n'
         }
         msg+='欸嘿!到大帝境界后别努力了,至强你达不到的doge!!\n后期修行困难可以选择#服用丹药,有40%的成功率.\n'
-        if(id.length>30){return await e.reply([msg,btn])}
+        if(id.length>30){
+			e.reply([msg,btn])
+        }
         e.reply(msg);
     }
     async xiuxian(e){
@@ -274,7 +288,9 @@ export class xiuxian extends plugin {//修炼
             cdtime = 0;
         }
         if (cdtime) {
-			if(id.length>30){return await e.reply([`对不起，修炼失败，还有${cdtime}秒cd`,btn])}
+			if(id.length>30){
+				return await e.reply(`对不起，修炼失败，还有${cdtime}秒cd`,btn)
+			}
             return await e.reply(`对不起，修炼失败，还有${cdtime}秒cd`)
         }
         await this.xxsetCd(cdtime_xiuxian);
@@ -295,26 +311,38 @@ export class xiuxian extends plugin {//修炼
         if (e.msg.includes('丹药')) {
             if (pills > 60) {
                 json[user_id].experience += 10
-                if(id.length>30){await e.reply([segment.at(user_id),
-                    `\n服用丹药成功，你获得了10点灵力！\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`,btn])}
-                else{e.reply([segment.at(user_id),
-                    `\n服用丹药成功，你获得了10点灵力！\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);}
+                if(id.length>30){
+					e.reply([segment.at(user_id),
+                    `\n服用丹药成功，你获得了10点灵力！\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`,btn]);
+                    }
+                else{
+                e.reply([segment.at(user_id),
+                    `\n服用丹药成功，你获得了10点灵力！\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
+                    }
             }
             else {
                 json[user_id].experience -= 3
-                if(id.length>30){await e.reply([segment.at(user_id),
-                    `\n服用失败，由于大量丹毒你损失了3点灵力！\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`,btn])}
-                else{e.reply([segment.at(user_id),
-                    `\n服用失败，由于大量丹毒你损失了3点灵力！\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);}
+                if(id.length>30){
+					e.reply([segment.at(user_id),
+                    `\n服用失败，由于大量丹毒你损失了3点灵力！\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`,btn]);
+                    }
+                else{
+                e.reply([segment.at(user_id),
+                    `\n服用失败，由于大量丹毒你损失了3点灵力！\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
+                    }
             }
         }
         else{
             experience_ = Math.round(1 + 2 * Math.random())
             json[user_id].experience += experience_
-            if(id.length>30){await e.reply([segment.at(user_id),
-                `\n你获得了${experience_}点灵力。\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`,btn])}
-            else{e.reply([segment.at(user_id),
-                `\n你获得了${experience_}点灵力。\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);}
+            if(id.length>30){
+				e.reply([segment.at(user_id),
+                `\n你获得了${experience_}点灵力。\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`],btn);
+                }
+            else{
+            e.reply([segment.at(user_id),
+                `\n你获得了${experience_}点灵力。\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
+                }
         }
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));//写入文件
         if(e.isMaster){
@@ -363,7 +391,9 @@ export class xiuxian extends plugin {//修炼
             cdtime = 0;
         }
         if (cdtime) {
-			if(id.length>30){return await e.reply([`对不起，突破失败，还有${cdtime}秒cd`,btn])}
+			if(id.length>30){
+				return await e.reply(`对不起，突破失败，还有${cdtime}秒cd`,btn)
+			}
             return await e.reply(`对不起，突破失败，还有${cdtime}秒cd`)
         }
         await this.brsetCd(cdtime_break);
@@ -381,21 +411,24 @@ export class xiuxian extends plugin {//修炼
         if (json[user_id].experience < 5) json[user_id].level = 1
         for(let ls=1;ls<17;ls++){
             if(json[user_id].experience < level_exp[ls] && json[user_id].level >= ls+1){
-				if(id.length>30){return await e.reply([segment.at(e.user_id),`修为不足,还差${level_exp[ls] - json[user_id].experience},请再接再厉`,btn])}
+				if(id.length>30){
+					return e.reply(segment.at(e.user_id),`修为不足,还差${level_exp[ls] - json[user_id].experience},请再接再厉`,btn)
+				}
                 return e.reply(segment.at(e.user_id),`修为不足,还差${level_exp[ls] - json[user_id].experience},请再接再厉`)
             }
         }
         if (json[user_id].experience >= 320 && json[user_id].level > 18 + Math.floor((json[user_id].experience - 320) / 80)) {
-			if(id.length>30){return await e.reply([segment.at(e.user_id),`修为不足,还差${(Math.floor(json[user_id].experience / 80) * 80 + 80) - json[user_id].experience},请再接再厉`,btn])}
-            return e.reply(segment.at(e.user_id),`修为不足,还差${(Math.floor(json[user_id].experience / 80) * 80 + 80) - json[user_id].experience},请再接再厉`)
+			if(id.length>30){
+				return e.reply([segment.at(e.user_id),`修为不足,还差${(Math.floor(json[user_id].experience / 80) * 80 + 80) - json[user_id].experience},请再接再厉`,btn])
+			}
+            return e.reply([segment.at(e.user_id),`修为不足,还差${(Math.floor(json[user_id].experience / 80) * 80 + 80) - json[user_id].experience},请再接再厉`])
         }
         if (json[user_id].experience < 1) {
             json[user_id].experience = 0
         }
         if (json[user_id].level < 18) { var gailv = 100 - json[user_id].level * 2 }
         else { var gailv = 68 - json[user_id].level * 0.05 }
-        if(id.length>30){await e.reply([`当前境界${json[user_id].levelname},需要时间${2 * (json[user_id].level)}s,突破成功概率${gailv},开始突破......`,btn])}
-        else{e.reply(`当前境界${json[user_id].levelname},需要时间${2 * (json[user_id].level)}s,突破成功概率${gailv},开始突破......`)}
+        e.reply(`当前境界${json[user_id].levelname},需要时间${2 * (json[user_id].level)}s,突破成功概率${gailv},开始突破......`)
         let i = Math.random() * 100
         if (i > gailv) {
             setTimeout(() => {//延迟5秒
@@ -418,8 +451,12 @@ export class xiuxian extends plugin {//修炼
             if (json[user_id].level > 2000) json[user_id].levelname = levelname[19];
         }
         setTimeout(() => {//延迟5秒
-            if(id.length>30){await e.reply([segment.at(e.user_id),`突破成功，当前境界${json[user_id].levelname}`,btn])}
-            else{e.reply(segment.at(e.user_id),`突破成功，当前境界${json[user_id].levelname}`)}
+            if(id.length>30){
+				e.reply([segment.at(e.user_id),`突破成功，当前境界${json[user_id].levelname}`,btn]);
+            }
+            else{
+				e.reply([segment.at(e.user_id),`突破成功，当前境界${json[user_id].levelname}`]);
+            }
         }, 3000 * (json[user_id].level + 1));//设置延时
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));//写入文件
         if(e.isMaster){
