@@ -337,7 +337,7 @@ export class xiuxian extends plugin {//修炼
             json[user_id].experience += experience_
             if(id.length>30){
 				e.reply([segment.at(user_id),
-                `\n你获得了${experience_}点灵力。\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`],btn);
+                `\n你获得了${experience_}点灵力。\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`,btn]);
                 }
             else{
             e.reply([segment.at(user_id),
