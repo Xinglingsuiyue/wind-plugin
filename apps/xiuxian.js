@@ -6,7 +6,7 @@ import moment from "moment"
 let path = process.cwd().replace(/\\/g, '/')
 const dirpath=path+'/plugins/wind-plugin/resources/xiuxian-data'
 const levelname=['凡人','练气期','筑基期','金丹期','元婴期','化神期','合体期','大乘期','渡劫期','人仙境','地仙境','天仙境','金仙境','大罗金仙境','准仙帝','仙帝','天人五衰境','圣人','大帝','至强大帝']
-const level_exp=[10,20,30,40,55,70,85,100,125,150,175,200,230,260,290,320];
+const level_exp=[0,10,20,30,40,55,70,85,100,125,150,175,200,230,260,290,320];
 const master_cd=false //主人是否需要cd
 const cdtime_xiuxian = 15 * 60 //修炼的冷却时间,初始为15分钟
 const cdtime_break = 5 * 60 //突破的冷却时间,初始为5分钟
@@ -256,7 +256,7 @@ export class xiuxian extends plugin {//修炼
     async list(e) {
 		let id=e.user_id
         let msg = levelname[0] + '\n';
-        for (let j = 0; j < levelname.length; j++) {
+        for (let j = 1; j < levelname.length; j++) {
             msg = msg + levelname[j] + '\n'
         }
         msg+='欸嘿!到大帝境界后别努力了,至强你达不到的doge!!\n后期修行困难可以选择#服用丹药,有40%的成功率.\n'
@@ -289,7 +289,7 @@ export class xiuxian extends plugin {//修炼
         }
         if (cdtime) {
 			if(id.length>30){
-				return await e.reply(`对不起，修炼失败，还有${cdtime}秒cd`,btn)
+				return await e.reply([`对不起，修炼失败，还有${cdtime}秒cd`,btn])
 			}
             return await e.reply(`对不起，修炼失败，还有${cdtime}秒cd`)
         }
@@ -392,7 +392,7 @@ export class xiuxian extends plugin {//修炼
         }
         if (cdtime) {
 			if(id.length>30){
-				return await e.reply(`对不起，突破失败，还有${cdtime}秒cd`,btn)
+				return await e.reply([`对不起，突破失败，还有${cdtime}秒cd`,btn])
 			}
             return await e.reply(`对不起，突破失败，还有${cdtime}秒cd`)
         }
@@ -408,8 +408,7 @@ export class xiuxian extends plugin {//修炼
         if (!json.hasOwnProperty(user_id)) {//如果json中不存在该用户
             json[user_id] = new_data
         }
-        if (json[user_id].experience < 5) json[user_id].level = 1
-        for(let ls=1;ls<17;ls++){
+        for(let ls=0;ls<17;ls++){
             if(json[user_id].experience < level_exp[ls] && json[user_id].level >= ls+1){
 				if(id.length>30){
 					return e.reply(segment.at(e.user_id),`修为不足,还差${level_exp[ls] - json[user_id].experience},请再接再厉`,btn)
@@ -423,16 +422,13 @@ export class xiuxian extends plugin {//修炼
 			}
             return e.reply([segment.at(e.user_id),`修为不足,还差${(Math.floor(json[user_id].experience / 80) * 80 + 80) - json[user_id].experience},请再接再厉`])
         }
-        if (json[user_id].experience < 1) {
-            json[user_id].experience = 0
-        }
         if (json[user_id].level < 18) { var gailv = 100 - json[user_id].level * 2 }
         else { var gailv = 68 - json[user_id].level * 0.05 }
         e.reply(`当前境界${json[user_id].levelname},需要时间${2 * (json[user_id].level)}s,突破成功概率${gailv},开始突破......`)
         let i = Math.random() * 100
         if (i > gailv) {
             setTimeout(() => {//延迟5秒
-                e.reply('对不起，突破失败，请努力修行')
+                e.reply([segment.at(user_id),'对不起，突破失败，请努力修行'])
             }, 2 * (json[user_id].level));//设置延时
         }
         else{
