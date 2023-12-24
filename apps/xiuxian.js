@@ -93,7 +93,7 @@ export class xiuxian extends plugin {//修炼
 		let id=e.user_id
 		let user_id=e.user_id
 		if (id.length<30&&id.length>5) return false
-		let filename=[e.group_id]
+		let filename=[e.group_id]+".json"
         if(e.isMaster){
             filename="masterxiuxian.json";
         }
