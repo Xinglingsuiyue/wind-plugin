@@ -19,6 +19,7 @@ const btn=segment.button([
       { text: "修仙境界列表", callback: `/修仙境界列表` },
       { text: "我的境界", callback: `/我的境界` },
       { text: "决斗", input: `/决斗`, send: false },
+      { text: "我的id", callback: `/我的id` },
     ])
 export class xiuxian extends plugin {//修炼
     constructor() {
@@ -78,9 +79,50 @@ export class xiuxian extends plugin {//修炼
                     reg: "^#?(修仙者|修炼者|用户)(人数|数量)$", //匹配消息正则，命令正则
                     /** 执行方法 */
                     fnc: 'numxiuxian'
+                },
+                {
+					/** 命令正则匹配 */
+                    reg: "^#?我的id$", //匹配消息正则，命令正则
+                    /** 执行方法 */
+                    fnc: 'myid'
                 }
             ]
         })
+    }
+    async myid(e){
+		let id=e.user_id
+		let user_id=e.user_id
+		if (id.length<30&&id.length>5) return false
+		let filename=[e.group_id]
+        if(e.isMaster){
+            filename="masterxiuxian.json";
+        }
+        if (!fs.existsSync(dirpath)) {//如果文件夹不存在
+            fs.mkdirSync(dirpath);//创建文件夹
+        }
+        if (!fs.existsSync(dirpath + "/" + filename)) {//如果文件不存在
+            fs.writeFileSync(dirpath + "/" + filename, JSON.stringify({//创建文件
+            }));
+        }
+        const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));//读取文件
+        if (!json.hasOwnProperty(user_id)) {//如果json中不存在该用户
+				let uid = await IDDB.getID() + 1
+				await IDDB.setID(uid)
+				new_data = {//创建新用户
+					"id": uid,
+					"experience": 0,
+					"level": 0,
+					"levelname": '凡人',
+					"Privilege": 0,
+        };
+            json[user_id] = new_data
+        }
+        if (!json[user_id].id){
+				let uid = await IDDB.getID() + 1
+				await IDDB.setID(uid)
+				json[user_id].id=uid
+        }
+        return await e.reply([segment.at(e.user_id),`\n你的id是:${json[user_id].id}`,btn])
     }
     async numxiuxian(e){
 		e.reply(JSON.stringify(await IDDB.getID()))
