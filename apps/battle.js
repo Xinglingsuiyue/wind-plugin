@@ -207,7 +207,6 @@ export class xiuxian extends plugin {//修炼
 					at_id=key
 				}
 			}
-			e.reply(at_id)
 			if(!at_id){
 				return e.reply("请输入正确的用户id")
 			}
@@ -234,7 +233,8 @@ export class xiuxian extends plugin {//修炼
                 experience_user=experience_at+Math.round(0 + 2 * Math.random());
                 json[at_id].experience+=experience_at;
                 json[user_id].experience+=experience_user;
-                await e.reply(`你们实力不相上下，经过激烈的战斗之后你赢了，你们都获得了一些经验,\n你获得了${experience_user}点灵力\n对方获得了${experience_at}点灵力`);
+                if(id.length>30) await e.reply([segment.at(e.user_id),`你们实力不相上下，经过激烈的战斗之后你赢了，你们都获得了一些经验,\n你获得了${experience_user}点灵力\n对方获得了${experience_at}点灵力`,btn]);
+                await e.reply([segment.at(e.user_id),`你们实力不相上下，经过激烈的战斗之后你赢了，你们都获得了一些经验,\n你获得了${experience_user}点灵力\n对方获得了${experience_at}点灵力`]);
             }
             else if(score>40&&Math.random()<0.6){
                 experience_at=Math.round(4 + 2 * Math.random());
