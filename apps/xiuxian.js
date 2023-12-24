@@ -411,9 +411,9 @@ export class xiuxian extends plugin {//修炼
         for(let ls=0;ls<17;ls++){
             if(json[user_id].experience < level_exp[ls] && json[user_id].level >= ls+1){
 				if(id.length>30){
-					return e.reply(segment.at(e.user_id),`修为不足,还差${level_exp[ls] - json[user_id].experience},请再接再厉`,btn)
+					return e.reply([segment.at(e.user_id),`修为不足,还差${level_exp[ls] - json[user_id].experience},请再接再厉`,btn])
 				}
-                return e.reply(segment.at(e.user_id),`修为不足,还差${level_exp[ls] - json[user_id].experience},请再接再厉`)
+                return e.reply([segment.at(e.user_id),`修为不足,还差${level_exp[ls] - json[user_id].experience},请再接再厉`])
             }
         }
         if (json[user_id].experience >= 320 && json[user_id].level > 18 + Math.floor((json[user_id].experience - 320) / 80)) {
