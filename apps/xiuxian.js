@@ -18,6 +18,7 @@ const btn=segment.button([
     ],[
       { text: "修仙境界列表", callback: `/修仙境界列表` },
       { text: "我的境界", callback: `/我的境界` },
+      { text: "决斗", input: `/决斗`, send: false },
     ])
 export class xiuxian extends plugin {//修炼
     constructor() {
