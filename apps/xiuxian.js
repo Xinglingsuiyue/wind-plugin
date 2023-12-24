@@ -353,9 +353,9 @@ export class xiuxian extends plugin {//修炼
         }
         if (cdtime) {
 			if(id.length>30){
-				return await e.reply([segment.at(e.user_id),`对不起，用户:${json[user_id].id},\n修炼失败，还有${cdtime}秒cd`,btn])
+				return await e.reply([segment.at(e.user_id),`对不起,修炼失败，还有${cdtime}秒cd`,btn])
 			}
-            return await e.reply(segment.at(e.user_id),`对不起，用户:${json[user_id].id},\n修炼失败，还有${cdtime}秒cd`)
+            return await e.reply(segment.at(e.user_id),`对不起,修炼失败，还有${cdtime}秒cd`)
         }
         await this.xxsetCd(cdtime_xiuxian);
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
@@ -488,9 +488,9 @@ export class xiuxian extends plugin {//修炼
         }
         if (cdtime) {
 			if(id.length>30){
-				return await e.reply([segment.at(e.user_id),`对不起,用户:${json[user_id].id},\n你已突破失败，还有${cdtime}秒cd`,btn])
+				return await e.reply([segment.at(e.user_id),`对不起,突破失败，还有${cdtime}秒cd`,btn])
 			}
-            return await e.reply([segment.at(e.user_id),`对不起,用户:${json[user_id].id},\n你已突破失败，还有${cdtime}秒cd`])
+            return await e.reply([segment.at(e.user_id),`对不起,突破失败，还有${cdtime}秒cd`])
         }
         await this.brsetCd(cdtime_break);
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
