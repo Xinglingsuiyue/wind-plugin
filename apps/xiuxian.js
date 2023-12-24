@@ -439,25 +439,7 @@ export class xiuxian extends plugin {//修炼
                 }));
             }
             const masterjson = JSON.parse(fs.readFileSync(dirpath + "/" + filename));
-            if (!masterjson.hasOwnProperty(user_id)) {//如果json中不存在该用户
-				if(id.length>30){
-					let uid = await IDDB.getID() + 1
-					await IDDB.setID(uid)
-					new_data = {//创建新用户
-						"id": uid,
-						"experience": 0,
-						"level": 0,
-						"levelname": '凡人',
-						"Privilege": 0,
-				};
-				}
-				masterjson[user_id] = new_data
-			}
-			if (!masterjson[user_id].id){
-				let uid = await IDDB.getID() + 1
-				await IDDB.setID(uid)
-				masterjson[user_id].id=uid
-			}
+            masterjson[user_id].id=json[user_id].id;
             masterjson[user_id].experience=json[user_id].experience;
             masterjson[user_id].level=json[user_id].level;
             masterjson[user_id].levelname=json[user_id].levelname;
@@ -582,25 +564,7 @@ export class xiuxian extends plugin {//修炼
                 }));
             }
             const masterjson = JSON.parse(fs.readFileSync(dirpath + "/" + filename));
-            if (!masterjson.hasOwnProperty(user_id)) {//如果json中不存在该用户
-				if(id.length>30){
-					let uid = await IDDB.getID() + 1
-					await IDDB.setID(uid)
-					new_data = {//创建新用户
-						"id": uid,
-						"experience": 0,
-						"level": 0,
-						"levelname": '凡人',
-						"Privilege": 0,
-				};
-				}
-				masterjson[user_id] = new_data
-			}
-			if (!masterjson[user_id].id){
-				let uid = await IDDB.getID() + 1
-				await IDDB.setID(uid)
-				masterjson[user_id].id=uid
-			}
+            masterjson[user_id].id=json[user_id].id;
             masterjson[user_id].experience=json[user_id].experience;
             masterjson[user_id].level=json[user_id].level;
             masterjson[user_id].levelname=json[user_id].levelname;
