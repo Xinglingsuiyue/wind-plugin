@@ -205,6 +205,11 @@ export class xiuxian extends plugin {//修炼
 			for (let key in json) {
 				if (json[key].id == uid) {
 					at_id=key
+					if(at_id == e.user_id)
+					{	
+						if(id.length>30) return await e.reply([segment.at(e.user_id),"自己不能跟自己决斗哦",btn]);
+						return e.reply([segment.at(e.user_id),"自己不能跟自己决斗哦"])
+					}
 				}
 			}
 			if(!at_id){
