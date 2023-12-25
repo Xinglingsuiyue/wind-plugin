@@ -275,7 +275,6 @@ export class xiuxian extends plugin {//修炼
         if(isqbot.trssbtnqbot(id) === true){
 			btn=isqbot.btn
 		}
-        if(isqbot.trssbtnqbot(id) === true) return await e.reply("暂时还未适配");
         let filename = [e.group_id]+".json";
         if (!fs.existsSync(dirpath + "/" + filename)) {//如果文件不存在
             return e.reply("本群暂无修炼者～")
@@ -303,7 +302,7 @@ export class xiuxian extends plugin {//修炼
         const sortedScores = scores.sort((a, b) => b - a);
         console.log(`sortedScores: ${sortedScores}`);
         const topTenUserids = sortedScores.reduce((acc, score, index) => {
-            if (index < 10) {
+            if (index < 15) {
                 const userId = sortedUsers[scores.indexOf(score)];
                 if (!acc.includes(userId)) {
                     acc.push(userId);
@@ -312,14 +311,25 @@ export class xiuxian extends plugin {//修炼
             return acc;
         }, []);
         console.log(`topTenUserids: ${topTenUserids}`);
-        let forwardMsg = await e.group.makeForwardMsg(MsgList);
-        if(typeof forwardMsg.data!='string')
-        {forwardMsg.data = JSON.stringify(forwardMsg.data)}
-        forwardMsg.data = forwardMsg.data
-            .replace(/\n/g, '')
-            .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
-            .replace(/___+/, `<title color="#777777" size="26">修仙排行榜～</title>`)
-        await e.reply(forwardMsg)
+        if(id == "stdin" || id.length>15){
+			let remsg=`\n第1名:id:${jsonData[topTenUserids[0]].id},境界:${jsonData[topTenUserids[0]].levelname},灵力:${jsonData[topTenUserids[0]].experience}`;
+			for(let i=1;i<topTenUserids.length;i++){
+				remsg=remsg+`\n第${i+1}名:id:${jsonData[topTenUserids[i]].id},境界:${jsonData[topTenUserids[i]].levelname},灵力:${jsonData[topTenUserids[i]].experience}`
+			}
+			if(isqbot.trssbtnqbot(id) === true) return await e.reply([remsg,btn])
+			return await e.reply(remsg)
+        }
+        if(id.length<12){
+			let forwardMsg = await e.group.makeForwardMsg(MsgList);
+			if(typeof forwardMsg.data!='string')
+			{forwardMsg.data = JSON.stringify(forwardMsg.data)}
+			forwardMsg.data = forwardMsg.data
+				.replace(/\n/g, '')
+				.replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
+				.replace(/___+/, `<title color="#777777" size="26">修仙排行榜～</title>`)
+			return await e.reply(forwardMsg)
+        }
+        await e.reply("暂时还未适配");
     }
     async view(e){
 		let id=e.user_id
