@@ -4,6 +4,8 @@ import fs from 'fs';
 import YAML from "yaml";
 import{segment}from'oicq';
 import moment from "moment"
+import isqbot from '../model/isqbot.js';
+let btn
 let path = process.cwd().replace(/\\/g, '/')
 const dirpath=path+'/plugins/wind-plugin/resources/xiuxian-data'
 const levelname=['凡人','练气期','筑基期','金丹期','元婴期','化神期','合体期','大乘期','渡劫期','人仙境','地仙境','天仙境','金仙境','大罗金仙境','准仙帝','仙帝','天人五衰境','圣人','大帝','至强大帝']
@@ -11,16 +13,6 @@ const level_exp=[0,10,20,30,40,55,70,85,100,125,150,175,200,230,260,290,320];
 const master_battled=true //主人是否会被别人攻打
 const master_cd=false //主人是否需要cd
 const cdtime_battle = 5 * 60 //决斗的冷却时间,初始为1分钟
-const btn=segment.button([
-      { text: "修仙", callback: `/修仙` },
-      { text: "突破", callback: `/突破` },
-      { text: "服用丹药", callback: `/服用丹药` },
-    ],[
-      { text: "修仙境界列表", callback: `/修仙境界列表` },
-      { text: "我的境界", callback: `/我的境界` },
-      { text: "决斗", input: `/决斗`, send: false },
-      { text: "我的id", callback: `/我的id` },
-    ])
 export class xiuxian extends plugin {//修炼
     constructor() {
         super({
@@ -153,9 +145,12 @@ export class xiuxian extends plugin {//修炼
     }
     async battle(e){
 		let id=e.user_id
+		if(isqbot.trssbtnqbot(id) === true){
+			btn=isqbot.btn
+		}
 		let numreg = /[1-9][0-9]{0,12}/;
         let uid= parseInt(numreg.exec(e.msg));
-        if(!uid&&id.length>30) return e.reply([segment.at(e.user_id),"你倒是说一说你跟谁决斗啊！他的id呢？",btn])
+        if(isqbot.trssbtnqbot(id) === true) return e.reply([segment.at(e.user_id),"你倒是说一说你跟谁决斗啊！他的id呢？",btn])
         if(!e.at&&!uid){
             return e.reply([segment.at(e.user_id),"大笨蛋，你要打谁你倒是说啊！！"])
         }
@@ -174,7 +169,7 @@ export class xiuxian extends plugin {//修炼
             cdtime = 0;
         }
         if (cdtime) {
-			if(id.length>30){
+			if(isqbot.trssbtnqbot(id) === true){
 				return await e.reply([segment.at(e.user_id),`上一场战斗刚过去不久呢,你太累了,还有${cdtime}秒cd`,btn]);
 			}
             return await e.reply([segment.at(e.user_id),`上一场战斗刚过去不久呢,你太累了,还有${cdtime}秒cd`]);
@@ -189,14 +184,14 @@ export class xiuxian extends plugin {//修炼
         }
         const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));//读取文件
         if (!json.hasOwnProperty(user_id)) {//如果json中不存在该用户
-			if(id.length>30){
+			if(isqbot.trssbtnqbot(id) === true){
 				return await e.reply([segment.at(e.user_id),"你还没有修炼过呢，想和别人决斗先修炼一下吧",btn]);
 			}
 			return e.reply([segment.at(e.user_id),"你还没有修炼过呢，想和别人决斗先修炼一下吧"])
 		}
-		if(id.length<30&&id.length>5){
+		if(isqbot.trssbtnqbot(id) === true){
 			if (!json.hasOwnProperty(at_id)) {//如果json中不存在该用户
-				if(id.length>30){
+				if(isqbot.trssbtnqbot(id) === true){
 					return await e.reply([segment.at(e.user_id),"对方还没修炼过呢，你这样欺负ta实在太可恶了！！",btn]);
 				}
 				return e.reply([segment.at(e.user_id),"对方还没修炼过呢，你这样欺负ta实在太可恶了！！"])
@@ -208,7 +203,7 @@ export class xiuxian extends plugin {//修炼
 					at_id=key
 					if(at_id == e.user_id)
 					{	
-						if(id.length>30) return await e.reply([segment.at(e.user_id),"自己不能跟自己决斗哦",btn]);
+						if(isqbot.trssbtnqbot(id) === true) return await e.reply([segment.at(e.user_id),"自己不能跟自己决斗哦",btn]);
 						return e.reply([segment.at(e.user_id),"自己不能跟自己决斗哦"])
 					}
 				}
@@ -227,11 +222,11 @@ export class xiuxian extends plugin {//修炼
                 json[at_id].level=0;
                 json[at_id].experience=0;
                 json[at_id].levelname="凡人"
-                if(id.length>30) await e.reply([segment.at(e.user_id),"对方与你的差距太大了,对方直接被你抓住没跑掉,你将他打回凡人,从头修炼",btn]);
+                if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),"对方与你的差距太大了,对方直接被你抓住没跑掉,你将他打回凡人,从头修炼",btn]);
 				else await e.reply([segment.at(e.user_id),"对方与你的差距太大了,对方直接被你抓住没跑掉,你将他打回凡人,从头修炼"]);
             }
             else if(score>60){
-				if(id.length>30) await e.reply([segment.at(e.user_id),"对方与你差距较大，你轻松战胜了敌人，你们两个都没有获得提升",btn]);
+				if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),"对方与你差距较大，你轻松战胜了敌人，你们两个都没有获得提升",btn]);
                 else await e.reply([segment.at(e.user_id),"对方与你差距较大，你轻松战胜了敌人，你们两个都没有获得提升"])
             }
             else if(score>40&&Math.random()<0.3){
@@ -239,7 +234,7 @@ export class xiuxian extends plugin {//修炼
                 experience_user=experience_at+Math.round(0 + 2 * Math.random());
                 json[at_id].experience+=experience_at;
                 json[user_id].experience+=experience_user;
-                if(id.length>30) await e.reply([segment.at(e.user_id),`你们实力不相上下，经过激烈的战斗之后你赢了，你们都获得了一些经验,\n你获得了${experience_user}点灵力\n对方获得了${experience_at}点灵力`,btn]);
+                if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),`你们实力不相上下，经过激烈的战斗之后你赢了，你们都获得了一些经验,\n你获得了${experience_user}点灵力\n对方获得了${experience_at}点灵力`,btn]);
                 await e.reply([segment.at(e.user_id),`你们实力不相上下，经过激烈的战斗之后你赢了，你们都获得了一些经验,\n你获得了${experience_user}点灵力\n对方获得了${experience_at}点灵力`]);
             }
             else if(score>40&&Math.random()<0.6){
@@ -247,11 +242,11 @@ export class xiuxian extends plugin {//修炼
                 experience_user=experience_at-Math.round(0 + 2 * Math.random());
                 json[at_id].experience-=experience_at;
                 json[user_id].experience-=experience_user;
-                if(id.length>30) await e.reply([segment.at(e.user_id),`你们实力不相上下你打赢了对方，但是你们两个因为消耗巨大导致灵力流失,\n你丢失了${experience_user}点灵力\n对方丢失了${experience_at}点灵力`,btn]);
+                if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),`你们实力不相上下你打赢了对方，但是你们两个因为消耗巨大导致灵力流失,\n你丢失了${experience_user}点灵力\n对方丢失了${experience_at}点灵力`,btn]);
                 else await e.reply([segment.at(e.user_id),`你们实力不相上下你打赢了对方，但是你们两个因为消耗巨大导致灵力流失,\n你丢失了${experience_user}点灵力\n对方丢失了${experience_at}点灵力`]);
             }
             else if(score>40){
-				if(id.length>30) await e.reply([segment.at(e.user_id),"你们实力不相上下，激烈斗争后，你赢了对方,你们两个都没有提升",btn]);
+				if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),"你们实力不相上下，激烈斗争后，你赢了对方,你们两个都没有提升",btn]);
                 else await e.reply([segment.at(e.user_id),"你们实力不相上下，激烈斗争后，你赢了对方,你们两个都没有提升"]);
             }
             else if(score>30){
@@ -259,7 +254,7 @@ export class xiuxian extends plugin {//修炼
                 experience_at=experience_user+Math.round(0 + 5 * Math.random());
                 json[at_id].experience-=experience_at;
                 json[user_id].experience+=experience_user;
-                if(id.length>30) await e.reply([segment.at(e.user_id),`你因机缘巧合打败了对方，获得大量的经验值,\n你获得了${experience_user}点灵力对方丢失了${experience_at}点灵力`,btn]);
+                if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),`你因机缘巧合打败了对方，获得大量的经验值,\n你获得了${experience_user}点灵力对方丢失了${experience_at}点灵力`,btn]);
                 else await e.reply([segment.at(e.user_id),`你因机缘巧合打败了对方，获得大量的经验值,\n你获得了${experience_user}点灵力对方丢失了${experience_at}点灵力`]);
             }
             else if(score>20){
@@ -291,7 +286,7 @@ export class xiuxian extends plugin {//修炼
                     json[at_id].levelname = levelname[17] + `${level_name}重天`
                 }
                 if (json[at_id].level > 2000) json[at_id].levelname = levelname[18];
-                if(id.length>30) await e.reply([segment.at(e.user_id),`你忽然觉醒，灵气值和境界提升，成功反杀了对方,\n你提升了${level_user}个境界，获得了${experience_user}点灵力\n对方跌落了${level_user}个境界，丢失了${experience_user}点灵力`,btn]);
+                if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),`你忽然觉醒，灵气值和境界提升，成功反杀了对方,\n你提升了${level_user}个境界，获得了${experience_user}点灵力\n对方跌落了${level_user}个境界，丢失了${experience_user}点灵力`,btn]);
                 else await e.reply([segment.at(e.user_id),`你忽然觉醒，灵气值和境界提升，成功反杀了对方,\n你提升了${level_user}个境界，获得了${experience_user}点灵力\n对方跌落了${level_user}个境界，丢失了${experience_user}点灵力`]);
             }
             else{
@@ -325,7 +320,7 @@ export class xiuxian extends plugin {//修炼
                     json[at_id].levelname = levelname[17] + `${level_name}重天`
                 }
                 if (json[at_id].level > 2000) json[at_id].levelname = levelname[18];
-                if(id.length>30) await e.reply([segment.at(e.user_id),`你人品大爆发了，获得天道青睐，成功爆发进阶，反杀了对方,\n你提升了${level_user}个境界，获得了${experience_user}点灵力\n对方跌落了${level_at}个境界，丢失了${experience_at}点灵力`,btn]);
+                if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),`你人品大爆发了，获得天道青睐，成功爆发进阶，反杀了对方,\n你提升了${level_user}个境界，获得了${experience_user}点灵力\n对方跌落了${level_at}个境界，丢失了${experience_at}点灵力`,btn]);
                 else await e.reply([segment.at(e.user_id),`你人品大爆发了，获得天道青睐，成功爆发进阶，反杀了对方,\n你提升了${level_user}个境界，获得了${experience_user}点灵力\n对方跌落了${level_at}个境界，丢失了${experience_at}点灵力`]);
             }
         }
@@ -361,7 +356,7 @@ export class xiuxian extends plugin {//修炼
                     json[at_id].levelname = levelname[17] + `${level_name}重天`
                 }
                 if (json[at_id].level > 2000) json[at_id].levelname = levelname[18];
-                if(id.length>30) await e.reply([segment.at(e.user_id),`虽然你领先了对方很多个境界，但是对方忽然人品大爆发，获得了天道青睐，你被对面反杀了,\n你跌落了${level_user}个境界，丢失了${experience_user}点灵力\n对方提升了${level_at}个境界，获得了${experience_at}点灵力`,btn]);
+                if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),`虽然你领先了对方很多个境界，但是对方忽然人品大爆发，获得了天道青睐，你被对面反杀了,\n你跌落了${level_user}个境界，丢失了${experience_user}点灵力\n对方提升了${level_at}个境界，获得了${experience_at}点灵力`,btn]);
                 else await e.reply([segment.at(e.user_id),`虽然你领先了对方很多个境界，但是对方忽然人品大爆发，获得了天道青睐，你被对面反杀了,\n你跌落了${level_user}个境界，丢失了${experience_user}点灵力\n对方提升了${level_at}个境界，获得了${experience_at}点灵力`]);
             }
             else if(score>80){
@@ -393,7 +388,7 @@ export class xiuxian extends plugin {//修炼
                     json[at_id].levelname = levelname[17] + `${level_name}重天`
                 }
                 if (json[at_id].level > 2000) json[at_id].levelname = levelname[18];
-                if(id.length>30) await e.reply([segment.at(e.user_id),`对面忽然觉醒，灵气值和境界获得提升，你被对面反杀了,\n你跌落了${level_user}个境界，丢失了${experience_user}点灵力\n对方提升了${level_user}个境界，获得了${experience_user}点灵力`,btn]);
+                if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),`对面忽然觉醒，灵气值和境界获得提升，你被对面反杀了,\n你跌落了${level_user}个境界，丢失了${experience_user}点灵力\n对方提升了${level_user}个境界，获得了${experience_user}点灵力`,btn]);
                 else await e.reply([segment.at(e.user_id),`对面忽然觉醒，灵气值和境界获得提升，你被对面反杀了,\n你跌落了${level_user}个境界，丢失了${experience_user}点灵力\n对方提升了${level_user}个境界，获得了${experience_user}点灵力`]);
             }
             else if(score>60){
@@ -401,7 +396,7 @@ export class xiuxian extends plugin {//修炼
                 experience_user=experience_user+Math.round(0 + 5 * Math.random());
                 json[at_id].experience+=experience_at;
                 json[user_id].experience-=experience_user;
-                if(id.length>30) await e.reply([segment.at(e.user_id),`对方机缘巧合下击败了你，对方获得了大量经验,\n你损失了${experience_user}点灵力,\n对方获得了${experience_at}点灵力`,btn]);
+                if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),`对方机缘巧合下击败了你，对方获得了大量经验,\n你损失了${experience_user}点灵力,\n对方获得了${experience_at}点灵力`,btn]);
                 else await e.reply([segment.at(e.user_id),`对方机缘巧合下击败了你，对方获得了大量经验,\n你损失了${experience_user}点灵力,\n对方获得了${experience_at}点灵力`,btn]);
             }
             else if(score>40&&Math.random()>0.7){
@@ -409,7 +404,7 @@ export class xiuxian extends plugin {//修炼
                 experience_user=experience_at+Math.round(0 + 2 * Math.random());
                 json[at_id].experience+=experience_at;
                 json[user_id].experience+=experience_user;
-                if(id.length>30) await e.reply([segment.at(e.user_id),`你们实力不相上下，经过激烈的战斗之后你还是输了，但是你们都获得了一些经验\n你获得了${experience_user}点灵力\n对方获得了${experience_at}点灵力`,btn]);
+                if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),`你们实力不相上下，经过激烈的战斗之后你还是输了，但是你们都获得了一些经验\n你获得了${experience_user}点灵力\n对方获得了${experience_at}点灵力`,btn]);
                 else await e.reply([segment.at(e.user_id),`你们实力不相上下，经过激烈的战斗之后你还是输了，但是你们都获得了一些经验\n你获得了${experience_user}点灵力\n对方获得了${experience_at}点灵力`]);
             }
             else if(score>40&&Math.random()>0.4){
@@ -417,22 +412,22 @@ export class xiuxian extends plugin {//修炼
                 experience_user=experience_at-Math.round(0 + 2 * Math.random());
                 json[at_id].experience-=experience_at;
                 json[user_id].experience-=experience_user;
-                if(id.length>30) await e.reply([segment.at(e.user_id),`你们实力不相上下你打赢了对方，激烈战斗后你还是输了,\n你丢失了${experience_user}点灵力\n对方丢失了${experience_at}点灵力`,btn]);
+                if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),`你们实力不相上下你打赢了对方，激烈战斗后你还是输了,\n你丢失了${experience_user}点灵力\n对方丢失了${experience_at}点灵力`,btn]);
                 else await e.reply([segment.at(e.user_id),`你们实力不相上下你打赢了对方，激烈战斗后你还是输了,\n你丢失了${experience_user}点灵力\n对方丢失了${experience_at}点灵力`]);
             }
             else if(score>40){
-				if(id.length>30) await e.reply([segment.at(e.user_id),"你们实力不相上下，激烈斗争后，你赢了对方,你们两个都没有提升",btn]);
+				if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),"你们实力不相上下，激烈斗争后，你赢了对方,你们两个都没有提升",btn]);
                 await e.reply([segment.at(e.user_id),"你们实力不相上下，激烈斗争后，你赢了对方,你们两个都没有提升"])
             }
             else if(score<5&&Math.random()>0.9){
                 json[at_id].level=0;
                 json[at_id].experience=0;
                 json[at_id].levelname="凡人"
-                if(id.length>30) await e.reply([segment.at(e.user_id),"你们实力相差太过悬殊，你被对面抓起来废了，需要重头修炼了",btn]);
+                if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),"你们实力相差太过悬殊，你被对面抓起来废了，需要重头修炼了",btn]);
                 await e.reply([segment.at(e.user_id),"你们实力相差太过悬殊，你被对面抓起来废了，需要重头修炼了"])
             }
             else{
-				if(id.length>30) await e.reply([segment.at(e.user_id),"你们的境界相差过大了，你直接被对方吊打，再修炼一下再来决斗吧",btn]);
+				if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),"你们的境界相差过大了，你直接被对方吊打，再修炼一下再来决斗吧",btn]);
                 await e.reply([segment.at(e.user_id),"你们的境界相差过大了，你直接被对方吊打，再修炼一下再来决斗吧"])
             }
         }
