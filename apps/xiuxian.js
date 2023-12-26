@@ -494,6 +494,15 @@ export class xiuxian extends plugin {//修炼
                 }));
             }
             const masterjson = JSON.parse(fs.readFileSync(dirpath + "/" + filename));
+            if (!masterjson.hasOwnProperty(user_id)) {//如果json中不存在该用户
+                new_data = {//创建新用户
+                        "experience": 0,
+                        "level": 0,
+                        "levelname": '凡人', 
+                        "Privilege": 0,
+                 };      
+                masterjson[user_id]=new_data;
+            }
             masterjson[user_id].id=json[user_id].id;
             masterjson[user_id].experience=json[user_id].experience;
             masterjson[user_id].level=json[user_id].level;
@@ -622,6 +631,15 @@ export class xiuxian extends plugin {//修炼
                 }));
             }
             const masterjson = JSON.parse(fs.readFileSync(dirpath + "/" + filename));
+            if (!masterjson.hasOwnProperty(user_id)) {//如果json中不存在该用户
+                new_data = {//创建新用户
+                        "experience": 0,
+                        "level": 0,
+                        "levelname": '凡人', 
+                        "Privilege": 0,
+                 };      
+                masterjson[user_id]=new_data;
+            }
             masterjson[user_id].id=json[user_id].id;
             masterjson[user_id].experience=json[user_id].experience;
             masterjson[user_id].level=json[user_id].level;
