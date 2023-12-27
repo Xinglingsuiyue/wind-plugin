@@ -217,6 +217,8 @@ export class xiuxian extends plugin {//修炼
         sc = (json[user_id].level * 3 + json[user_id].experience) / (json[user_id].level * 3 + json[user_id].experience + json[at_id].level * 3 + json[at_id].experience) * 100;
         score = sc.toFixed(2);
         await e.reply(`你的境界是${json[user_id].levelname},你的灵力值为${json[user_id].experience},\n对方的境界是${json[at_id].levelname},对方的灵力值为${json[at_id].experience},\n你赢的概率约为${score}%`);
+        let experience_at
+        let experience_user
         if(sc>Math.random()){
             if(score>95&&Math.random()<0.1){
                 json[at_id].level=0;
