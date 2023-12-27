@@ -237,7 +237,7 @@ export class xiuxian extends plugin {//修炼
                 json[at_id].experience+=experience_at;
                 json[user_id].experience+=experience_user;
                 if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),`你们实力不相上下，经过激烈的战斗之后你赢了，你们都获得了一些经验,\n你获得了${experience_user}点灵力\n对方获得了${experience_at}点灵力`,btn]);
-                await e.reply([segment.at(e.user_id),`你们实力不相上下，经过激烈的战斗之后你赢了，你们都获得了一些经验,\n你获得了${experience_user}点灵力\n对方获得了${experience_at}点灵力`]);
+                else await e.reply([segment.at(e.user_id),`你们实力不相上下，经过激烈的战斗之后你赢了，你们都获得了一些经验,\n你获得了${experience_user}点灵力\n对方获得了${experience_at}点灵力`]);
             }
             else if(score>40&&Math.random()<0.6){
                 experience_at=Math.round(4 + 2 * Math.random());
@@ -419,18 +419,18 @@ export class xiuxian extends plugin {//修炼
             }
             else if(score>40){
 				if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),"你们实力不相上下，激烈斗争后，你赢了对方,你们两个都没有提升",btn]);
-                await e.reply([segment.at(e.user_id),"你们实力不相上下，激烈斗争后，你赢了对方,你们两个都没有提升"])
+                else await e.reply([segment.at(e.user_id),"你们实力不相上下，激烈斗争后，你赢了对方,你们两个都没有提升"])
             }
             else if(score<5&&Math.random()>0.9){
                 json[at_id].level=0;
                 json[at_id].experience=0;
                 json[at_id].levelname="凡人"
                 if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),"你们实力相差太过悬殊，你被对面抓起来废了，需要重头修炼了",btn]);
-                await e.reply([segment.at(e.user_id),"你们实力相差太过悬殊，你被对面抓起来废了，需要重头修炼了"])
+                else await e.reply([segment.at(e.user_id),"你们实力相差太过悬殊，你被对面抓起来废了，需要重头修炼了"])
             }
             else{
 				if(isqbot.trssbtnqbot(id) === true) await e.reply([segment.at(e.user_id),"你们的境界相差过大了，你直接被对方吊打，再修炼一下再来决斗吧",btn]);
-                await e.reply([segment.at(e.user_id),"你们的境界相差过大了，你直接被对方吊打，再修炼一下再来决斗吧"])
+                else await e.reply([segment.at(e.user_id),"你们的境界相差过大了，你直接被对方吊打，再修炼一下再来决斗吧"])
             }
         }
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));//写入文件
