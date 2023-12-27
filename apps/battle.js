@@ -219,6 +219,8 @@ export class xiuxian extends plugin {//修炼
         await e.reply(`你的境界是${json[user_id].levelname},你的灵力值为${json[user_id].experience},\n对方的境界是${json[at_id].levelname},对方的灵力值为${json[at_id].experience},\n你赢的概率约为${score}%`);
         let experience_at
         let experience_user
+        let level_user
+        let level_at
         if(sc>Math.random()){
             if(score>95&&Math.random()<0.1){
                 json[at_id].level=0;
