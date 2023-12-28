@@ -293,7 +293,7 @@ export class xiuxian extends plugin {//修炼
             return acc;
         }, []);
         console.log(`topTenUserids: ${topTenUserids}`);
-        if(id.length < 5 || id.length>15){
+        if(user_id.length <=5 || user_id.length>15){
 			let remsg=`\n第1名:id:${jsonData[topTenUserids[0]].id},境界:${jsonData[topTenUserids[0]].levelname},灵力:${jsonData[topTenUserids[0]].experience}`;
 			for(let i=1;i<topTenUserids.length;i++){
 				remsg=remsg+`\n第${i+1}名:id:${jsonData[topTenUserids[i]].id},境界:${jsonData[topTenUserids[i]].levelname},灵力:${jsonData[topTenUserids[i]].experience}`
@@ -301,7 +301,7 @@ export class xiuxian extends plugin {//修炼
 			if(isqbot.trssbtnqbot(user_id) === true) return await e.reply([remsg,btn])
 			return await e.reply(remsg)
         }
-        if(id.length<12){
+        if(user_id.length<12){
 			let forwardMsg = await e.group.makeForwardMsg(MsgList);
 			if(typeof forwardMsg.data!='string')
 			{forwardMsg.data = JSON.stringify(forwardMsg.data)}
@@ -392,7 +392,7 @@ export class xiuxian extends plugin {//修炼
         if (!json.hasOwnProperty(user_id)) {//如果json中不存在该用户
 			let uid = await IDDB.getID() + 1
 			await IDDB.setID(uid)
-			new_data = {//创建新用户
+			let new_data = {//创建新用户
 				"id": uid,
 				"experience": 0,
 				"level": 0,
@@ -493,7 +493,7 @@ export class xiuxian extends plugin {//修炼
         if (!json.hasOwnProperty(user_id)) {//如果json中不存在该用户
 			let uid = await IDDB.getID() + 1
 			await IDDB.setID(uid)
-			new_data = {//创建新用户
+			let new_data = {//创建新用户
 				"id": uid,
 				"experience": 0,
 				"level": 0,
