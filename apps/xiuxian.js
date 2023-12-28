@@ -88,9 +88,31 @@ export class xiuxian extends plugin {//修炼
             ]
         })
     }
+    async clear(){
+		await IDDB.setID(0)
+		if (!fs.existsSync(dirpath)) {//如果文件夹不存在
+            fs.mkdirSync(dirpath);//创建文件夹
+            files.forEach(function(file) {
+			  // 拼接文件或子文件夹的完整路径
+			  var filepath = dirpath + "/" + file;
+			  // 获取文件或子文件夹的状态
+			  var stats = fs.statSync(filepath);
+			  // 判断是文件还是文件夹
+			  if (stats.isFile()) {
+				// 如果是文件，直接删除
+				fs.unlinkSync(filepath);
+			  } else if (stats.isDirectory()) {
+				// 如果是文件夹，递归调用删除文件夹的函数
+			deleteFolder(filepath);
+      }
+    });
+    // 删除空文件夹
+    fs.rmdirSync(dirpath);
+        }
+    }
     async myid(e){
 		let user_id=e.user_id
-		if(isqbot.trssbtnqbot(user_id) === true) btn=isqbot.btn
+		if(user_id.length>30) btn=isqbot.btn
 		let filename=[e.group_id]+'.json'
         if(e.isMaster){
             filename="masterxiuxian.json";
@@ -127,11 +149,11 @@ export class xiuxian extends plugin {//修炼
 	}
     async giveme_level(e){
 		let user_id=e.user_id
-		if(isqbot.trssbtnqbot(user_id) === true){
+		if(user_id.length>30){
 			btn=isqbot.btn
 		}
         if(!e.isMaster){
-			if(isqbot.trssbtnqbot(user_id) === true) return await e.reply(["哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡",btn]);
+			if(user_id.length>30) return await e.reply(["哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡",btn]);
             return await e.reply("哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡");
         }
         let numreg = /[1-9][0-9]{0,12}/;
@@ -171,18 +193,18 @@ export class xiuxian extends plugin {//修炼
         if(json[user_id].level>=10000) json[user_id].levelname="道祖";
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));
         await e.reply([segment.at(e.user_id),`恭喜您，获得了境界${numret}层`]);
-        if(isqbot.trssbtnqbot(user_id) === true){
+        if(user_id.length>30){
 			return await e.reply([segment.at(e.user_id),`\n你的id:${json[user_id].id},\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`,btn]);
         }
         return await e.reply([segment.at(e.user_id),`\n你的id:${json[user_id].id},\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`]);
     }
     async giveme_exp(e){
 		let user_id=e.user_id
-		if(isqbot.trssbtnqbot(user_id) === true){
+		if(user_id.length>30){
 			btn=isqbot.btn
 		}
         if(!e.isMaster){
-			if(isqbot.trssbtnqbot(user_id) === true) return await e.reply(["哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡",btn]);
+			if(user_id.length>30) return await e.reply(["哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡",btn]);
             return await e.reply("哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡");
         }
         let numreg = /[1-9][0-9]{0,12}/;
@@ -219,7 +241,7 @@ export class xiuxian extends plugin {//修炼
         json[user_id].experience+=numret;
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));
         await e.reply([segment.at(e.user_id),`恭喜您，获得了灵力${numret}点`]);
-        if(isqbot.trssbtnqbot(user_id) === true) return await e.reply([segment.at(e.user_id),`\n你的id:${json[user_id].id},\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`,btn]);
+        if(user_id.length>30) return await e.reply([segment.at(e.user_id),`\n你的id:${json[user_id].id},\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`,btn]);
         return await e.reply([segment.at(e.user_id),`\n你的id:${json[user_id].id},\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`]);
     }
     async xxsetCd (seconds = 60) {
@@ -254,7 +276,7 @@ export class xiuxian extends plugin {//修炼
     }
     async rankings(e){
         let user_id=e.user_id
-        if(isqbot.trssbtnqbot(user_id) === true){
+        if(user_id.length>30){
 			btn=isqbot.btn
 		}
         let filename = [e.group_id]+".json";
@@ -298,7 +320,7 @@ export class xiuxian extends plugin {//修炼
 			for(let i=1;i<topTenUserids.length;i++){
 				remsg=remsg+`\n第${i+1}名:id:${jsonData[topTenUserids[i]].id},境界:${jsonData[topTenUserids[i]].levelname},灵力:${jsonData[topTenUserids[i]].experience}`
 			}
-			if(isqbot.trssbtnqbot(user_id) === true) return await e.reply([remsg,btn])
+			if(user_id.length>30) return await e.reply([remsg,btn])
 			return await e.reply(remsg)
         }
         if(user_id.length<12){
@@ -315,7 +337,7 @@ export class xiuxian extends plugin {//修炼
 	}
     async view(e){
 		let user_id=e.user_id
-		if(isqbot.trssbtnqbot(user_id) === true) btn=isqbot.btn
+		if(user_id.length>30) btn=isqbot.btn
         console.log("[wind-plugin]", e.msg);
         let filename=[e.group_id]+".json"
         if(e.isMaster){
@@ -340,14 +362,14 @@ export class xiuxian extends plugin {//修炼
 				await IDDB.setID(uid)
 				json[user_id].id=uid
         }
-        if(isqbot.trssbtnqbot(user_id) === true){
+        if(user_id.length>30){
 			return e.reply([segment.at(e.user_id),`\n你的id:${json[user_id].id},\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`,btn]);
         }
         e.reply([segment.at(e.user_id),`\n你的id:${json[user_id].id},\n您的境界是:${json[user_id].levelname},\n您的灵力为:${json[user_id].experience}`]);
     }
     async list(e) {
 		let user_id=e.user_id
-		if(isqbot.trssbtnqbot(user_id) === true){
+		if(user_id.length>30){
 			btn=isqbot.btn
 		}
         let msg = levelname[0] + '\n';
@@ -355,14 +377,14 @@ export class xiuxian extends plugin {//修炼
             msg = msg + levelname[j] + '\n'
         }
         msg+='凡境每个境界分九层,仙境每个境界分初期中期后期圆满四层,仙帝之后则还有不同,自行探索吧!\n欸嘿!到大帝境界后别努力了,道祖境界你达不到的doge!!\n后期修行困难可以选择#服用丹药,有40%的成功率.\n'
-        if(isqbot.trssbtnqbot(user_id) === true){
+        if(user_id.length>30){
 			return e.reply([msg,btn])
         }
         e.reply(msg);
     }
     async xiuxian(e){
 		let user_id=e.user_id
-		if(isqbot.trssbtnqbot(user_id) === true){
+		if(user_id.length>30){
 			btn=isqbot.btn
 		}
         console.log("[wind-plugin]", e.msg);
@@ -375,7 +397,7 @@ export class xiuxian extends plugin {//修炼
             cdtime = 0;
         }
         if (cdtime) {
-			if(isqbot.trssbtnqbot(user_id) === true){
+			if(user_id.length>30){
 				return await e.reply([segment.at(e.user_id),`\n用户:${json[user_id].id}\n对不起,修炼失败，还有${cdtime}秒cd`,btn])
 			}
             return await e.reply(segment.at(e.user_id),`\n用户:${json[user_id].id}\n对不起,修炼失败，还有${cdtime}秒cd`)
@@ -412,7 +434,7 @@ export class xiuxian extends plugin {//修炼
         if (e.msg.includes('丹药')) {
             if (pills > 60) {
                 json[user_id].experience += 10
-                if(isqbot.trssbtnqbot(user_id) === true) e.reply([segment.at(user_id),
+                if(user_id.length>30) e.reply([segment.at(user_id),
                     `\n用户:${json[user_id].id}\n服用丹药成功，你获得了10点灵力！\n你的id:${json[user_id].id},\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`,btn]);
                 else e.reply([segment.at(user_id),
                     `\n用户:${json[user_id].id}\n服用丹药成功，你获得了10点灵力！\n你的id:${json[user_id].id},\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
@@ -428,7 +450,7 @@ export class xiuxian extends plugin {//修炼
         else{
             experience_ = Math.round(1 + 2 * Math.random())
             json[user_id].experience += experience_
-            if(isqbot.trssbtnqbot(user_id) === true) e.reply([segment.at(user_id),
+            if(user_id.length>30) e.reply([segment.at(user_id),
                 `\n用户:${json[user_id].id}\n你获得了${experience_}点灵力。\n你的id:${json[user_id].id},\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`,btn]);
             else e.reply([segment.at(user_id),
                 `\n用户:${json[user_id].id}\n你获得了${experience_}点灵力。\n你的id:${json[user_id].id},\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
@@ -446,13 +468,13 @@ export class xiuxian extends plugin {//修炼
             }
             const masterjson = JSON.parse(fs.readFileSync(dirpath + "/" + filename));
             if (!masterjson.hasOwnProperty(user_id)) {//如果json中不存在该用户
-				new_data = {//创建新用户
+				let new_data = {//创建新用户
 					"experience": 0,
 					"level": 0,
 					"levelname": '凡人',
 					"Privilege": 0,
 				};
-            json[user_id] = new_data
+				masterjson[user_id] = new_data
 			}
             masterjson[user_id].id=json[user_id].id;
             masterjson[user_id].experience=json[user_id].experience;
@@ -463,7 +485,7 @@ export class xiuxian extends plugin {//修炼
     }
     async break(e){
 		let user_id=e.user_id;
-		if(isqbot.trssbtnqbot(user_id) === true){
+		if(user_id.length>30){
 			btn=isqbot.btn
 		}
         console.log("[wind-plugin]", e.msg);
@@ -476,7 +498,7 @@ export class xiuxian extends plugin {//修炼
             cdtime = 0;
         }
         if (cdtime){
-			if(isqbot.trssbtnqbot(user_id) === true){
+			if(user_id.length>30){
 				return await e.reply([segment.at(e.user_id),`\n用户:${json[user_id].id}\n对不起,突破失败，还有${cdtime}秒cd`,btn])
 			}
             return await e.reply([segment.at(e.user_id),`\n用户:${json[user_id].id}\n对不起,突破失败，还有${cdtime}秒cd`])
@@ -510,13 +532,13 @@ export class xiuxian extends plugin {//修炼
         let lev=json[user_id].level+1;
         let exerp=100*(lev-110)+3050;
         if(json[user_id].experience < level_exp[lev] && json[user_id].level<111){
-			if(isqbot.trssbtnqbot(user_id) === true){
+			if(user_id.length>30){
 				return e.reply([segment.at(e.user_id),`对不起，用户:${json[user_id].id},\n你的修为不足,还差${level_exp[lev] - json[user_id].experience},请再接再厉`,btn])
 			}
             return e.reply([segment.at(e.user_id),`对不起，用户:${json[user_id].id},\n你的修为不足,还差${level_exp[lev] - json[user_id].experience},请再接再厉`])
         }
         if (json[user_id].level>110 && json[user_id].experience<exerp) {
-			if(isqbot.trssbtnqbot(user_id) === true){
+			if(user_id.length>30){
 				return e.reply([segment.at(e.user_id),`对不起，用户:${json[user_id].id},\n你的修为不足,还差${exerp - json[user_id].experience},请再接再厉`,btn])
 				}
             return e.reply([segment.at(e.user_id),`对不起，用户:${json[user_id].id},\n你的修为不足,还差${exerp - json[user_id].experience},请再接再厉`])
@@ -537,7 +559,7 @@ export class xiuxian extends plugin {//修炼
             if(json[user_id].level>=10000) json[user_id].levelname="道祖";
         }
         setTimeout(() => {//延迟5秒
-            if(isqbot.trssbtnqbot(user_id) === true){e.reply([segment.at(e.user_id),`用户:${json[user_id].id},\n你已突破成功，当前境界${json[user_id].levelname}`,btn]);}
+            if(user_id.length>30){e.reply([segment.at(e.user_id),`用户:${json[user_id].id},\n你已突破成功，当前境界${json[user_id].levelname}`,btn]);}
             else {e.reply([segment.at(e.user_id),`用户:${json[user_id].id},\n你已突破成功，当前境界${json[user_id].levelname}`]);}
         }, 200 * (json[user_id].level + 1));//设置延时
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));//写入文件
@@ -552,13 +574,13 @@ export class xiuxian extends plugin {//修炼
             }
             const masterjson = JSON.parse(fs.readFileSync(dirpath + "/" + filename));
             if (!masterjson.hasOwnProperty(user_id)) {//如果json中不存在该用户
-				new_data = {//创建新用户
+				let new_data = {//创建新用户
 					"experience": 0,
 					"level": 0,
 					"levelname": '凡人',
 					"Privilege": 0,
 				};
-            json[user_id] = new_data
+            masterjson[user_id] = new_data
 			}
             masterjson[user_id].id=json[user_id].id;
             masterjson[user_id].experience=json[user_id].experience;
