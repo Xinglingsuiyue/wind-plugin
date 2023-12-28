@@ -352,7 +352,7 @@ export class xiuxian extends plugin {//修炼
         }
         const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));//读取文件
         if (!json.hasOwnProperty(user_id)||json[user_id].level==0) {//如果文件夹不存在
-			if(isqbot.trssbtnqbot(id) === true){
+			if(user_id.length>30){
 				return e.reply([segment.at(e.user_id),"您还是凡人，请通过#修炼和#突破开启你的仙途",btn]);
 			}
             return e.reply([segment.at(e.user_id),'您还是凡人，请通过#修炼和#突破开启你的仙途']);
@@ -398,9 +398,9 @@ export class xiuxian extends plugin {//修炼
         }
         if (cdtime) {
 			if(user_id.length>30){
-				return await e.reply([segment.at(e.user_id),`\n用户:${json[user_id].id}\n对不起,修炼失败，还有${cdtime}秒cd`,btn])
+				return await e.reply([segment.at(e.user_id),`\n对不起,修炼失败，还有${cdtime}秒cd`,btn])
 			}
-            return await e.reply(segment.at(e.user_id),`\n用户:${json[user_id].id}\n对不起,修炼失败，还有${cdtime}秒cd`)
+            return await e.reply(segment.at(e.user_id),`\n对不起,修炼失败，还有${cdtime}秒cd`)
         }
         await this.xxsetCd(cdtime_xiuxian);
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
@@ -433,22 +433,22 @@ export class xiuxian extends plugin {//修炼
         let pills = Math.random() * 100
         if (e.msg.includes('丹药')) {
             if (pills > 60) {
-                json[user_id].experience += 10
+                json[user_id].experience += 20
                 if(user_id.length>30) e.reply([segment.at(user_id),
-                    `\n用户:${json[user_id].id}\n服用丹药成功，你获得了10点灵力！\n你的id:${json[user_id].id},\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`,btn]);
+                    `\n用户:${json[user_id].id}\n服用丹药成功，你获得了20点灵力！\n你的id:${json[user_id].id},\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`,btn]);
                 else e.reply([segment.at(user_id),
-                    `\n用户:${json[user_id].id}\n服用丹药成功，你获得了10点灵力！\n你的id:${json[user_id].id},\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
+                    `\n用户:${json[user_id].id}\n服用丹药成功，你获得了20点灵力！\n你的id:${json[user_id].id},\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
             }
             else {
-                json[user_id].experience -= 3
-                if(isqbot.trssbtnqbot(id) === true) e.reply([segment.at(user_id),
-                    `\n用户:${json[user_id].id}\n服用失败，由于大量丹毒你损失了3点灵力！\n你的id:${json[user_id].id},\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`,btn]);
+                json[user_id].experience -= 5
+                if(user_id.length>30) e.reply([segment.at(user_id),
+                    `\n用户:${json[user_id].id}\n服用失败，由于大量丹毒你损失了5点灵力！\n你的id:${json[user_id].id},\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`,btn]);
                 else e.reply([segment.at(user_id),
-                    `\n用户:${json[user_id].id}\n服用失败，由于大量丹毒你损失了3点灵力！\n你的id:${json[user_id].id},\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
+                    `\n用户:${json[user_id].id}\n服用失败，由于大量丹毒你损失了5点灵力！\n你的id:${json[user_id].id},\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`]);
             }
         }
         else{
-            experience_ = Math.round(1 + 2 * Math.random())
+            experience_ = Math.round(1 + 9 * Math.random())
             json[user_id].experience += experience_
             if(user_id.length>30) e.reply([segment.at(user_id),
                 `\n用户:${json[user_id].id}\n你获得了${experience_}点灵力。\n你的id:${json[user_id].id},\n你的灵力为:${json[user_id].experience}\n你的境界为${json[user_id].levelname}`,btn]);
@@ -499,9 +499,9 @@ export class xiuxian extends plugin {//修炼
         }
         if (cdtime){
 			if(user_id.length>30){
-				return await e.reply([segment.at(e.user_id),`\n用户:${json[user_id].id}\n对不起,突破失败，还有${cdtime}秒cd`,btn])
+				return await e.reply([segment.at(e.user_id),`\n对不起,突破失败，还有${cdtime}秒cd`,btn])
 			}
-            return await e.reply([segment.at(e.user_id),`\n用户:${json[user_id].id}\n对不起,突破失败，还有${cdtime}秒cd`])
+            return await e.reply([segment.at(e.user_id),`\n对不起,突破失败，还有${cdtime}秒cd`])
         }
         await this.brsetCd(cdtime_break);
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
@@ -529,7 +529,7 @@ export class xiuxian extends plugin {//修炼
 				await IDDB.setID(uid)
 				json[user_id].id=uid
         }
-        let lev=json[user_id].level+1;
+        let lev=json[user_id].level;
         let exerp=100*(lev-110)+3050;
         if(json[user_id].experience < level_exp[lev] && json[user_id].level<111){
 			if(user_id.length>30){
