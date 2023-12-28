@@ -90,8 +90,8 @@ export class xiuxian extends plugin {//修炼
     }
     async clear(){
 		await IDDB.setID(0)
-		if (!fs.existsSync(dirpath)) {//如果文件夹不存在
-            fs.mkdirSync(dirpath);//创建文件夹
+		if (fs.existsSync(dirpath)) {//如果文件夹不存在
+			var files = fs.readdirSync(dirpath);
             files.forEach(function(file) {
 			  // 拼接文件或子文件夹的完整路径
 			  var filepath = dirpath + "/" + file;
@@ -103,11 +103,11 @@ export class xiuxian extends plugin {//修炼
 				fs.unlinkSync(filepath);
 			  } else if (stats.isDirectory()) {
 				// 如果是文件夹，递归调用删除文件夹的函数
-			deleteFolder(filepath);
-      }
-    });
-    // 删除空文件夹
-    fs.rmdirSync(dirpath);
+				deleteFolder(filepath);
+				}
+			});
+		// 删除空文件夹
+		fs.rmdirSync(dirpath);
         }
     }
     async myid(e){
