@@ -173,7 +173,7 @@ export class xiuxian extends plugin {//修炼
         if (!json.hasOwnProperty(user_id)) {//如果json中不存在该用户
 			let uid = await IDDB.getID() + 1
 			await IDDB.setID(uid)
-			new_data = {//创建新用户
+			let new_data = {//创建新用户
 				"id": uid,
 				"experience": 0,
 				"level": 0,
@@ -189,7 +189,7 @@ export class xiuxian extends plugin {//修炼
         }
         json[user_id].level+=numret;
         if(json[user_id].level<111) json[user_id].levelname=findlevelname[json[user_id].level];
-        if(json[user_id].level>110&&l<10000) json[user_id].levelname=`大帝第${level-101}重天`;
+        if(json[user_id].level>110&&json[user_id].level<10000) json[user_id].levelname=`大帝第${json[user_id].level-101}重天`;
         if(json[user_id].level>=10000) json[user_id].levelname="道祖";
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));
         await e.reply([segment.at(e.user_id),`恭喜您，获得了境界${numret}层`]);
@@ -224,7 +224,7 @@ export class xiuxian extends plugin {//修炼
         if (!json.hasOwnProperty(user_id)) {//如果json中不存在该用户
 			let uid = await IDDB.getID() + 1
 			await IDDB.setID(uid)
-			new_data = {//创建新用户
+			let new_data = {//创建新用户
 				"id": uid,
 				"experience": 0,
 				"level": 0,
