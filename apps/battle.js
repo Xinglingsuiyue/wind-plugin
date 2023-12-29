@@ -328,7 +328,7 @@ export class xiuxian extends plugin {//修炼
             }
             else if(score>60){
                 experience_at=Math.round(10 + 5 * Math.random());
-                experience_user=experience_user+Math.round(0 + 5 * Math.random());
+                experience_user=experience_at+Math.round(0 + 5 * Math.random());
                 json[at_id].experience+=experience_at;
                 json[user_id].experience-=experience_user;
                 if(user_id.length>30) await e.reply([segment.at(e.user_id),'\n',segment.at(at_id),`机缘巧合下击败了你，对方获得了大量经验,\n你损失了${experience_user}点灵力,\n对方获得了${experience_at}点灵力`,btn]);
