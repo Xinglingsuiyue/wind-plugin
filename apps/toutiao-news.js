@@ -2,7 +2,7 @@ import plugin from '../../../lib/plugins/plugin.js'
 import fetch from 'node-fetch'
 import { segment } from "oicq";
 import lodash from "lodash";
-const toutiaonews='https://tenapi.cn/v2/toutiaohotnew'
+const weibohot='https://tenapi.cn/v2/weibohot'
 export class slander extends plugin {
     constructor() {
         super({
@@ -13,15 +13,15 @@ export class slander extends plugin {
             priority: 1,
             rule: [
                 {
-                    reg: '^#?今日头条(新闻|热点新闻)$',
-                    fnc: 'toutiaonews'
+                    reg: '^#?微博(热搜榜|热榜|热度榜|热搜)$',
+                    fnc: 'weibohot'
                 }
             ]
         })
     }
-    async toutiaonews(e){
+    async weibohot(e){
         logger.info('[wind-plugin]', e.msg);
-        let url=toutiaonews
+        let url=weibohot
         let res = await fetch(url).catch((err) => logger.error(err));
         if (!res) {
             logger.error('查询接口请求失败');
@@ -34,23 +34,23 @@ export class slander extends plugin {
             let msg=[]
             let j = res.data.length
             if(Bot[e.self_id].adapter.name=="微信Bot"||Bot[e.self_id].adapter.name=="QQ频道Bot"){
-                let msg= `热搜1: 标题:${res.data[0].name}直达链接:${res.data[0].url}`
+                let msg= `热搜1: 标题:${res.data[0].name}热度:${res.data[0].hot}直达链接:${res.data[0].url}`
                 if(j<10){
                     for (let i = 1; i < j; i++){
                         let m= i + 1
-                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}直达链接:${res.data[i].url}`
+                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}热度:${res.data[i].hot}直达链接:${res.data[i].url}`
                     }
                 }
                 else{
                     for (let i = 1; i < 10; i++){
                         let m= i + 1
-                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}直达链接:${res.data[i].url}`
+                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}热度:${res.data[i].hot}直达链接:${res.data[i].url}`
                     }
                 }
                 return e.reply(msg);
             }
             if(Bot[e.self_id].adapter.name=="QQBot"){
-                let msg= `热搜1: 标题:${res.data[0].name}`
+                let msg= `\n热搜1: 标题:${res.data[0].name}热度:${res.data[0].hot}`
                 let arr = []
                 let atns = []
                 let btns = []
@@ -63,7 +63,7 @@ export class slander extends plugin {
                 if(j<10){
                     for (let i = 1; i < j; i++){
                         let m= i + 1
-                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}`
+                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}热度:${res.data[i].hot}`
                         arr.push({
                             text: `热搜${m}`,
                             link: `${res.data[i].url}`,
@@ -77,7 +77,7 @@ export class slander extends plugin {
                 else{
                     for (let i = 1; i < 10; i++){
                         let m= i + 1
-                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}`
+                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}热度:${res.data[i].hot}`
                         arr.push({
                             text: `热搜${m}`,
                             link: `${res.data[i].url}`,
@@ -96,7 +96,7 @@ export class slander extends plugin {
             }
             for (let i = 0 ;i<j;i++){
                 MsgList.push({
-                    message: ["标题:",res.data[i].name,"\n直达链接:",res.data[i].url],
+                    message: ["标题:",res.data[i].name,"\n热度:",res.data[i].hot,"\n直达链接:",res.data[i].url],
                     nickname: e.nickname,
                     user_id: e.user_id
                 });
@@ -112,7 +112,7 @@ export class slander extends plugin {
             forwardMsg.data = forwardMsg.data
                 .replace(/\n/g, '')
                 .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
-                .replace(/___+/, `<title color="#777777" size="26">今日头条热点新闻～</title>`)
+                .replace(/___+/, `<title color="#777777" size="26">微博热搜榜～</title>`)
             await e.reply(forwardMsg)
         }
         else return e.reply(res.msg)
