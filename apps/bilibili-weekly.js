@@ -35,10 +35,70 @@ export class slander extends plugin {
         res = await res.json();
         logger.info(`请求结果：${res.msg}`);
         if(res.msg=="success"){
-            e.reply("查询成功");
             let MsgList = [];
             let msg=[]
             let j = res.data.list.length
+            if(Bot[e.self_id].adapter.name=="微信Bot"||Bot[e.self_id].adapter.name=="QQ频道Bot"){
+                let msg= `当前查询期数:${res.data.name}\n热搜1: 标题:${res.data[0].name}直达链接:${res.data[0].url}`
+                if(j<10){
+                    for (let i = 1; i < j; i++){
+                        let m= i + 1
+                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}直达链接:${res.data[i].url}`
+                    }
+                }
+                else{
+                    for (let i = 1; i < 10; i++){
+                        let m= i + 1
+                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}直达链接:${res.data[i].url}`
+                    }
+                }
+                return e.reply(msg);
+            }
+            if(Bot[e.self_id].adapter.name=="QQBot"){
+                let msg= `当前查询期数:${res.data.name}\n热搜1: 标题:${res.data[0].name}`
+                let arr = []
+                let atns = []
+                let btns = []
+                let ctns = []
+                let buttons = []
+                arr.push({
+                    text: `热搜1`,
+                    link: `${res.data[0].url}`,
+                })
+                if(j<10){
+                    for (let i = 1; i < j; i++){
+                        let m= i + 1
+                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}`
+                        arr.push({
+                            text: `热搜${m}`,
+                            link: `${res.data[i].url}`,
+                        })
+                        if(arr.length==2){
+                            buttons.push(arr)
+                            arr=[]
+                        }
+                    }
+                }
+                else{
+                    for (let i = 1; i < 10; i++){
+                        let m= i + 1
+                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}`
+                        arr.push({
+                            text: `热搜${m}`,
+                            link: `${res.data[i].url}`,
+                        })
+                        if(arr.length==2){
+                            buttons.push(arr)
+                            arr=[]
+                        }
+                    }
+                }
+                if (arr.length) {
+                    buttons.push(arr)
+                }
+                for(let btn of buttons) {atns.push(btn[0]);btns.push(btn[1]);}
+                return e.reply([msg,'\n若是想要查询其他期的bilibili周榜请在指令后加上期数(例如bilibili周榜123)，否则默认为最新',segment.button(atns,btns,ctns)]);
+            }
             MsgList.push({
                 message: `当前查询期数:${res.data.name}`,
                 nickname: e.nickname,
