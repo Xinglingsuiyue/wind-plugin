@@ -30,10 +30,70 @@ export class slander extends plugin {
         res = await res.json();
         logger.info(`请求结果：${res.msg}`);
         if(res.msg=="success"){
-            e.reply("查询成功");
             let MsgList = [];
             let msg=[]
             let j = res.data.length
+            if(Bot[e.self_id].adapter.name=="微信Bot"||Bot[e.self_id].adapter.name=="QQ频道Bot"){
+                let msg= `热搜1: 标题:${res.data[0].name}热度:${res.data[0].hot}直达链接:${res.data[0].url}`
+                if(j<10){
+                    for (let i = 1; i < j; i++){
+                        let m= i + 1
+                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}热度:${res.data[i].hot}直达链接:${res.data[i].url}`
+                    }
+                }
+                else{
+                    for (let i = 1; i < 10; i++){
+                        let m= i + 1
+                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}热度:${res.data[i].hot}直达链接:${res.data[i].url}`
+                    }
+                }
+                return e.reply(msg);
+            }
+            if(Bot[e.self_id].adapter.name=="QQBot"){
+                let msg= `\n热搜1: 标题:${res.data[0].name}热度:${res.data[0].hot}`
+                let arr = []
+                let atns = []
+                let btns = []
+                let ctns = []
+                let buttons = []
+                arr.push({
+                    text: `热搜1`,
+                    link: `${res.data[0].url}`,
+                })
+                if(j<10){
+                    for (let i = 1; i < j; i++){
+                        let m= i + 1
+                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}热度:${res.data[i].hot}`
+                        arr.push({
+                            text: `热搜${m}`,
+                            link: `${res.data[i].url}`,
+                        })
+                        if(arr.length==2){
+                            buttons.push(arr)
+                            arr=[]
+                        }
+                    }
+                }
+                else{
+                    for (let i = 1; i < 10; i++){
+                        let m= i + 1
+                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}热度:${res.data[i].hot}`
+                        arr.push({
+                            text: `热搜${m}`,
+                            link: `${res.data[i].url}`,
+                        })
+                        if(arr.length==2){
+                            buttons.push(arr)
+                            arr=[]
+                        }
+                    }
+                }
+                if (arr.length) {
+                    buttons.push(arr)
+                }
+                for(let btn of buttons) {atns.push(btn[0]);btns.push(btn[1]);}
+                return e.reply([msg,segment.button(atns,btns,ctns)]);
+            }
             for (let i = 0 ;i<j;i++){
                 MsgList.push({
                     message: ["标题:",res.data[i].name,"\n热度:",res.data[i].hot,"\n直达链接:",res.data[i].url],
