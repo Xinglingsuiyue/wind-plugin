@@ -71,9 +71,6 @@ export class slander extends plugin {
                     .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
                     .replace(/___+/, `<title color="#777777" size="26">百度热搜榜～</title>`)
                 return await e.reply(forwardMsg)
-
-            }
-            else return e.reply(res.msg)
             }
             if(Bot[e.self_id].adapter.name=="QQBot"){
                 let msg= `\n热搜1: 标题:${res.data[0].name}热度:${res.data[0].hot}`
@@ -120,5 +117,7 @@ export class slander extends plugin {
                 for(let btn of buttons) {atns.push(btn[0]);btns.push(btn[1]);}
                 return e.reply([msg,segment.button(atns,btns,ctns)]);
             }
+        }
+            else return e.reply(res.msg)
     }
 }
