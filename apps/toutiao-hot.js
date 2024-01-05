@@ -2,6 +2,7 @@ import plugin from '../../../lib/plugins/plugin.js'
 import fetch from 'node-fetch'
 import { segment } from "oicq";
 import lodash from "lodash";
+import { Version } from '../components/index.js'
 const toutiaohot='https://tenapi.cn/v2/toutiaohot'
 export class slander extends plugin {
     constructor() {
@@ -33,6 +34,28 @@ export class slander extends plugin {
             let MsgList = [];
             let msg=[]
             let j = res.data.length
+            if(Version.name!="TRSS-Yunzai"){
+                for (let i = 0 ;i<j;i++){
+                MsgList.push({
+                    message: ["标题:",res.data[i].name,"\n直达链接:",res.data[i].url],
+                    nickname: e.nickname,
+                    user_id: e.user_id
+                    });
+                }
+                let forwardMsg
+                if(!e.isGroup){
+                    forwardMsg = await e.friend.makeForwardMsg(MsgList);
+                }
+                else{
+                    forwardMsg = await e.group.makeForwardMsg(MsgList);
+                }
+                if(typeof forwardMsg.data!='string'){forwardMsg.data = JSON.stringify(forwardMsg.data)}
+                forwardMsg.data = forwardMsg.data
+                    .replace(/\n/g, '')
+                    .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
+                    .replace(/___+/, `<title color="#777777" size="26">今日头条热搜榜～</title>`)
+                await e.reply(forwardMsg)
+            }
             if(Bot[e.self_id].adapter.name=="微信Bot"||Bot[e.self_id].adapter.name=="QQ频道Bot"){
                 let msg= `热搜1: 标题:${res.data[0].name}直达链接:${res.data[0].url}`
                 if(j<10){
@@ -94,26 +117,6 @@ export class slander extends plugin {
                 for(let btn of buttons) {atns.push(btn[0]);btns.push(btn[1]);}
                 return e.reply([msg,segment.button(atns,btns,ctns)]);
             }
-            for (let i = 0 ;i<j;i++){
-                MsgList.push({
-                    message: ["标题:",res.data[i].name,"\n直达链接:",res.data[i].url],
-                    nickname: e.nickname,
-                    user_id: e.user_id
-                });
-            }
-            let forwardMsg
-            if(!e.isGroup){
-                forwardMsg = await e.friend.makeForwardMsg(MsgList);
-            }
-            else{
-                forwardMsg = await e.group.makeForwardMsg(MsgList);
-            }
-            if(typeof forwardMsg.data!='string'){forwardMsg.data = JSON.stringify(forwardMsg.data)}
-            forwardMsg.data = forwardMsg.data
-                .replace(/\n/g, '')
-                .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
-                .replace(/___+/, `<title color="#777777" size="26">今日头条热搜榜～</title>`)
-            await e.reply(forwardMsg)
         }
         else return e.reply(res.msg)
     }
