@@ -38,6 +38,38 @@ export class slander extends plugin {
             let MsgList = [];
             let msg=[]
             let j = res.data.list.length
+            if(Bot[e.self_id].adapter.name){
+                MsgList.push({
+                message: `当前查询期数:${res.data.name}`,
+                nickname: e.nickname,
+                user_id: e.user_id
+                });
+                MsgList.push({
+                    message: `若是想要查询其他期的bilibili周榜请在指令后加上期数(例如bilibili周榜123)，否则默认为最新`,
+                    nickname: e.nickname,
+                    user_id: e.user_id
+                });
+                for (let i = 0 ;i<j;i++){
+                    MsgList.push({
+                        message: [segment.image(res.data.list[i].cover),"\n标题:",res.data.list[i].title,"\n推荐理由:",res.data.list[i].reason,"\n直达链接:",res.data.list[i].url],
+                        nickname: e.nickname,
+                        user_id: e.user_id
+                    });
+                }
+                let forwardMsg
+                if(!e.isGroup){
+                    forwardMsg = await e.friend.makeForwardMsg(MsgList);
+                }
+                else{
+                    forwardMsg = await e.group.makeForwardMsg(MsgList);
+                }
+                if(typeof forwardMsg.data!='string'){forwardMsg.data = JSON.stringify(forwardMsg.data)}
+                forwardMsg.data = forwardMsg.data
+                    .replace(/\n/g, '')
+                    .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
+                    .replace(/___+/, `<title color="#777777" size="26">${res.data.name}哔哩哔哩周榜～</title>`)
+                await e.reply(forwardMsg)
+            }
             if(Bot[e.self_id].adapter.name=="微信Bot"||Bot[e.self_id].adapter.name=="QQ频道Bot"){
                 let msg= `当前查询期数:${res.data.name}\n热搜1: 标题:${res.data[0].name}直达链接:${res.data[0].url}`
                 if(j<10){
@@ -99,36 +131,6 @@ export class slander extends plugin {
                 for(let btn of buttons) {atns.push(btn[0]);btns.push(btn[1]);}
                 return e.reply([msg,'\n若是想要查询其他期的bilibili周榜请在指令后加上期数(例如bilibili周榜123)，否则默认为最新',segment.button(atns,btns,ctns)]);
             }
-            MsgList.push({
-                message: `当前查询期数:${res.data.name}`,
-                nickname: e.nickname,
-                user_id: e.user_id
-            });
-            MsgList.push({
-                message: `若是想要查询其他期的bilibili周榜请在指令后加上期数(例如bilibili周榜123)，否则默认为最新`,
-                nickname: e.nickname,
-                user_id: e.user_id
-            });
-            for (let i = 0 ;i<j;i++){
-                MsgList.push({
-                    message: [segment.image(res.data.list[i].cover),"\n标题:",res.data.list[i].title,"\n推荐理由:",res.data.list[i].reason,"\n直达链接:",res.data.list[i].url],
-                    nickname: e.nickname,
-                    user_id: e.user_id
-                });
-            }
-            let forwardMsg
-            if(!e.isGroup){
-                forwardMsg = await e.friend.makeForwardMsg(MsgList);
-            }
-            else{
-                forwardMsg = await e.group.makeForwardMsg(MsgList);
-            }
-            if(typeof forwardMsg.data!='string'){forwardMsg.data = JSON.stringify(forwardMsg.data)}
-            forwardMsg.data = forwardMsg.data
-                .replace(/\n/g, '')
-                .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
-                .replace(/___+/, `<title color="#777777" size="26">${res.data.name}哔哩哔哩周榜～</title>`)
-            await e.reply(forwardMsg)
         }
         else return e.reply(res.msg)
     }
