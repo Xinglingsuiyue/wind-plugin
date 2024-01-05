@@ -2,6 +2,7 @@ import plugin from '../../../lib/plugins/plugin.js'
 import fetch from 'node-fetch'
 import { segment } from "oicq";
 import lodash from "lodash";
+import { Version } from '../components/index.js'
 const bilibiliweekly='https://tenapi.cn/v2/weekly';
 export class slander extends plugin {
     constructor() {
@@ -38,7 +39,7 @@ export class slander extends plugin {
             let MsgList = [];
             let msg=[]
             let j = res.data.list.length
-            if(!Bot[e.self_id].adapter.name){
+            if(Version.name!="TRSS-Yunzai"){
                 MsgList.push({
                 message: `当前查询期数:${res.data.name}`,
                 nickname: e.nickname,
