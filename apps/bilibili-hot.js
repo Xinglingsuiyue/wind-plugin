@@ -2,6 +2,7 @@ import plugin from '../../../lib/plugins/plugin.js'
 import fetch from 'node-fetch'
 import { segment } from "oicq";
 import lodash from "lodash";
+import { Version } from '../components/index.js'
 const bilibilihot='https://tenapi.cn/v2/bilihot'
 export class slander extends plugin {
     constructor() {
@@ -33,7 +34,7 @@ export class slander extends plugin {
             let MsgList = [];
             let msg=[]
             let j = res.data.length
-            if(!Bot[e.self_id].adapter.name){
+            if(Version.name!="TRSS-Yunzai"){
                 for (let i = 0 ;i<j;i++){
                 MsgList.push({
                     message: ["标题:",res.data[i].name,"\n直达链接:",res.data[i].url],
