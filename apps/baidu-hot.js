@@ -2,6 +2,7 @@ import plugin from '../../../lib/plugins/plugin.js'
 import fetch from 'node-fetch'
 import { segment } from "oicq";
 import lodash from "lodash";
+import { Version } from '../components/index.js'
 const baiduhot='https://tenapi.cn/v2/baiduhot'
 export class slander extends plugin {
     constructor() {
@@ -33,22 +34,6 @@ export class slander extends plugin {
             let MsgList = [];
             let msg=[]
             let j = res.data.length
-            if(Bot[e.self_id].adapter.name=="微信Bot"||Bot[e.self_id].adapter.name=="QQ频道Bot"){
-                let msg= `热搜1: 标题:${res.data[0].name}热度:${res.data[0].hot}直达链接:${res.data[0].url}`
-                if(j<10){
-                    for (let i = 1; i < j; i++){
-                        let m= i + 1
-                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}热度:${res.data[i].hot}直达链接:${res.data[i].url}`
-                    }
-                }
-                else{
-                    for (let i = 1; i < 10; i++){
-                        let m= i + 1
-                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}热度:${res.data[i].hot}直达链接:${res.data[i].url}`
-                    }
-                }
-                return e.reply(msg);
-            }
             if(!Bot[e.self_id].adapter.name){
                 for (let i = 0; i < j; i++) {
                 MsgList.push({
@@ -71,6 +56,22 @@ export class slander extends plugin {
                     .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
                     .replace(/___+/, `<title color="#777777" size="26">百度热搜榜～</title>`)
                 return await e.reply(forwardMsg)
+            }
+            if(Bot[e.self_id].adapter.name=="微信Bot"||Bot[e.self_id].adapter.name=="QQ频道Bot"){
+                let msg= `热搜1: 标题:${res.data[0].name}热度:${res.data[0].hot}直达链接:${res.data[0].url}`
+                if(j<10){
+                    for (let i = 1; i < j; i++){
+                        let m= i + 1
+                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}热度:${res.data[i].hot}直达链接:${res.data[i].url}`
+                    }
+                }
+                else{
+                    for (let i = 1; i < 10; i++){
+                        let m= i + 1
+                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}热度:${res.data[i].hot}直达链接:${res.data[i].url}`
+                    }
+                }
+                return e.reply(msg);
             }
             if(Bot[e.self_id].adapter.name=="QQBot"){
                 let msg= `\n热搜1: 标题:${res.data[0].name}热度:${res.data[0].hot}`
