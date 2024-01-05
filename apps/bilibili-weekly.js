@@ -38,7 +38,7 @@ export class slander extends plugin {
             let MsgList = [];
             let msg=[]
             let j = res.data.list.length
-            if(Bot[e.self_id].adapter.name){
+            if(!Bot[e.self_id].adapter.name){
                 MsgList.push({
                 message: `当前查询期数:${res.data.name}`,
                 nickname: e.nickname,
