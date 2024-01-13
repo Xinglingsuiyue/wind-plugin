@@ -583,6 +583,7 @@ export class xiuxian extends plugin {//修炼
             if(json[user_id].level>=10000) json[user_id].levelname="道祖";
         }
         let need
+        lev++
         if(json[user_id].experience < level_exp[lev] && json[user_id].level<111) need=level_exp[lev]-json[user_id].experience
         else if (json[user_id].level>110 && json[user_id].experience<exerp) need=exerp - json[user_id].experience
         else need=0
