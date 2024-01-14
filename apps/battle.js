@@ -75,7 +75,7 @@ export class xiuxian extends plugin {//修炼
 		let uid=msg.split(':')[0]
 		let exp=msg.split(':')[1]
 		if(!uid||!exp) return await e.reply("请输入正确的参数")
-		let filename=[e.group_id]+'.json'
+		let filename='xiuxian.json'
 		if (!fs.existsSync(dirpath)) {//如果文件夹不存在
             fs.mkdirSync(dirpath);//创建文件夹
         }
@@ -96,7 +96,36 @@ export class xiuxian extends plugin {//修炼
 		let exe=Number(json[at_id].experience)
 		json[at_id].experience=exe+Number(exp);
 		fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));//写入文件
-		return await e.reply([segment.at(at_id),`恭喜你，获得了${exp}点灵力,\n你的境界是${json[at_id].levelname},你的灵力是${json[at_id].experience},\n继续努力修炼吧`,btn])
+		let lev=json[at_id].level
+        let exerp=100*(lev-110)+3050;
+        let need
+        if(json[at_id].experience < level_exp[lev] && json[at_id].level<111) need=level_exp[lev]-json[at_id].experience
+        else if (json[at_id].level>110 && json[at_id].experience<exerp) need=exerp - json[at_id].experience
+        else need=0
+        filename=[e.group_id]+'.json';
+        if (!fs.existsSync(dirpath)) {//如果文件夹不存在
+            fs.mkdirSync(dirpath);//创建文件夹
+        }
+        if (!fs.existsSync(dirpath + "/" + filename)) {//如果文件不存在
+            fs.writeFileSync(dirpath + "/" + filename, JSON.stringify({//创建文件
+            }));
+        }
+        const groupjson = JSON.parse(fs.readFileSync(dirpath + "/" + filename));
+        if (!groupjson.hasOwnProperty(at_id)) {//如果json中不存在该用户
+            let new_data = {//创建新用户
+                "experience": 0,
+                "level": 0,
+                "levelname": '凡人',
+                "Privilege": 0,
+            };
+            groupjson[at_id] = new_data
+        }
+        groupjson[at_id].id=json[at_id].id;
+        groupjson[at_id].experience=json[at_id].experience;
+        groupjson[at_id].level=json[at_id].level;
+        groupjson[at_id].levelname=json[at_id].levelname;
+        fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(groupjson, null, "\t"));
+		return await e.reply([segment.at(at_id),`恭喜你，获得了${exp}点灵力,\n你的境界是${json[at_id].levelname},你的灵力是${json[at_id].experience},\n您还需要:${need}点灵力突破下一境界,\n继续努力修炼吧`,btn])
     }
     async give_level(e){
 		let user_id=e.user_id
@@ -133,19 +162,37 @@ export class xiuxian extends plugin {//修炼
 		if(json[at_id].level>110&&json[at_id].level<10000) json[at_id].levelname=`大帝第${json[at_id].level-101}重天`;
 		if(json[at_id].level>=10000) json[at_id].levelname="道祖";
 		fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));//写入文件
-		return await e.reply([segment.at(at_id),`恭喜你，获得了${lev}层境界,\n你的境界是${json[at_id].levelname},你的灵力是${json[at_id].experience},\n继续努力修炼吧`,btn])
+		lev=json[at_id].level
+        let exerp=100*(lev-110)+3050;
+        let need
+        if(json[at_id].experience < level_exp[lev] && json[at_id].level<111) need=level_exp[lev]-json[at_id].experience
+        else if (json[at_id].level>110 && json[at_id].experience<exerp) need=exerp - json[at_id].experience
+        else need=0
+        filename=[e.group_id]+'.json';
+        if (!fs.existsSync(dirpath)) {//如果文件夹不存在
+            fs.mkdirSync(dirpath);//创建文件夹
+        }
+        if (!fs.existsSync(dirpath + "/" + filename)) {//如果文件不存在
+            fs.writeFileSync(dirpath + "/" + filename, JSON.stringify({//创建文件
+            }));
+        }
+        const groupjson = JSON.parse(fs.readFileSync(dirpath + "/" + filename));
+        if (!groupjson.hasOwnProperty(at_id)) {//如果json中不存在该用户
+            let new_data = {//创建新用户
+                "experience": 0,
+                "level": 0,
+                "levelname": '凡人',
+                "Privilege": 0,
+            };
+            groupjson[at_id] = new_data
+        }
+        groupjson[at_id].id=json[at_id].id;
+        groupjson[at_id].experience=json[at_id].experience;
+        groupjson[at_id].level=json[at_id].level;
+        groupjson[at_id].levelname=json[at_id].levelname;
+        fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(groupjson, null, "\t"));
+		return await e.reply([segment.at(at_id),`恭喜你，获得了${lev}层境界,\n你的境界是${json[at_id].levelname},你的灵力是${json[at_id].experience},\n您还需要:${need}点灵力突破下一境界,\n继续努力修炼吧`,btn])
     }
-    async finduser(uid,e){
-		let filename=this.group_id + ".json"
-		const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));
-		for (let key in json) {
-			if (json[key].id == uid) {
-				this.reply(key)
-				return key;
-			}
-		}
-		return false;
-	}
     async de_level(e){
         if(!e.isMaster){
             return await e.reply("哈哈，就凭你也敢对别人的境界动手,🤣👉🏻🤡");
@@ -241,7 +288,7 @@ export class xiuxian extends plugin {//修炼
         if(e.atme||e.atall||e.at==e.user_id){
             return e.reply([segment.at(e.user_id),"大笨蛋，你艾特错了！！"])
         }
-        let filename=[e.group_id]+'.json'
+        let filename='xiuxian.json'
         let at_id 
         if (!uid) at_id= e.at;
         let cdtime = await this.btinCd();
@@ -438,9 +485,9 @@ export class xiuxian extends plugin {//修炼
                 else await e.reply([segment.at(e.user_id),'\n',segment.at(at_id),"\n你们实力不相上下，激烈斗争后，你赢了对方,你们两个都没有提升"])
             }
             else if(score<5&&Math.random()>0.9){
-                json[user_id].level=0;
-                json[user_id].experience=0;
-                json[user_id].levelname="凡人"
+                json[at_id].level=0;
+                json[at_id].experience=0;
+                json[at_id].levelname="凡人"
                 if(user_id.length>30) await e.reply([segment.at(e.user_id),'\n',segment.at(at_id),"\n你们实力相差太过悬殊，你被对面抓起来废了，需要重头修炼了",btn]);
                 else await e.reply([segment.at(e.user_id),'\n',segment.at(at_id),"\n你们实力相差太过悬殊，你被对面抓起来废了，需要重头修炼了"])
             }
@@ -450,5 +497,41 @@ export class xiuxian extends plugin {//修炼
             }
         }
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));//写入文件
+        filename=[e.group_id]+'.json';
+        if (!fs.existsSync(dirpath)) {//如果文件夹不存在
+            fs.mkdirSync(dirpath);//创建文件夹
+        }
+        if (!fs.existsSync(dirpath + "/" + filename)) {//如果文件不存在
+            fs.writeFileSync(dirpath + "/" + filename, JSON.stringify({//创建文件
+            }));
+        }
+        const groupjson = JSON.parse(fs.readFileSync(dirpath + "/" + filename));
+        if (!groupjson.hasOwnProperty(user_id)) {//如果json中不存在该用户
+            let new_data = {//创建新用户
+                "experience": 0,
+                "level": 0,
+                "levelname": '凡人',
+                "Privilege": 0,
+            };
+            groupjson[user_id] = new_data
+        }
+        if (!groupjson.hasOwnProperty(at_id)) {//如果json中不存在该用户
+            let new_data = {//创建新用户
+                "experience": 0,
+                "level": 0,
+                "levelname": '凡人',
+                "Privilege": 0,
+            };
+            groupjson[at_id] = new_data
+        }
+        groupjson[user_id].id=json[user_id].id;
+        groupjson[user_id].experience=json[user_id].experience;
+        groupjson[user_id].level=json[user_id].level;
+        groupjson[user_id].levelname=json[user_id].levelname;
+        groupjson[at_id].id=json[at_id].id;
+        groupjson[at_id].experience=json[at_id].experience;
+        groupjson[at_id].level=json[at_id].level;
+        groupjson[at_id].levelname=json[at_id].levelname;
+        fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(groupjson, null, "\t"));
     }
 }
