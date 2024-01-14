@@ -4,19 +4,18 @@ if (!global.segment) {
 }
 import fs from 'fs'
 import yaml from 'yaml'
-let flag=true
-const idPath=process.cwd()+'/config/QQBot.yaml'
-let data=''
-if(fs.existsSync(idPath))
-	data=fs.readFileSync(idPath, 'utf8');
-let data_list=yaml.parse(data)||{};
-let id=data_list.token
-id=JSON.stringify(id)
-id=id.split(':')[0]
-id=id.split('"')[1]
-logger.info(id)
 let btn
 if(Version.name=="TRSS-Yunzai"){
+    const idPath=process.cwd()+'/config/QQBot.yaml'
+    let data=''
+    if(fs.existsSync(idPath))
+        data=fs.readFileSync(idPath, 'utf8');
+    let data_list=yaml.parse(data)||{};
+    let id=data_list.token
+    id=JSON.stringify(id)
+    id=id.split(':')[0]
+    id=id.split('"')[1]
+    logger.info(id)
 	btn=segment.button([
 		  { text: "修仙", callback: `修仙` },
 		  { text: "突破", callback: `突破` },
