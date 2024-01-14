@@ -301,7 +301,6 @@ export class xiuxian extends plugin {//修炼
 			}
             return await e.reply([segment.at(e.user_id),`上一场战斗刚过去不久呢,你太累了,还有${cdtime}秒cd`]);
         }
-        await this.btsetCd(cdtime_battle);
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
             fs.mkdirSync(dirpath);//创建文件夹
         }
@@ -532,6 +531,7 @@ export class xiuxian extends plugin {//修炼
         groupjson[at_id].experience=json[at_id].experience;
         groupjson[at_id].level=json[at_id].level;
         groupjson[at_id].levelname=json[at_id].levelname;
+        await this.btsetCd(cdtime_battle);
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(groupjson, null, "\t"));
     }
 }
