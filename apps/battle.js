@@ -138,7 +138,7 @@ export class xiuxian extends plugin {//修炼
 		let uid=msg.split(':')[0]
 		let lev=msg.split(':')[1]
 		if(!uid||!lev) return await e.reply("请输入正确的参数")
-		let filename=[e.group_id]+'.json'
+		let filename='xiuxian.json'
 		if (!fs.existsSync(dirpath)) {//如果文件夹不存在
             fs.mkdirSync(dirpath);//创建文件夹
         }
