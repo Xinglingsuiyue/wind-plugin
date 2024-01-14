@@ -88,7 +88,7 @@ export class xiuxian extends plugin {//修炼
             ]
         })
     }
-    async clear(){
+    async clear(e){
 		await IDDB.setID(0)
 		if (fs.existsSync(dirpath)) {//如果文件夹不存在
 			var files = fs.readdirSync(dirpath);
