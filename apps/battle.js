@@ -289,6 +289,7 @@ export class xiuxian extends plugin {//修炼
             return e.reply([segment.at(e.user_id),"大笨蛋，你艾特错了！！"])
         }
         let filename='xiuxian.json'
+        let groupfile=e.group_id+'.json';
         let at_id 
         if (!uid) at_id= e.at;
         let cdtime = await this.btinCd();
@@ -308,7 +309,12 @@ export class xiuxian extends plugin {//修炼
             fs.writeFileSync(dirpath + "/" + filename, JSON.stringify({//创建文件
             }));
         }
+        if (!fs.existsSync(dirpath + "/" + groupfile)) {//如果文件不存在
+            fs.writeFileSync(dirpath + "/" + groupfile, JSON.stringify({//创建文件
+            }));
+        }
         const json = JSON.parse(fs.readFileSync(dirpath + "/" + filename));//读取文件
+        const groupfilejson = JSON.parse(fs.readFileSync(dirpath + "/" + groupfile));//读取文件
         if (!json.hasOwnProperty(user_id)) {//如果json中不存在该用户
 			if(user_id.length>30){
 				return await e.reply([segment.at(e.user_id),"你还没有修炼过呢，想和别人决斗先修炼一下吧",btn]);
@@ -316,8 +322,8 @@ export class xiuxian extends plugin {//修炼
 			return e.reply([segment.at(e.user_id),"你还没有修炼过呢，想和别人决斗先修炼一下吧"])
 		}
         if(!e.at){
-			for (let key in json) {
-				if (json[key].id == uid) {
+			for (let key in groupfilejson) {
+				if (groupfilejson[key].id == uid) {
 					at_id=key
 					if(at_id == e.user_id)
 					{	
@@ -496,7 +502,7 @@ export class xiuxian extends plugin {//修炼
             }
         }
         fs.writeFileSync(dirpath + "/" + filename, JSON.stringify(json, null, "\t"));//写入文件
-        filename=[e.group_id]+'.json';
+        filename=e.group_id+'.json';
         if (!fs.existsSync(dirpath)) {//如果文件夹不存在
             fs.mkdirSync(dirpath);//创建文件夹
         }
