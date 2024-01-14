@@ -4,6 +4,7 @@ if (!global.segment) {
 }
 import fs from 'fs'
 import yaml from 'yaml'
+let flag=true
 const idPath=process.cwd()+'/config/QQBot.yaml'
 let data=''
 if(fs.existsSync(idPath))
