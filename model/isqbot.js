@@ -2,14 +2,18 @@ import { Version } from '../components/index.js'
 if (!global.segment) {
     global.segment = (await import("oicq")).segment
 }
-let flag=true
-try{
-	const { config, configSave } = require("../../QQBot-Plugin/Model/config.js");
-}catch(err){
-	flag=false
-}
-
-
+import fs from 'fs'
+import yaml from 'yaml'
+const idPath=process.cwd()+'/config/QQBot.yaml'
+let data=''
+if(fs.existsSync(idPath))
+	data=fs.readFileSync(idPath, 'utf8');
+let data_list=yaml.parse(data)||{};
+let id=data_list.token
+id=JSON.stringify(id)
+id=id.split(':')[0]
+id=id.split('"')[1]
+logger.info(id)
 let btn
 if(Version.name=="TRSS-Yunzai"){
 	btn=segment.button([
@@ -21,20 +25,12 @@ if(Version.name=="TRSS-Yunzai"){
 		  { text: "我的境界", callback: `我的境界` },
 		  { text: "决斗", input: `决斗`, send: false },
 		  { text: "我的id", callback: `我的id` },
+		],[
+			{ text: "点击添加机器人到群聊", link: `https://web.qun.qq.com/qunrobot/data.html?robot_uin=${id}` },
 		])
 }
 let isqbot = {
-	btn,
-	async trssbtnqbot(user_id){
-		let id = user_id
-		if(id.split(':')[1]!=null){
-			id=id.split(':')[0]
-			if(flag){
-				if(config.markdown[id]!=null) return true
-			}
-		}
-		return false
-	}
+	btn
 }
 
 export default isqbot
