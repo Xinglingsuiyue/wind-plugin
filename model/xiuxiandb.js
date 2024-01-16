@@ -108,10 +108,7 @@ const COLUMNS = {
   },
   id: {
     type: xiuxiandb.Types.INTEGER,
-    allowNull: false,
-    autoIncrement: true, // 设置自增选项
-    initialValue: 1,
-    increment: 1
+    allowNull: false
   },
   experience: {
     type: xiuxiandb.Types.INTEGER,
