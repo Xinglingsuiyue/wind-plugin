@@ -482,17 +482,17 @@ export class xiuxian extends plugin {//修炼
                 experience_user=experience_at-Math.round(0 + 2 * Math.random());
                 json[at_id].experience-=experience_at;
                 json[user_id].experience-=experience_user;
-                if(user_id.length>30) await e.reply([segment.at(e.user_id),'\n',segment.at(at_id),`\n你们实力不相上下你打赢了对方，激烈战斗后你还是输了,\n你丢失了${experience_user}点灵力\n对方丢失了${experience_at}点灵力`,btn]);
-                else await e.reply([segment.at(e.user_id),'\n',segment.at(at_id),`\n你们实力不相上下你打赢了对方，激烈战斗后你还是输了,\n你丢失了${experience_user}点灵力\n对方丢失了${experience_at}点灵力`]);
+                if(user_id.length>30) await e.reply([segment.at(e.user_id),'\n',segment.at(at_id),`\n你们实力不相上下，激烈战斗后你还是输了,\n你丢失了${experience_user}点灵力\n对方丢失了${experience_at}点灵力`,btn]);
+                else await e.reply([segment.at(e.user_id),'\n',segment.at(at_id),`\n你们实力不相上下，激烈战斗后你还是输了,\n你丢失了${experience_user}点灵力\n对方丢失了${experience_at}点灵力`]);
             }
             else if(score>40){
 				if(user_id.length>30) await e.reply([segment.at(e.user_id),'\n',segment.at(at_id),"\n你们实力不相上下，激烈斗争后，你赢了对方,你们两个都没有提升",btn]);
                 else await e.reply([segment.at(e.user_id),'\n',segment.at(at_id),"\n你们实力不相上下，激烈斗争后，你赢了对方,你们两个都没有提升"])
             }
             else if(score<5&&Math.random()>0.9){
-                json[at_id].level=0;
-                json[at_id].experience=0;
-                json[at_id].levelname="凡人"
+                json[user_id].level=0;
+                json[user_id].experience=0;
+                json[user_id].levelname="凡人"
                 if(user_id.length>30) await e.reply([segment.at(e.user_id),'\n',segment.at(at_id),"\n你们实力相差太过悬殊，你被对面抓起来废了，需要重头修炼了",btn]);
                 else await e.reply([segment.at(e.user_id),'\n',segment.at(at_id),"\n你们实力相差太过悬殊，你被对面抓起来废了，需要重头修炼了"])
             }
