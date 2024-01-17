@@ -1,6 +1,6 @@
 // 导入BaseModel和sequelize
 import BaseModel, { sequelize } from './BaseModel.js';
-
+import { Sequelize, DataTypes, Model } from 'sequelize'
 // 定义一个xiuxiandb类，继承自BaseModel类
 class xiuxiandb extends BaseModel {
   // 定义一个静态方法，用来获取用户的修仙信息
@@ -25,11 +25,21 @@ class xiuxiandb extends BaseModel {
     Object.assign(user, data);
     await user.save();
   }
+  static async getAllUsers(){
+	let users = await xiuxiandb.findAll()
+	if(users){
+		return users
+	} else {
+		return [];
+	}
+  }
   static async getTopUsers(group_id,limit) {
 	  // 尝试从数据库中查询用户记录，按照境界的三倍加上灵力值降序排序，限制返回数量为limit
 	  let users = await xiuxiandb.findAll({
 	   where: {
-		group_id: group_id // 根据group_id过滤
+        group_id: {
+          [Sequelize.Op.like]: `%${group_id}%`
+			}
 		},
 		order: [
 		  [sequelize.literal('level * 3 + experience'), 'DESC'] // 使用sequelize.literal来包裹自定义的排序条件
@@ -75,7 +85,17 @@ class xiuxiandb extends BaseModel {
       return null;
     }
   }
-
+static async isInGroup(user_id, group_id) {
+  // 尝试从数据库中查询用户记录，根据user_id和group_id
+  let user = await xiuxiandb.findOne({ where: { user_id, group_id } });
+  if (user) {
+    // 如果查询结果不为空，说明用户已经加入了该群组，返回true
+    return true;
+  } else {
+    // 如果查询结果为空，说明用户没有加入该群组，返回false
+    return false;
+  }
+}
   // 定义一个静态方法，用来通过group_id查询用户的修仙信息
   static async getUsersByGroupId(group_id) {
     // 尝试从数据库中查询用户记录，如果不存在，就返回空数组
@@ -101,17 +121,18 @@ class xiuxiandb extends BaseModel {
 }
 const COLUMNS = {
   // 在这里定义模型属性
-  user_id: {
-    type: xiuxiandb.Types.STRING,
-    allowNull: false,
-    primaryKey: true // 如果user_id是主键，否则可以删除
-  },
   id: {
     type: xiuxiandb.Types.INTEGER,
+    allowNull: false,
+    primaryKey: true, // 使用id作为主键
+    autoIncrement: true // 使用自增长的方式生成id
+  },
+  user_id: {
+    type: xiuxiandb.Types.STRING,
     allowNull: false
   },
-  experience: {
-    type: xiuxiandb.Types.INTEGER,
+  group_id: {
+    type: xiuxiandb.Types.STRING, // 如果group_id是字符串数组，否则可以修改
     allowNull: false
   },
   level: {
@@ -122,8 +143,8 @@ const COLUMNS = {
     type: xiuxiandb.Types.STRING,
     allowNull: false
   },
-  group_id: {
-    type: xiuxiandb.Types.JSON, // 如果group_id是字符串数组，否则可以修改
+  experience: {
+    type: xiuxiandb.Types.INTEGER,
     allowNull: false
   }
 };
