@@ -92,6 +92,9 @@ export class xiuxian extends plugin {//修炼
         })
     }
     async clear(e){
+        if(!e.isMaster){
+            return false
+        }
 		let dirpath=process.cwd()+'/data/wind-db/xiuxiandata.db'
 		if (fs.existsSync(dirpath)) {//如果文件夹不存在
 			var files = fs.readdirSync(dirpath);
