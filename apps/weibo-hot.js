@@ -34,6 +34,26 @@ export class slander extends plugin {
             let msg=[]
             let j = res.data.length
             if(j==0) return await e.reply("未查询到结果")
+            if ([1, '1', 4, '4'].includes(e.bot.config.markdown?.type)){
+                let msg = ``
+                let btn = []
+                e.Buttons = []
+                for (let i = 0; i < ((j < 10) ? j : 10); i++) {
+                    msg += `\r\r#热搜${ i + 1 }: \r\r>标题:${res.data[i].name} \r\r>热度:${res.data[i].hot}`
+                    btn.push({
+                        label: `${ i + 1 }`,
+                        link: `${res.data[i].url}`,
+                    })
+                    if (btn.length == 5){
+                        e.Buttons.push(btn)
+                        btn = []
+                    }
+                }
+                if (btn.length > 0){
+                    e.Buttons.push(btn)
+                }
+                return await e.reply(msg)
+            }
             if(Bot[e.self_id].adapter.name=="微信Bot"||Bot[e.self_id].adapter.name=="QQ频道Bot"){
                 let msg= `热搜1: 标题:${res.data[0].name}热度:${res.data[0].hot}直达链接:${res.data[0].url}`
                 if(j<10){

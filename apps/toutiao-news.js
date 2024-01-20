@@ -14,7 +14,7 @@ export class slander extends plugin {
             priority: 1,
             rule: [
                 {
-                    reg: '^#?今日头条(新闻|热点新闻)$',
+                    reg: '^#?(今日)?头条(新闻|热点新闻)$',
                     fnc: 'toutiaonews'
                 }
             ]

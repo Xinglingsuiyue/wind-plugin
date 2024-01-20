@@ -14,7 +14,7 @@ export class slander extends plugin {
             priority: 1,
             rule: [
                 {
-                    reg: '^#?(bilibili|哔哩哔哩)周榜(.*)$',
+                    reg: '^#?(bili|哔哩)?(bili|哔哩)周榜(.*)$',
                     fnc: 'bilibili'
                 }
             ]
@@ -37,8 +37,27 @@ export class slander extends plugin {
         logger.info(`请求结果：${res.msg}`);
         if(res.msg=="success"){
             let MsgList = [];
-            let msg=[]
             let j = res.data.list.length
+            if ([1, '1', 4, '4'].includes(e.bot.config.markdown?.type)){
+                let msg = `当前查询期数:${res.data.name}`
+                let btn = []
+                e.Buttons = []
+                for (let i = 0; i < ((j < 10) ? j : 10); i++) {
+                    msg += `\r\r#热搜${ i + 1 }: \r\r>标题:${res.data[i].name}`
+                    btn.push({
+                        label: `${ i + 1 }`,
+                        link: `${res.data[i].url}`,
+                    })
+                    if (btn.length == 5){
+                        e.Buttons.push(btn)
+                        btn = []
+                    }
+                }
+                if (btn.length > 0){
+                    e.Buttons.push(btn)
+                }
+                return await e.reply(msg)
+            }
             if(Version.name!="TRSS-Yunzai"){
                 MsgList.push({
                 message: `当前查询期数:${res.data.name}`,
