@@ -38,7 +38,7 @@ export class slander extends plugin {
         if(res.msg=="success"){
             let MsgList = [];
             let j = res.data.list.length
-            if ([1, '1', 4, '4'].includes(e.bot.config.markdown?.type)){
+            if (e.bot.config?.markdown){
                 let msg = `当前查询期数:${res.data.name}`
                 let btn = []
                 e.Buttons = []

@@ -34,7 +34,7 @@ export class slander extends plugin {
             let msg=[]
             let j = res.data.length
             if(j==0) return await e.reply("未查询到结果")
-            if ([1, '1', 4, '4'].includes(e.bot.config.markdown?.type)){
+            if (e.bot.config?.markdown){
                 let msg = ``
                 let btn = []
                 e.Buttons = []
