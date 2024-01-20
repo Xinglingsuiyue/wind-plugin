@@ -18,81 +18,81 @@ export default class Button {
           fnc: 'hot'
         },
         {
-					reg: "^#?(wind|风|Wind|WIND)(命令|帮助|菜单|help|说明|功能|指令|使用说明)$",
-					fnc: 'help'
-				},
-        {
-        reg: "^#?(我的境界|查看境界)$",
-        fnc: 'xiuxian'
+          reg: "^#?(wind|风|Wind|WIND)(命令|帮助|菜单|help|说明|功能|指令|使用说明)$",
+          fnc: 'help'
         },
         {
-        reg: "^#?(修炼|修仙|服用丹药)$",
-        fnc: 'xiuxian'
+          reg: "^#?(我的境界|查看境界)$",
+          fnc: 'xiuxian'
         },
         {
-        reg: "^#?(闭关)?突破$",
-        fnc: 'xiuxian'
+          reg: "^#?(修炼|修仙|服用丹药)$",
+          fnc: 'xiuxian'
         },
         {
-        reg: "^#?(修仙|修炼)?境界列表$",
-        fnc: 'xiuxian'
+          reg: "^#?(闭关)?突破$",
+          fnc: 'xiuxian'
         },
         {
-        reg: "^#?排行榜$",
-        fnc: 'xiuxian'
+          reg: "^#?(修仙|修炼)?境界列表$",
+          fnc: 'xiuxian'
         },
         {
-        reg: "^#?我要境界(.*)$",
-        fnc: 'xiuxian'
+          reg: "^#?排行榜$",
+          fnc: 'xiuxian'
         },
         {
-        reg: "^#?我要灵力(.*)$",
-        fnc: 'xiuxian'
+          reg: "^#?我要境界(.*)$",
+          fnc: 'xiuxian'
+        },
+        {
+          reg: "^#?我要灵力(.*)$",
+          fnc: 'xiuxian'
         },
         {  
-        reg: "^#?(修仙者|修炼者|用户)(人数|数量)$",
-        fnc: 'xiuxian'
+          reg: "^#?(修仙者|修炼者|用户)(人数|数量)$",
+          fnc: 'xiuxian'
         },
         {  
-        reg: "^#?我的id$",
-        fnc: 'xiuxian'
+          reg: "^#?我的id$",
+          fnc: 'xiuxian'
         },
         {
-        reg: "#?全服(排行榜|排名)$",
-        fnc: 'xiuxian'
+          reg: "#?全服(排行榜|排名)$",
+          fnc: 'xiuxian'
         },
         {
-        reg: "^#?(战斗|决斗|pk|PK|攻打|battle)(.*)$",
-        fnc: 'xiuxian'
-      },
-      {
-        reg: "^#?扣除境界(.*)$",
-        fnc: 'xiuxian'
-      },
-      {
-        reg: "^#?扣除灵力(.*)$",
-        fnc: 'xiuxian'
-      },
-      {
-        reg: "^#?test2$",
-        fnc: 'xiuxian'
-      },
-      {
-        reg: "^#?给他境界(.*)$",
-        fnc: 'xiuxian'
-      },
-      {
-        reg: "^#?给他灵力(.*)$",
-        fnc: 'xiuxian'
-      },
-      //{
+          reg: "^#?(战斗|决斗|pk|PK|攻打|battle)(.*)$",
+          fnc: 'xiuxian'
+        },
+        {
+          reg: "^#?扣除境界(.*)$",
+          fnc: 'xiuxian'
+        },
+        {
+          reg: "^#?扣除灵力(.*)$",
+          fnc: 'xiuxian'
+        },
+        {
+          reg: "^#?test2$",
+          fnc: 'xiuxian'
+        },
+        {
+          reg: "^#?给他境界(.*)$",
+          fnc: 'xiuxian'
+        },
+        {
+          reg: "^#?给他灵力(.*)$",
+          fnc: 'xiuxian'
+        },
+        //{
         //  reg: "^#?清理妖兽",
-        //fnc: "xiuxian"
-      //},
-      //{
-      //	reg: '^#?妖兽信息',
-      //	fnc: 'xiuxian'
-      //}
+        //  fnc: "xiuxian"
+        //},
+        //{
+        //	reg: '^#?妖兽信息',
+        //	fnc: 'xiuxian'
+        //}
       ]
     }
   }
