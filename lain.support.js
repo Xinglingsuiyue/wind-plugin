@@ -6,11 +6,11 @@ export default class Button {
       priority: -999,
       rule: [
         {
-          reg: '^#?(百度|baidu|抖音|tiktok|今日头条|微博|知乎|bilibili|哔哩哔哩)(热搜榜|热榜|热度榜|热搜)$',
+          reg: '^#?(百度|baidu|抖音|tiktok|(今日)?头条|微博|知乎|((bili|哔哩)?(bili|哔哩)))(热搜榜|热榜|热度榜|热搜)$',
           fnc: 'hot'
         },
         {
-          reg: '^#?(bilibili|哔哩哔哩)周榜(.*)$',
+          reg: '^#?(bili|哔哩)?(bili|哔哩)周榜(.*)$',
           fnc: 'hot'
         },
         {

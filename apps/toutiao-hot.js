@@ -14,7 +14,7 @@ export class slander extends plugin {
             priority: 1,
             rule: [
                 {
-                    reg: '^#?今日头条(热搜榜|热榜|热度榜|热搜)$',
+                    reg: '^#?(今日)?头条(热搜榜|热榜|热度榜|热搜)$',
                     fnc: 'toutiaohot'
                 }
             ]
@@ -32,7 +32,6 @@ export class slander extends plugin {
         logger.info(`请求结果：${res.msg}`);
         if(res.msg=="success"){
             let MsgList = [];
-            let msg=[]
             let j = res.data.length
             if ([1, '1', 4, '4'].includes(e.bot.config.markdown?.type)){
                 let msg = ``

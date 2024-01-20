@@ -32,8 +32,27 @@ export class slander extends plugin {
         logger.info(`请求结果：${res.msg}`);
         if(res.msg=="success"){
             let MsgList = [];
-            let msg=[]
             let j = res.data.length
+            if ([1, '1', 4, '4'].includes(e.bot.config.markdown?.type)){
+                let msg = ``
+                let btn = []
+                e.Buttons = []
+                for (let i = 0; i < ((j < 10) ? j : 10); i++) {
+                    msg += `\r\r#热搜${ i + 1 }: \r\r>标题:${res.data[i].name}`
+                    btn.push({
+                        label: `${ i + 1 }`,
+                        link: `${res.data[i].url}`,
+                    })
+                    if (btn.length == 5){
+                        e.Buttons.push(btn)
+                        btn = []
+                    }
+                }
+                if (btn.length > 0){
+                    e.Buttons.push(btn)
+                }
+                return await e.reply(msg)
+            }
             if(Version.name!="TRSS-Yunzai"){
                 for (let i = 0 ;i<j;i++){
                 MsgList.push({
