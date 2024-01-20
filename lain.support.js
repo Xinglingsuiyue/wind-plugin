@@ -110,18 +110,21 @@ export default class Button {
   }
 
   xiuxian () {
-    const btn = [
+    const btn = []
+    btn.push(...shuffle([
       { label: "修仙", callback: `修仙` },
       { label: "突破", callback: `突破` },
       { label: "服用丹药", callback: `服用丹药` },
+    ]))
+    btn.push(...[
       { label: "我的境界", callback: `我的境界` },
       { label: "决斗" },
       { label: "我的id", callback: `我的id` },
       { label: "境界列表", callback: `修仙境界列表` },
       { label: "排行榜", enter: true },
       { label: "全服排行榜", enter: true },
-    ]
-    return Bot.Button(shuffle(btn), 3)
+    ])
+    return Bot.Button(btn, 3)
   }
 }
 
