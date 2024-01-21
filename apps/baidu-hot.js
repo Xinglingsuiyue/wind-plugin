@@ -120,7 +120,7 @@ export class slander extends plugin {
                 else{
                     for (let i = 1; i < 10; i++){
                         let m= i + 1
-                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}热度:${res.data[i].hot}`
+                        msg = msg + `\n#热搜${m}: \n>标题:${res.data[i].name}\n>热度:${res.data[i].hot}`
                         arr.push({
                             text: `热搜${m}`,
                             link: `${res.data[i].url}`,
