@@ -140,7 +140,7 @@ export class xiuxian extends plugin {//修炼
         let leve=Number(at_data.level)
         at_data.level=leve+Number(lev);
         if(at_data.level<111) at_data.levelname=findlevelname[at_data.level];
-        if(at_data.level>110&&at_data.level<10000) at_data.levelname=`大帝第${at_data.level-101}重天`;
+        if(at_data.level>110&&at_data.level<10000) at_data.levelname=`大帝第${at_data.level-110}重天`;
         if(at_data.level>=10000) at_data.levelname="道祖";
         await xiuxiandb.updateUserInfo(at_id,at_data)
         lev=at_data.level
@@ -175,7 +175,7 @@ export class xiuxian extends plugin {//修炼
         at_data.level=exe-Number(exp);
         if(at_data.level<0) at_data.level=0
         if(at_data.level<111) at_data.levelname=findlevelname[at_data.level];
-        if(at_data.level>110&&l<10000) at_data.levelname=`大帝第${at_data.level-101}重天`;
+        if(at_data.level>110&&l<10000) at_data.levelname=`大帝第${at_data.level-110}重天`;
         if(at_data.level>=10000) at_data.levelname="道祖";
         await xiuxiandb.updateUserInfo(at_id,at_data)
         await e.reply([segment.at(e.user_id),`您斩落了\n`,segment.at(at_id),`境界${exp}层`]);
@@ -332,10 +332,10 @@ export class xiuxian extends plugin {//修炼
                 at_data.experience-=experience_user;
                 if(at_data.level<0) at_data.level=0
                 if(user_data.level<111) user_data.levelname=findlevelname[user_data.level];
-                if(user_data.level>110&&user_data.level<10000) user_data.levelname=`大帝第${user_data.level-101}重天`;
+                if(user_data.level>110&&user_data.level<10000) user_data.levelname=`大帝第${user_data.level-110}重天`;
                 if(user_data.level>=10000) user_data.levelname="道祖";
                 if(at_data.level<111) at_data.levelname=findlevelname[at_data.level];
-                if(at_data.level>110&&at_data.level<10000) at_data.levelname=`大帝第${at_data.level-101}重天`;
+                if(at_data.level>110&&at_data.level<10000) at_data.levelname=`大帝第${at_data.level-110}重天`;
                 if(at_data.level>=10000) at_data.levelname="道祖";
                 if(user_id.length>30) await e.reply([segment.at(e.user_id),`你忽然觉醒，灵气值和境界提升，成功反杀了`,'\n',segment.at(at_id),'',`\n你提升了${level_user}个境界，获得了${experience_user}点灵力\n对方跌落了${level_user}个境界，丢失了${experience_user}点灵力`,btn]);
                 else await e.reply([segment.at(e.user_id),`你忽然觉醒，灵气值和境界提升，成功反杀了`,'\n',segment.at(at_id),`\n你提升了${level_user}个境界，获得了${experience_user}点灵力\n对方跌落了${level_user}个境界，丢失了${experience_user}点灵力`]);
@@ -351,10 +351,10 @@ export class xiuxian extends plugin {//修炼
                 if(at_data.level<0) at_data.level=0
                 at_data.experience-=experience_at;
                 if(user_data.level<111) user_data.levelname=findlevelname[user_data.level];
-                if(user_data.level>110&&user_data.level<10000) user_data.levelname=`大帝第${user_data.level-101}重天`;
+                if(user_data.level>110&&user_data.level<10000) user_data.levelname=`大帝第${user_data.level-110}重天`;
                 if(user_data.level>=10000) user_data.levelname="道祖";
                 if(at_data.level<111) at_data.levelname=findlevelname[at_data.level];
-                if(at_data.level>110&&at_data.level<10000) at_data.levelname=`大帝第${at_data.level-101}重天`;
+                if(at_data.level>110&&at_data.level<10000) at_data.levelname=`大帝第${at_data.level-110}重天`;
                 if(at_data.level>=10000) at_data.levelname="道祖";
                 if(user_id.length>30) await e.reply([segment.at(e.user_id),`你人品大爆发了，获得天道青睐，成功爆发进阶，反杀了`,'\n',segment.at(at_id),`\n你提升了${level_user}个境界，获得了${experience_user}点灵力\n对方跌落了${level_at}个境界，丢失了${experience_at}点灵力`,btn]);
                 else await e.reply([segment.at(e.user_id),`你人品大爆发了，获得天道青睐，成功爆发进阶，反杀了`,'\n',segment.at(at_id),`\n你提升了${level_user}个境界，获得了${experience_user}点灵力\n对方跌落了${level_at}个境界，丢失了${experience_at}点灵力`]);
@@ -376,10 +376,10 @@ export class xiuxian extends plugin {//修炼
                 user_data.experience-=experience_user;
                 if(user_data.level<0) user_data.level=0
                 if(user_data.level<111) user_data.levelname=findlevelname[user_data.level];
-                if(user_data.level>110&&user_data.level<10000) user_data.levelname=`大帝第${user_data.level-101}重天`;
+                if(user_data.level>110&&user_data.level<10000) user_data.levelname=`大帝第${user_data.level-110}重天`;
                 if(user_data.level>=10000) user_data.levelname="道祖";
                 if(at_data.level<111) at_data.levelname=findlevelname[at_data.level];
-                if(at_data.level>110&&at_data.level<10000) at_data.levelname=`大帝第${at_data.level-101}重天`;
+                if(at_data.level>110&&at_data.level<10000) at_data.levelname=`大帝第${at_data.level-110}重天`;
                 if(at_data.level>=10000) at_data.levelname="道祖";
                 if(user_id.length>30) await e.reply([segment.at(e.user_id),`虽然你领先了`,'\n',segment.at(at_id),'\n',`很多个境界，但是对方忽然人品大爆发，获得了天道青睐，你被对面反杀了,\n你跌落了${level_user}个境界，丢失了${experience_user}点灵力\n对方提升了${level_at}个境界，获得了${experience_at}点灵力`,btn]);
                 else await e.reply([segment.at(e.user_id),`虽然你领先了`,'\n',segment.at(at_id),'\n',`很多个境界，但是对方忽然人品大爆发，获得了天道青睐，你被对面反杀了,\n你跌落了${level_user}个境界，丢失了${experience_user}点灵力\n对方提升了${level_at}个境界，获得了${experience_at}点灵力`]);
@@ -393,10 +393,10 @@ export class xiuxian extends plugin {//修炼
                 user_data.experience-=experience_at;
                 if(user_data.level<0) user_data.level=0
                 if(user_data.level<111) user_data.levelname=findlevelname[user_data.level];
-                if(user_data.level>110&&user_data.level<10000) user_data.levelname=`大帝第${user_data.level-101}重天`;
+                if(user_data.level>110&&user_data.level<10000) user_data.levelname=`大帝第${user_data.level-110}重天`;
                 if(user_data.level>=10000) user_data.levelname="道祖";
                 if(at_data.level<111) at_data.levelname=findlevelname[at_data.level];
-                if(at_data.level>110&&at_data.level<10000) at_data.levelname=`大帝第${at_data.level-101}重天`;
+                if(at_data.level>110&&at_data.level<10000) at_data.levelname=`大帝第${at_data.level-110}重天`;
                 if(at_data.level>=10000) at_data.levelname="道祖";
                 if(user_id.length>30) await e.reply([segment.at(e.user_id),'\n',segment.at(at_id),`忽然觉醒，灵气值和境界获得提升，你被对面反杀了,\n你跌落了${level_user}个境界，丢失了${experience_user}点灵力\n对方提升了${level_user}个境界，获得了${experience_user}点灵力`,btn]);
                 else await e.reply([segment.at(e.user_id),'\n',segment.at(at_id),`忽然觉醒，灵气值和境界获得提升，你被对面反杀了,\n你跌落了${level_user}个境界，丢失了${experience_user}点灵力\n对方提升了${level_user}个境界，获得了${experience_user}点灵力`]);
