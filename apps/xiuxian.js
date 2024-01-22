@@ -165,7 +165,7 @@ export class xiuxian extends plugin {//修炼
         }
         user_data.level+=numret;
         if(user_data.level<111) user_data.levelname=findlevelname[user_data.level];
-        if(user_data.level>110&&user_data.level<10000) user_data.levelname=`大帝第${user_data.level-101}重天`;
+        if(user_data.level>110&&user_data.level<10000) user_data.levelname=`大帝第${user_data.level-110}重天`;
         if(user_data.level>=10000) user_data.levelname="道祖";
         await xiuxiandb.updateUserInfo(user_id,user_data)
         await e.reply([segment.at(e.user_id),`恭喜您，获得了境界${numret}层`]);
@@ -507,14 +507,12 @@ export class xiuxian extends plugin {//修炼
         e.reply([segment.at(e.user_id),`用户:${user_data.id},\n你当前境界为${user_data.levelname},需要时间${(0.2 * user_data.level)}s,突破成功概率${gailv},开始突破......`])
         let i = Math.random() * 100
         if (i > gailv) {
-            setTimeout(() => {
-                return e.reply([segment.at(user_id),`用户:${user_data.id},\n对不起，突破失败，请努力修行`])
-            }, 1 * (user_data.level));//设置延时
+            return e.reply([segment.at(user_id),`用户:${user_data.id},\n对不起，突破失败，请努力修行`])
         }
         else{
             user_data.level++
             if(user_data.level<111) user_data.levelname=findlevelname[user_data.level];
-            if(user_data.level>110&&user_data.level<10000) user_data.levelname=`大帝第${level-101}重天`;
+            if(user_data.level>110&&user_data.level<10000) user_data.levelname=`大帝第${level-110}重天`;
             if(user_data.level>=10000) user_data.levelname="道祖";
         }
         let need
