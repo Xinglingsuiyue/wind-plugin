@@ -512,7 +512,7 @@ export class xiuxian extends plugin {//修炼
         else{
             user_data.level++
             if(user_data.level<111) user_data.levelname=findlevelname[user_data.level];
-            if(user_data.level>110&&user_data.level<10000) user_data.levelname=`大帝第${level-110}重天`;
+            if(user_data.level>110&&user_data.level<10000) user_data.levelname=`大帝第${user_data.level-110}重天`;
             if(user_data.level>=10000) user_data.levelname="道祖";
         }
         let need
