@@ -42,7 +42,7 @@ class xiuxiandb extends BaseModel {
 			}
 		},
 		order: [
-		  [sequelize.literal('level * 3 + experience'), 'DESC'] // 使用sequelize.literal来包裹自定义的排序条件
+		  [sequelize.literal('level * level + experience'), 'DESC'] // 使用sequelize.literal来包裹自定义的排序条件
 		],
 		limit: limit
 	  });
@@ -56,7 +56,7 @@ class xiuxiandb extends BaseModel {
 	  // 尝试从数据库中查询用户记录，按照境界的三倍加上灵力值降序排序，限制返回数量为limit
 	  let users = await xiuxiandb.findAll({
 		order: [
-		  [sequelize.literal('level * 3 + experience'), 'DESC'] // 使用sequelize.literal来包裹自定义的排序条件
+		  [sequelize.literal('level * level + experience'), 'DESC'] // 使用sequelize.literal来包裹自定义的排序条件
 		],
 		limit: limit
 	  });
