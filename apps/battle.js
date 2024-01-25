@@ -175,7 +175,7 @@ export class xiuxian extends plugin {//修炼
         at_data.level=exe-Number(exp);
         if(at_data.level<0) at_data.level=0
         if(at_data.level<111) at_data.levelname=findlevelname[at_data.level];
-        if(at_data.level>110&&l<10000) at_data.levelname=`大帝第${at_data.level-110}重天`;
+        if(at_data.level>110&&at_data.level<10000) at_data.levelname=`大帝第${at_data.level-110}重天`;
         if(at_data.level>=10000) at_data.levelname="道祖";
         await xiuxiandb.updateUserInfo(at_id,at_data)
         await e.reply([segment.at(e.user_id),`您斩落了\n`,segment.at(at_id),`境界${exp}层`]);
