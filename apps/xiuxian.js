@@ -170,7 +170,7 @@ export class xiuxian extends plugin {//修炼
         await xiuxiandb.updateUserInfo(user_id,user_data)
         await e.reply([segment.at(e.user_id),`恭喜您，获得了境界${numret}层`]);
          let lev=user_data.level
-        let exerp=100*(lev-110)+3050;
+        let exerp=1000*(lev-110)+30500;
         let need
         if(user_data.experience < level_exp[lev] && user_data.level<111) need=level_exp[lev]-user_data.experience
         else if (user_data.level>110 && user_data.experience<exerp) need=exerp - user_data.experience
@@ -214,7 +214,7 @@ export class xiuxian extends plugin {//修炼
         await xiuxiandb.updateUserInfo(user_id,user_data)
         await e.reply([segment.at(e.user_id),`恭喜您，获得了灵力${numret}点`]);
         let lev=user_data.level
-        let exerp=100*(lev-110)+3050;
+        let exerp=1000*(lev-110)+30500;
         let need
         if(user_data.experience < level_exp[lev] && user_data.level<111) need=level_exp[lev]-user_data.experience
         else if (user_data.level>110 && user_data.experience<exerp) need=exerp - user_data.experience
@@ -348,7 +348,7 @@ export class xiuxian extends plugin {//修炼
 			user_data.group_id += ',' + e.group_id // 使用字符串拼接来添加群组id
         }
         let lev=user_data.level
-        let exerp=100*(lev-110)+3050;
+        let exerp=1000*(lev-110)+30500;
         let need
         if(user_data.experience < level_exp[lev] && user_data.level<111) need=level_exp[lev]-user_data.experience
         else if (user_data.level>110 && user_data.experience<exerp) need=exerp - user_data.experience
@@ -415,7 +415,7 @@ export class xiuxian extends plugin {//修炼
             if (pills > 60) {
                 user_data.experience += 15
                 let lev=user_data.level
-				let exerp=100*(lev-110)+3050;
+				let exerp=1000*(lev-110)+30500;
 				let need
 				if(user_data.experience < level_exp[lev] && user_data.level<111) need=level_exp[lev]-user_data.experience
 				else if (user_data.level>110 && user_data.experience<exerp) need=exerp - user_data.experience
@@ -440,7 +440,7 @@ export class xiuxian extends plugin {//修炼
             experience_ = Math.round(1 + 5 * Math.random())
             user_data.experience += experience_
             let lev =user_data.level
-			let exerp=100*(lev-110)+3050;
+			let exerp=1000*(lev-110)+30500;
 			let need
 			if(user_data.experience < level_exp[lev] && user_data.level<111) need=level_exp[lev]-user_data.experience
 			else if (user_data.level>110 && user_data.experience<exerp) need=exerp - user_data.experience
@@ -489,7 +489,7 @@ export class xiuxian extends plugin {//修炼
 			user_data.group_id += ',' + e.group_id // 使用字符串拼接来添加群组id
         }
         let lev=user_data.level;
-        let exerp=100*(lev-110)+3050;
+        let exerp=1000*(lev-110)+30500;
         if(user_data.experience < level_exp[lev] && user_data.level<111){
 			if(user_id.length>30){
 				return e.reply([segment.at(e.user_id),`对不起，用户:${user_data.id},\n你的修为不足,还差${level_exp[lev] - user_data.experience},请再接再厉`,btn])
