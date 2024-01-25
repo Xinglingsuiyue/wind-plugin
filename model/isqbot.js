@@ -26,6 +26,7 @@ if(Version.name=="TRSS-Yunzai"){
 		  { text: "决斗", input: `决斗`, send: false },
 		  { text: "我的id", callback: `我的id` },
 		],[
+            { text: "修仙公告", callback:'修仙公告'},
 			{ text: "点击添加机器人到群聊", link: `https://web.qun.qq.com/qunrobot/data.html?robot_uin=${id}` },
 		])
 }
