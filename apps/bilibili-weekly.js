@@ -107,7 +107,7 @@ export class slander extends plugin {
                 return e.reply(msg);
             }
             if(Bot[e.self_id].adapter.name=="QQBot"){
-                let msg= `当前查询期数:${res.data.name}\n热搜1: 标题:${res.data[0].name}`
+                let msg= `\n#当前查询期数:${res.data.name}\n#热搜1: \n>标题:${res.data[0].name}`
                 let arr = []
                 let atns = []
                 let btns = []
@@ -120,7 +120,7 @@ export class slander extends plugin {
                 if(j<10){
                     for (let i = 1; i < j; i++){
                         let m= i + 1
-                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}`
+                        msg = msg + `\n#热搜${m}: \n>标题:${res.data[i].name}`
                         arr.push({
                             text: `热搜${m}`,
                             link: `${res.data[i].url}`,
@@ -134,7 +134,7 @@ export class slander extends plugin {
                 else{
                     for (let i = 1; i < 10; i++){
                         let m= i + 1
-                        msg = msg + `\n热搜${m}: 标题:${res.data[i].name}`
+                        msg = msg + `\n#热搜${m}: \n>标题:${res.data[i].name}`
                         arr.push({
                             text: `热搜${m}`,
                             link: `${res.data[i].url}`,
