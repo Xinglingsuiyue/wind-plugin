@@ -123,6 +123,7 @@ export default class Button {
       { label: "境界列表", callback: `修仙境界列表` },
       { label: "排行榜", enter: true },
       { label: "全服排行榜", enter: true },
+      { label: "修仙公告", callback:'修仙公告'},
     ])
     return Bot.Button(btn, 3)
   }
