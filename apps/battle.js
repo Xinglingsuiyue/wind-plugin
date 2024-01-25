@@ -110,7 +110,7 @@ export class xiuxian extends plugin {//修炼
         at_data.experience=exe+Number(exp);
         await xiuxiandb.updateUserInfo(at_id,at_data)
         let lev=at_data.level
-        let exerp=100*(lev-110)+3050;
+        let exerp=1000*(lev-110)+30500;
         let need
         if(at_data.experience < level_exp[lev] && at_data.level<111) need=level_exp[lev]-at_data.experience
         else if (at_data.level>110 && at_data.experience<exerp) need=exerp - at_data.experience
@@ -144,7 +144,7 @@ export class xiuxian extends plugin {//修炼
         if(at_data.level>=10000) at_data.levelname="道祖";
         await xiuxiandb.updateUserInfo(at_id,at_data)
         lev=at_data.level
-        let exerp=100*(lev-110)+3050;
+        let exerp=1000*(lev-110)+30500;
         let need
         if(at_data.experience < level_exp[lev] && at_data.level<111) need=level_exp[lev]-at_data.experience
         else if (at_data.level>110 && at_data.experience<exerp) need=exerp - at_data.experience
