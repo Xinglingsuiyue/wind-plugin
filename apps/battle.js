@@ -279,7 +279,7 @@ export class xiuxian extends plugin {//修炼
         let experience_at
         let level_user
         let level_at
-        sc = (user_data.level * 3 + user_data.experience) / (user_data.level * 3 + user_data.experience + at_data.level * 3 + at_data.experience) * 100;
+        sc = (user_data.level * user_data.level + user_data.experience) / (user_data.level * user_data.level + user_data.experience + at_data.level * at_data.level + at_data.experience) * 100;
         score = sc.toFixed(2);
         let sscore=Math.random()
         await e.reply([segment.at(e.user_id),`你的境界是${user_data.levelname},你的灵力值为${user_data.experience},\n`,segment.at(at_id),`的境界是${at_data.levelname},对方的灵力值为${at_data.experience},\n你赢的概率约为${score}%`]);
