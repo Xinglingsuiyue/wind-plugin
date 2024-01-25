@@ -8,17 +8,17 @@ import xiuxiandb from "../model/xiuxiandb.js"
 import isqbot from '../model/isqbot.js';
 let btn
 const ani={
-    step:1,
-    name:"蓬蓬兽",
-    level:20,
-    experience:100,
-    level_up:0,
-    level_ave:0,
-    experience_up:10,
-    experience_ave:5,
-    level_down:0,
-    experience_down:0,
-    num:10000
+    step:1,                 //妖兽阶数
+    name:"蓬蓬兽",           //妖兽名称
+    level:20,               //妖兽等级
+    experience:100,         //妖兽灵力值
+    level_up:0,             //攻打成功给的境界提升保底
+    level_ave:0,            //境界提升波动范围
+    experience_up:10,       //攻打成功给的灵力提升保底
+    experience_ave:5,       //灵力提升的波动范围
+    level_down:0,           //失败丢失的境界下限
+    experience_down:0,      //失败丢失的灵力下限
+    num:10000               //妖兽数量
 }
 let path = process.cwd().replace(/\\/g, '/')
 const dirpath=path+'/plugins/wind-plugin/resources/xiuxian-data'
