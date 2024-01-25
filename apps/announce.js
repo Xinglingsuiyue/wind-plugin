@@ -53,7 +53,7 @@ export class example extends plugin {
     }
     async announce(e){
         if(!announce.test) return await e.reply("当前无公告内容")
-    	e.reply(["\r\r#修仙公告:\r\r>",announce.test,segment.button([{text:'其他板块',callback:'帮助'}])])
+    	e.reply(["\r\r#修仙公告:\r\r>",announce.test])
     }
     async announceset_robot(e){
     	if(!e.isMaster) return false
@@ -72,6 +72,6 @@ export class example extends plugin {
     }
     async announce_robot(e){
         if(!announce.robot) return await e.reply("当前无公告内容")
-    	e.reply(["\r\r#机器人公告:\r\r>",announce.robot,segment.button([{text:'其他板块',callback:'帮助'}])])
+    	e.reply(["\r\r#机器人公告:\r\r>",announce.robot])
     }
 }
