@@ -93,7 +93,7 @@ export class xiuxian extends plugin {//修炼
         if(user_id.length>30){
             btn=isqbot.btn
         }
-		e.reply([`\r#当前妖兽【${ani.name}】\r>对应修士境界:${findlevelname[ani.level]}\r>灵气值:${ani.experience}\r>由于妖兽身体素质强于修士故可越阶战斗`,btn])
+		e.reply([`\r\r#当前妖兽【${ani.name}】\r>对应修士境界:${findlevelname[ani.level]}\r>灵气值:${ani.experience}\r>由于妖兽身体素质强于修士故可越阶战斗`,btn])
     }
     async give_exp(e){
         let user_id=e.user_id
