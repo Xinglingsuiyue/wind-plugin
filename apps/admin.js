@@ -45,6 +45,7 @@ export class slander extends plugin {
     }
     async black(e){
         if(black.all&&!black.group.includes(e.group_id)) return false
+        e.reply("当前群聊修仙功能已关闭,请联系机器人管理员开启")
         return true
     }
     async turnoff(e){
