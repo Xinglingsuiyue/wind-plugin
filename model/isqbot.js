@@ -13,6 +13,7 @@ if(Version.name=="TRSS-Yunzai"){
     let data_list=yaml.parse(data)||{};
     let id=data_list.token
     id=JSON.stringify(id)
+    let appid=id.split(':')[1]
     id=id.split(':')[0]
     id=id.split('"')[1]
     logger.info(id)
@@ -27,7 +28,7 @@ if(Version.name=="TRSS-Yunzai"){
 		  { text: "我的id", callback: `我的id` },
 		],[
             { text: "修仙公告", callback:'修仙公告'},
-			{ text: "点击添加机器人到群聊", link: `https://web.qun.qq.com/qunrobot/data.html?robot_uin=${id}` },
+			{ text: "点击添加机器人到群聊", link: `https://qun.qq.com/qunpro/robot/qunshare?robot_uin=${id}&robot_appid=${appid}&biz_type=0` },
 		])
 }
 let isqbot = {
