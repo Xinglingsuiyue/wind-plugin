@@ -1,3 +1,8 @@
+const announcePath = './plugins/wind-plugin/resources/announce.yaml'
+let data = ''
+if (fs.existsSync(announcePath))
+    data = fs.readFileSync(announcePath, 'utf8');
+let announce = yaml.parse(data) || {};
 export default class Button {
   constructor() {
     this.plugin = {
@@ -119,12 +124,21 @@ export default class Button {
       { label: "决斗" },
       { label: "我的id", callback: `我的id` },
     ]))
-    btn.push(...[
+    if(announce.test){
+        btn.push(...[
       { label: "境界列表", callback: `修仙境界列表` },
       { label: "排行榜", enter: true },
       { label: "全服排行榜", enter: true },
       { label: "修仙公告", callback:'修仙公告'},
     ])
+    }
+    else{
+        btn.push(...[
+      { label: "境界列表", callback: `修仙境界列表` },
+      { label: "排行榜", enter: true },
+      { label: "全服排行榜", enter: true },
+    ])
+    }
     return Bot.Button(btn, 3)
   }
 }
