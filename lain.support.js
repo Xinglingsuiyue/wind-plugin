@@ -1,4 +1,4 @@
-const announcePath = './plugins/wind-plugin/resources/announce.yaml'
+const announcePath = './plugins/wind-plugin/config/announce.yaml'
 import fs from "node:fs"
 import yaml from "yaml"
 let data = ''
