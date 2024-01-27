@@ -1,4 +1,6 @@
 const announcePath = './plugins/wind-plugin/resources/announce.yaml'
+import fs from "node:fs"
+import yaml from "yaml"
 let data = ''
 if (fs.existsSync(announcePath))
     data = fs.readFileSync(announcePath, 'utf8');
