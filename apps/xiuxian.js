@@ -582,7 +582,7 @@ export class xiuxian extends plugin {//修炼
         e.reply([segment.at(e.user_id),`用户:${user_data.id},\n你当前境界为${user_data.levelname},需要时间${(0.2 * user_data.level)}s,突破成功概率${gailv},开始突破......`])
         let i = Math.random() * 100
         if (i > gailv) {
-        	return e.reply([segment.at(user_id),`用户:${user_data.id},\n对不起，突破失败，请努力修行`])
+        	return await e.reply([segment.at(user_id),`用户:${user_data.id},\n对不起，突破失败，请努力修行`])
         }
         else{
             user_data.level++
