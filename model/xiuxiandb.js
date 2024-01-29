@@ -33,7 +33,9 @@ const level_exp=[0,50,100,150,200,250,300,350,400/*炼气*/,460,520,580,640,700,
 						break
 						}
 				}
-				user.levelname=findlevelname[user.level]
+                if(user.level<111) user.levelname=findlevelname[user.level]
+                if(user.level>110&&user.level<10000) user.levelname=`大帝第${user.level-110}重天`
+                if(user.level>=10000) user.levelname='道祖'
 				await user.save();
 		} 
 	}
