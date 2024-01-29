@@ -39,18 +39,20 @@ const level_exp=[0,50,100,150,200,250,300,350,400/*炼气*/,460,520,580,640,700,
             }
             if(user.level>110&&user.level<10000){
                 for(i=111;i<10000;i++){
-                    if(user.experience>1000*(i-110)+30500&&user.experience<1000*(i-109)+30500)
-                    user.level=i
-                    break
+                    if(user.experience>1000*(i-110)+30500&&user.experience<1000*(i-109)+30500){
+                         user.level=i
+                        break
+                    }
                 }
                 user.levelname=`大帝第${user.level-110}重天`
             }
             if(user.level>=10000){
                 for(i=10000;i>110;i--){
                     if(user.experience>1000*(10000-110)+30500) break
-                    if(user.experience>1000*(i-110)+30500&&user.experience<1000*(i-109)+30500)
-                    user.level=i
-                    break
+                    if(user.experience>1000*(i-110)+30500&&user.experience<1000*(i-109)+30500){
+                        user.level=i
+                        break
+                    }
                 }
                 user.levelname='道祖'
             }
