@@ -1,25 +1,10 @@
-import plugin from '../../../lib/plugins/plugin.js'
 import Cfg from '../../../lib/config/config.js'
 import fs from 'fs';
 import YAML from "yaml";
-import{segment}from'oicq';
 import moment from "moment"
 import xiuxiandb from "../model/xiuxiandb.js"
 import isqbot from '../model/isqbot.js';
 let btn
-const ani={
-    step:1,
-    name:"蓬蓬兽",
-    level:20,
-    experience:100,
-    level_up:0,
-    level_ave:0,
-    experience_up:10,
-    experience_ave:10,
-    level_down:0,
-    experience_down:0,
-    num:10000
-}
 let path = process.cwd().replace(/\\/g, '/')
 const dirpath=path+'/plugins/wind-plugin/resources/xiuxian-data'
 const power_name=['灵力','仙力','魔力[非最终版]','帝源','混沌之力']
@@ -76,24 +61,9 @@ export class xiuxian extends plugin {//修炼
                     reg: "^#?给他灵力(.*)$", //匹配消息正则，命令正则
                     /** 执行方法 */
                     fnc: 'give_exp'
-                },
-               /* {
-                    reg: "^#?清理妖兽",
-                    fnc: "ani"
-                },*/
-                {
-			reg: '^#?妖兽信息',
-			fnc: 'ani_ms'
                 }
             ]
         })
-    }
-    async ani_ms(e){
-		let user_id=e.user_id
-        if(user_id.length>30){
-            btn=isqbot.btn
-        }
-		e.reply([`\r\r#当前妖兽【${ani.name}】\r>对应修士境界:${findlevelname[ani.level]}\r>灵气值:${ani.experience}\r>由于妖兽身体素质强于修士故可越阶战斗`,btn])
     }
     async give_exp(e){
         let user_id=e.user_id
