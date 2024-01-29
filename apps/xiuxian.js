@@ -7,7 +7,7 @@ import xiuxiandb from "../model/xiuxiandb.js"
 import isqbot from '../model/isqbot.js';
 let path = process.cwd().replace(/\\/g, '/')
 const power_name=['灵力','仙力','魔力[非最终版]','帝源','混沌之力']
-const levelname=['凡人','练气期','筑基期','金丹期','元婴期','化神期','合体期','大乘期','渡劫期','人仙境','地仙境','天仙境','金仙境','大罗金仙境','准仙帝','仙帝','天人五衰境','圣人','大帝','道祖']
+const levelname=['凡人','练气期','筑基期','金丹期','元婴期','化神期','合体期','大乘期','渡劫期','人仙境','地仙境','天仙境','金仙境','大罗金仙境','准仙帝','仙帝','天人五衰境','圣人','大帝','神境【预告】/ 魔境【预告】','神魔合一境【预告】','道祖']
 const findlevelname=["凡人","炼气第1层","炼气第2层","炼气第3层","炼气第4层","炼气第5层","炼气第6层","炼气第7层","炼气第8层","炼气第9层","筑基第1层","筑基第2层","筑基第3层","筑基第4层","筑基第5层","筑基第6层","筑基第7层","筑基第8层","筑基第9层","金丹第1层","金丹第2层","金丹第3层","金丹第4层","金丹第5层","金丹第6层","金丹第7层","金丹第8层","金丹第9层","元婴第1层","元婴第2层","元婴第3层","元婴第4层","元婴第5层","元婴第6层","元婴第7层","元婴第8层","元婴第9层","化神第1层","化神第2层","化神第3层","化神第4层","化神第5层","化神第6层","化神第7层","化神第8层","化神第9层","合体第1层","合体第2层","合体第3层","合体第4层","合体第5层","合体第6层","合体第7层","合体第8层","合体第9层","大乘第1层","大乘第2层","大乘第3层","大乘第4层","大乘第5层","大乘第6层","大乘第7层","大乘第8层","大乘第9层","渡劫第1层","渡劫第2层","渡劫第3层","渡劫第4层","渡劫第5层","渡劫第6层","渡劫第7层","渡劫第8层","渡劫第9层","人仙境初期","人仙境中期","人仙境后期","人仙境圆满","地仙境初期","地仙境中期","地仙境后期","地仙境圆满","天仙境初期","天仙境中期","天仙境后期","天仙境圆满","金仙境初期","金仙境中期","金仙境后期","金仙境圆满","大罗金仙境初期","大罗金仙境中期","大罗金仙境后期","大罗金仙境圆满","准仙帝境","准仙帝境圆满","仙帝境","仙帝境圆满","天人五衰之仙衰","天人五衰之躯衰","天人五衰之窍衰","天人五衰之魂衰","天人五衰之煞衰","圣人第1层","圣人第2层","圣人第3层","圣人第4层","圣人第5层","圣人第6层","圣人第7层","圣人第8层","圣人第9层"]
 const level_exp=[0,50,100,150,200,250,300,350,400/*炼气*/,460,520,580,640,700,760,820,880,940/*筑基*/,1010,1080,1150,1220,1290,1360,1430,1500,1570/*金丹*/,1650,1730,1810,1890,1970,2050,2130,2210,2290/*元婴*/,2380,2470,2560,2650,2740,2830,2920,3010,3100/*化神*/,3200,3300,3400,3500,3600,3700,3800,3900,4000/*合体*/,4100,4200,4300,4400,4500,4600,4700,4800,4900/*大乘*/,5000,5100,5200,5300,5400,5500,5600,5700,5800/*渡劫*/,6000,6200,6400,6600/*人仙*/,6900,7200,7500,7800/*地仙*/,8150,8500,8850,9200/*天仙*/,9600,10000,10400,10800/*金仙*/,11200,11600,12000,12400/*大罗金仙*/,13000,13800/*准仙帝*/,14600,15500/*仙帝*/,16500,17500,18500,19500,20500/*天人五衰*/,21500,22500,23500,24500,25500,26500,27500,28500,29500,30500/*圣人*/];
 const master_cd=false //主人是否需要cd
@@ -80,6 +80,12 @@ export class xiuxian extends plugin {//修炼
                     /** 执行方法 */
                     fnc: 'myid'
                 },
+               // {
+					/** 命令正则匹配 */
+                  ///  reg: "^#?清空修仙数据$", //匹配消息正则，命令正则
+                    /** 执行方法 */
+                   // fnc: 'clear'
+               // },
                 {
                     reg: "#?全服(排行榜|排名)$",
                     fnc: 'allrank'
@@ -101,9 +107,31 @@ export class xiuxian extends plugin {//修炼
     }
     async moveback(e){
     		if(!e.isMaster) return false
-            await e.reply("开始压缩")
 		await xiuxiandb.moveback()
 		await e.reply("压缩完成");
+    }
+    async clear(e){
+		let dirpath=process.cwd()+'/data/wind-db/xiuxiandata.db'
+		if (fs.existsSync(dirpath)) {//如果文件夹不存在
+			var files = fs.readdirSync(dirpath);
+            files.forEach(function(file) {
+			  // 拼接文件或子文件夹的完整路径
+			  var filepath = dirpath + "/" + file;
+			  // 获取文件或子文件夹的状态
+			  var stats = fs.statSync(filepath);
+			  // 判断是文件还是文件夹
+			  if (stats.isFile()) {
+				// 如果是文件，直接删除
+				fs.unlinkSync(filepath);
+			  } else if (stats.isDirectory()) {
+				// 如果是文件夹，递归调用删除文件夹的函数
+				deleteFolder(filepath);
+				}
+			});
+		// 删除空文件夹
+		fs.rmdirSync(dirpath);
+        }
+        e.reply("清除成功！！")
     }
     async myid(e){
 		let user_id=e.user_id
@@ -167,7 +195,7 @@ export class xiuxian extends plugin {//修炼
         if(user_data.level<73) pwname=power_name[0]
         if(user_data.level>72&&user_data.level<111) pwname=power_name[1]
         if(user_data.experience<0) pwname=power_name[2]
-        if(user_data.level>111&&user_data.level<10000) pwname=power_name[3]
+        if(user_data.level>110&&user_data.level<10000) pwname=power_name[3]
         if(user_data.level>=10000) pwname=power_name[4]
         if(user_id.length>30){
 			return await e.reply([segment.at(e.user_id),`\r\r#id:${user_data.id},\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience},\r>您还需要:${need}点${pwname}突破下一境界`,btn]);
@@ -210,7 +238,7 @@ export class xiuxian extends plugin {//修炼
         if(user_data.level<73) pwname=power_name[0]
         if(user_data.level>72&&user_data.level<111) pwname=power_name[1]
         if(user_data.experience<0) pwname=power_name[2]
-        if(user_data.level>111&&user_data.level<10000) pwname=power_name[3]
+        if(user_data.level>110&&user_data.level<10000) pwname=power_name[3]
         if(user_data.level>=10000) pwname=power_name[4]
         await e.reply([segment.at(e.user_id),`恭喜您，获得了${pwname}共${numret}点`]);
         let lev=user_data.level
@@ -331,10 +359,16 @@ export class xiuxian extends plugin {//修炼
         if (group_data.length==0) {//如果文件不存在
             return await e.reply("暂无修炼者～")
         }
+        let at_data=await xiuxiandb.getUserById(29483)
         if(user_id.length <=5 || user_id.length>15){
             // 如果用户id长度小于等于5或者大于15，就用文本的方式展示前N名的用户信息，N为group_data的长度
             let pwname=0
-            let remsg=``;
+            if(at_data.level<73) pwname=power_name[0]
+			if(at_data.level>72&&at_data.level<111) pwname=power_name[1]
+			if(at_data.experience<0) pwname=power_name[2]
+			if(at_data.level>110&&at_data.level<10000) pwname=power_name[3]
+			if(at_data.level>=10000) pwname=power_name[4]
+            let remsg=`\r\r#全服排行:\r#至尊id:29483,称号:琉璃帝尊,境界:${at_data.levelname},${pwname}:${at_data.experience}`;
             for(let i=0;i<group_data.length;i++){
 				if(group_data[i].level<73) pwname=power_name[0]
 				if(group_data[i].level>72&&group_data[i].level<111) pwname=power_name[1]
@@ -391,7 +425,7 @@ export class xiuxian extends plugin {//修炼
         if(user_data.level<73) pwname=power_name[0]
         if(user_data.level>72&&user_data.level<111) pwname=power_name[1]
         if(user_data.experience<0) pwname=power_name[2]
-        if(user_data.level>111&&user_data.level<10000) pwname=power_name[3]
+        if(user_data.level>110&&user_data.level<10000) pwname=power_name[3]
         if(user_data.level>=10000) pwname=power_name[4]
         if(user_id.length>30){
 			return await e.reply([segment.at(e.user_id),`\r#你的id:${user_data.id},\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience},\r>您还需要:${need}点灵力突破下一境界`,btn]);
@@ -407,7 +441,7 @@ export class xiuxian extends plugin {//修炼
         for (let j = 1; j < levelname.length; j++) {
             msg = msg + levelname[j] + '\n'
         }
-        msg+='凡境每个境界分九层,仙境每个境界分初期中期后期圆满四层,仙帝之后则还有不同,自行探索吧!\n欸嘿!到大帝境界后别努力了,道祖境界你达不到的doge!!\n后期修行困难可以选择#服用丹药,有40%的成功率.\n'
+        msg+='\r#凡境每个境界分九层,仙境每个境界分初期中期后期圆满四层,仙帝之后则还有不同,自行探索吧!\r#欸嘿!到大帝境界后别努力了,道祖境界你达不到的doge!!\r#后期修行困难可以选择#服用丹药,有40%的成功率.\r#预计将在大帝之后开放神魔境，可以自选成神或成魔，默认为大帝，选择成神或者成魔之后将无法再作改变，等到神魔合一境才可回归正途'
         if(user_id.length>30){
 			return e.reply([msg,btn])
         }
@@ -456,7 +490,7 @@ export class xiuxian extends plugin {//修炼
         if(user_data.level<73) pwname=power_name[0]
         if(user_data.level>72&&user_data.level<111) pwname=power_name[1]
         if(user_data.experience<0) pwname=power_name[2]
-        if(user_data.level>111&&user_data.level<10000) pwname=power_name[3]
+        if(user_data.level>110&&user_data.level<10000) pwname=power_name[3]
         if(user_data.level>=10000) pwname=power_name[4]
         if (e.msg.includes('丹药')) {
             if (pills > 60) {
@@ -469,14 +503,14 @@ export class xiuxian extends plugin {//修炼
 				else need=0
 				await xiuxiandb.updateUserInfo(user_id,user_data);
 				user_data=await xiuxiandb.getUserInfo(user_id)
-                if(user_id.length>30) await e.reply([segment.at(user_id),`\r#用户:${user_data.id}\r#恭喜你服用丹药成功，你获得了40点${pwname}！\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience}\n您还需要:${need}点${pwname}突破下一境界`,btn]);
-                else await e.reply([segment.at(user_id),`\r#用户:${user_data.id}\r#恭喜你服用丹药成功，你获得了40点${pwname}！\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience}\n您还需要:${need}点${pwname}突破下一境界`]);
+                if(user_id.length>30) await e.reply([segment.at(user_id),`\r#用户:${user_data.id}\r#恭喜你服用丹药成功，你获得了25点${pwname}！\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience}\n您还需要:${need}点${pwname}突破下一境界`,btn]);
+                else await e.reply([segment.at(user_id),`\r#用户:${user_data.id}\r#恭喜你服用丹药成功，你获得了25点${pwname}！\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience}\n您还需要:${need}点${pwname}突破下一境界`]);
             }
             else {
-                user_data.experience -= 10
+                user_data.experience -= 7
                 await xiuxiandb.updateUserInfo(user_id,user_data);
-                if(user_id.length>30) await e.reply([segment.at(user_id),`\r#用户:${user_data.id}\r#服用失败，由于大量丹毒你损失了15点${pwname}！\r>境界:${user_data.levelname}\r>${pwname}:${user_data.experience}`,btn]);
-                else await e.reply([segment.at(user_id),`\r#用户:${user_data.id}\r#服用失败，由于大量丹毒你损失了15点${pwname}！\r>境界:${user_data.levelname}\r>${pwname}:${user_data.experience}`]);
+                if(user_id.length>30) await e.reply([segment.at(user_id),`\r#用户:${user_data.id}\r#服用失败，由于大量丹毒你损失了7点${pwname}！\r>境界:${user_data.levelname}\r>${pwname}:${user_data.experience}`,btn]);
+                else await e.reply([segment.at(user_id),`\r#用户:${user_data.id}\r#服用失败，由于大量丹毒你损失了7点${pwname}！\r>境界:${user_data.levelname}\r>${pwname}:${user_data.experience}`]);
             }
         }
         else{
@@ -565,7 +599,7 @@ export class xiuxian extends plugin {//修炼
         if(user_data.level<73) pwname=power_name[0]
         if(user_data.level>72&&user_data.level<111) pwname=power_name[1]
         if(user_data.experience<0) pwname=power_name[2]
-        if(user_data.level>111&&user_data.level<10000) pwname=power_name[3]
+        if(user_data.level>110&&user_data.level<10000) pwname=power_name[3]
         if(user_data.level>=10000) pwname=power_name[4]
         setTimeout(() => {//延迟5秒
             if(user_id.length>30){e.reply([segment.at(e.user_id),`\r#用户:${user_data.id}\r#恭喜你已突破成功！\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience}\r>您还需要:${need}点${pwname}突破下一境界`,btn]);}
