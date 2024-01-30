@@ -377,17 +377,10 @@ export class xiuxian extends plugin {//修炼
         if (group_data.length==0) {//如果文件不存在
             return await e.reply("暂无修炼者～")
         }
-        let at_data=await xiuxiandb.getUserById(29483)
         if(user_id.length <=5 || user_id.length>15){
             // 如果用户id长度小于等于5或者大于15，就用文本的方式展示前N名的用户信息，N为group_data的长度
             let pwname=0
-            if(at_data.level<73) pwname=power_name[0]
-			if(at_data.level>72&&at_data.level<111) pwname=power_name[1]
-			if(at_data.experience<0) pwname=power_name[2]
-			if(at_data.level>110&&at_data.level<10000) pwname=power_name[3]
-			if(at_data.level>=10000) pwname=power_name[4]
-            let remsg=`\r\r#全服排行:\r#至尊id:29483,称号:琉璃帝尊,境界:${at_data.levelname},${pwname}:${at_data.experience}`;
-            //let remsg='\r\r#全服排行:'
+            let remsg='\r\r#全服排行:'
             for(let i=0;i<group_data.length;i++){
 				if(group_data[i].level<73) pwname=power_name[0]
 				if(group_data[i].level>72&&group_data[i].level<111) pwname=power_name[1]
