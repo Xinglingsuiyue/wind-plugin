@@ -3,7 +3,8 @@ import fetch from 'node-fetch'
 import YAML from "yaml"
 import fs from "node:fs"
 const blackPath = './plugins/wind-plugin/config/black.yaml'
-let data={ all:true,group:[] } //false全局关闭，true全局开启
+const blackdefaultPath = './plugins/wind-plugin/config/default_config/black.yaml'
+let data=YAML.parse(fs.readFileSync(blackdefaultPath, 'utf8')); //false全局关闭，true全局开启
 if (fs.existsSync(blackPath))
     data = fs.readFileSync(blackPath, 'utf8');
 else{
@@ -44,15 +45,9 @@ export class slander extends plugin {
         })
     }
     async black(e){
-        if(!black.all){
-            e.reply("当前已关闭修仙，也许是在调整，请稍后")
-            return true
-        }
-        if(black.group.includes(e.group_id)){
-            e.reply("本群修仙已关闭,请自行拉群使用或联系机器人管理员开启")
-            return true
-        } 
-        return false
+        if(black.all&&!black.group.includes(e.group_id)) return false
+        e.reply("当前群聊修仙功能已关闭,请联系机器人管理员开启")
+        return true
     }
     async turnoff(e){
 		if(!e.isMaster) return await e.reply("你看起来真是个笨蛋呢")
