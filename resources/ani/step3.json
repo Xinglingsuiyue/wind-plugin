@@ -1,0 +1,15 @@
+{
+	"1":{
+        "step": 3,
+        "name": "白虎帝",
+        "level": 45,
+        "experience": 3200,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 25,
+        "experience_ave": 17,
+        "level_down": 0,
+        "experience_down": 10,
+        "num": 1411
+    }
+}

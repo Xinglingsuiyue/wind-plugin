@@ -1,0 +1,15 @@
+{
+	"1":{
+        "step": 2,
+        "name": "青龙王",
+        "level": 30,
+        "experience": 1900,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 15,
+        "experience_ave": 8,
+        "level_down": 0,
+        "experience_down": 5,
+        "num": 1878
+    }
+}

@@ -1,0 +1,15 @@
+{
+	"1":{
+        "step": 8,
+        "name": "朱雀仙",
+        "level": 110,
+        "experience": 31000,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 80,
+        "experience_ave": 20,
+        "level_down": 0,
+        "experience_down": 40,
+        "num": 264
+    }
+}

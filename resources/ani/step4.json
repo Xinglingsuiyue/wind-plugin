@@ -1,0 +1,15 @@
+{
+	"1":{
+        "step": 4,
+        "name": "紫霜神",
+        "level": 57,
+        "experience": 4800,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 32,
+        "experience_ave": 18,
+        "level_down": 0,
+        "experience_down": 12,
+        "num": 368
+    }
+}
