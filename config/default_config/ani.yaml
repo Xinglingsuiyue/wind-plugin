@@ -1,0 +1,3 @@
+master_cd: false #主人是否需要cd
+cdtime_ani: 2 #清理妖兽cd,单位分钟
+deatk: 0.95 #攻打妖兽时将用户的战力削弱至原本的多少

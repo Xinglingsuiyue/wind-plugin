@@ -1,0 +1,42 @@
+lingexp_limit: 8000 #凡境使用灵石的灵力上限
+celestialexp_limit: 34000 #仙境使用仙石的灵力上限
+lingtoexp: 0.1 #凡境灵石换灵力1颗可以换多少灵力
+celestialtoexpm: 0.1 #仙境仙晶换灵力1颗可以换多少灵力
+celestialtoexph: 0.03 #帝境仙晶换灵力1颗可以换多少灵力
+#以下后缀为up的均表示保底，ave均表示涨幅
+#凡境
+learngoldup: 0
+learngoldave: 10000
+learnlingup: 20
+learnlingave: 80
+learncelestialup: 0
+learncelestialave: 0
+learnmagicup: 0
+learnmagicave: 0
+#仙境
+mearngoldup: 0
+mearngoldave: 100000
+mearnlingup: 200
+mearnlingave: 300
+mearncelestialup: 20
+mearncelestialave: 80
+mearnmagicup: 20
+mearnmagicave: 80
+#帝境
+hearngoldup: 0
+hearngoldave: 10000000
+hearnlingup: 800
+hearnlingave: 1600
+hearncelestialup: 100
+hearncelestialave: 300
+hearnmagicup: 100
+hearnmagicave: 300
+#道祖
+eearngoldup: 9999999999999999
+eearngoldave: 9999999999999999
+eearnlingup: 9999999999999999
+eearnlingave: 9999999999999999
+eearncelestialup: 9999999999999999
+eearncelestialave: 9999999999999999
+eearnmagicup: 9999999999999999
+eearnmagicave: 9999999999999999
