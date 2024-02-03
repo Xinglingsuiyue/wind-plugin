@@ -92,6 +92,14 @@ export default class Button {
           reg: "^#?给他灵力(.*)$",
           fnc: 'xiuxian'
         },
+        {
+            reg: "闭关",
+            fcn: 'down'
+        },
+        {
+            reg: "确认闭关",
+            fnc: 'xiuxian'
+        }
         //{
         //  reg: "^#?清理妖兽",
         //  fnc: "xiuxian"
@@ -115,7 +123,12 @@ export default class Button {
     ]
     return Bot.Button(btn)
   }
-
+  down () {
+      const btn = [
+      { label: '确认闭关',enter: false },
+    ]
+    return Bot.Button(btn)
+  }
   xiuxian () {
     const btn = []
     btn.push(...shuffle([
