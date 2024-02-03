@@ -99,7 +99,7 @@ export default class Button {
         {
             reg: "确认闭关",
             fnc: 'xiuxian'
-        }
+        },
         //{
         //  reg: "^#?清理妖兽",
         //  fnc: "xiuxian"
