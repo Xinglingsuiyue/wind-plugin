@@ -1,0 +1,81 @@
+{
+	"1":{
+        "step": 5,
+        "name": "星云虹纹蝶",
+        "level": 68,
+        "experience": 5900,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 40,
+        "experience_ave": 15,
+        "level_down": 0,
+        "experience_down": 19,
+        "num": 299
+    },
+	"2":{
+        "step": 5,
+        "name": "枯木螳螂",
+        "level": 69,
+        "experience": 5900,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 41,
+        "experience_ave": 16,
+        "level_down": 0,
+        "experience_down": 19,
+        "num": 299
+    },
+	"3":{
+        "step": 5,
+        "name": "苍焰朱雀",
+        "level": 70,
+        "experience": 5900,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 42,
+        "experience_ave": 16,
+        "level_down": 0,
+        "experience_down": 20,
+        "num": 299
+    },
+	"4":{
+        "step": 5,
+        "name": "碧眼金鹰",
+        "level": 71,
+        "experience": 5900,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 43,
+        "experience_ave": 16,
+        "level_down": 0,
+        "experience_down": 21,
+        "num": 299
+    },
+	"5":{
+        "step": 5,
+        "name": "幻灵狐",
+        "level": 72,
+        "experience": 5900,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 44,
+        "experience_ave": 16,
+        "level_down": 0,
+        "experience_down": 21,
+        "num": 299
+    },
+	"6":{
+        "step": 5,
+        "name": "乌金蝉",
+        "level": 73,
+        "experience": 5900,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 45,
+        "experience_ave": 17,
+        "level_down": 0,
+        "experience_down": 22,
+        "num": 299
+    }
+
+}

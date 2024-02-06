@@ -1,0 +1,54 @@
+{
+	"1":{
+        "step": 7,
+        "name": "金猿凤",
+        "level": 93,
+        "experience": 13300,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 70,
+        "experience_ave": 10,
+        "level_down": 0,
+        "experience_down": 32,
+        "num": 516
+    },
+	"2":{
+        "step": 7,
+        "name": "纔墟鲲",
+        "level": 95,
+        "experience": 13300,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 70,
+        "experience_ave": 11,
+        "level_down": 0,
+        "experience_down": 34,
+        "num": 516
+    },
+	"3":{
+        "step": 7,
+        "name": "七彩麋鹿",
+        "level": 97,
+        "experience": 13300,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 71,
+        "experience_ave": 12,
+        "level_down": 0,
+        "experience_down": 35,
+        "num": 516
+    },
+	"4":{
+        "step": 7,
+        "name": "墨麒麟",
+        "level": 98,
+        "experience": 13300,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 73,
+        "experience_ave": 14,
+        "level_down": 0,
+        "experience_down": 37,
+        "num": 516
+    }
+}

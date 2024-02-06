@@ -1,0 +1,80 @@
+{
+	"1":{
+        "step": 6,
+        "name": "天罡鸟",
+        "level": 79,
+        "experience": 8200,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 57,
+        "experience_ave": 14,
+        "level_down": 0,
+        "experience_down": 22,
+        "num": 355
+    },
+	"2":{
+        "step": 6,
+        "name": "魔炎虎",
+        "level": 80,
+        "experience": 8200,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 58,
+        "experience_ave": 14,
+        "level_down": 0,
+        "experience_down": 23,
+        "num": 355
+    },
+	"3":{
+        "step": 6,
+        "name": "乌金鱼",
+        "level": 81,
+        "experience": 8200,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 59,
+        "experience_ave": 14,
+        "level_down": 0,
+        "experience_down": 24,
+        "num": 355
+    },
+	"4":{
+        "step": 6,
+        "name": "六尾龙蝎",
+        "level": 82,
+        "experience": 8200,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 60,
+        "experience_ave": 14,
+        "level_down": 0,
+        "experience_down": 24,
+        "num": 355
+    },
+	"5":{
+        "step": 6,
+        "name": "鎏光寻宝鼠",
+        "level": 83,
+        "experience": 8200,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 61,
+        "experience_ave": 14,
+        "level_down": 0,
+        "experience_down": 25,
+        "num": 355
+    },
+	"6":{
+        "step": 6,
+        "name": "地火蛟",
+        "level": 84,
+        "experience": 8200,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 62,
+        "experience_ave": 14,
+        "level_down": 0,
+        "experience_down": 26,
+        "num": 355
+    }
+}

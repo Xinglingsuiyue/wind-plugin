@@ -1,0 +1,54 @@
+{
+	"1":{
+        "step": 8,
+        "name": "浑沌",
+        "level": 110,
+        "experience": 31000,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 80,
+        "experience_ave": 18,
+        "level_down": 0,
+        "experience_down": 40,
+        "num": 264
+    },
+	"2":{
+        "step": 8,
+        "name": "梼杌",
+        "level": 112,
+        "experience": 31000,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 82,
+        "experience_ave": 19,
+        "level_down": 0,
+        "experience_down": 42,
+        "num": 264
+    },
+	"3":{
+        "step": 8,
+        "name": "穷奇",
+        "level": 114,
+        "experience": 31000,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 84,
+        "experience_ave": 20,
+        "level_down": 0,
+        "experience_down": 43,
+        "num": 264
+    },
+	"4":{
+        "step": 8,
+        "name": "饕餮",
+        "level": 118,
+        "experience": 31000,
+        "level_up": 0,
+        "level_ave": 0,
+        "experience_up": 85,
+        "experience_ave": 21,
+        "level_down": 0,
+        "experience_down": 44,
+        "num": 264
+    }
+}

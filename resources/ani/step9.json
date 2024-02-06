@@ -1,0 +1,28 @@
+{
+  "1": {
+    "step": 9,
+    "name": "祖龙•魔化",
+    "level": 126,
+    "experience": 46000,
+    "level_up": 0,
+    "level_ave": 0,
+    "experience_up": 100,
+    "experience_ave": 40,
+    "level_down": 0,
+    "experience_down": 50,
+    "num": 515
+  },
+  "2": {
+    "step": 9,
+    "name": "烛九阴",
+    "level": 126,
+    "experience": 46000,
+    "level_up": 0,
+    "level_ave": 0,
+    "experience_up": 100,
+    "experience_ave": 40,
+    "level_down": 0,
+    "experience_down": 50,
+    "num": 515
+  }
+}
