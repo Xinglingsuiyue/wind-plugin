@@ -93,20 +93,26 @@ export default class Button {
           fnc: 'xiuxian'
         },
         {
-            reg: "闭关",
-            fcn: 'down'
+		  reg: "#?(闭关|确认闭关)",
+		  fnc: 'down'
         },
         {
-            reg: "确认闭关",
-            fnc: 'xiuxian'
+          reg: "确认闭关",
+          fnc: 'xiuxian'
+        },
+        {
+                    /** 命令正则匹配 */
+          reg: "^#?打周本$", //匹配消息正则，命令正则
+                    /** 执行方法 */
+          fnc: 'bt_boss'
         },
         //{
         //  reg: "^#?清理妖兽",
         //  fnc: "xiuxian"
         //},
         //{
-        //	reg: '^#?妖兽信息',
-        //	fnc: 'xiuxian'
+        //    reg: '^#?妖兽信息',
+        //    fnc: 'xiuxian'
         //}
       ]
     }
@@ -123,8 +129,18 @@ export default class Button {
     ]
     return Bot.Button(btn)
   }
+  bt_boss () {
+    const btn = [
+      { label: '打周本',data:'打周本'},
+    ]
+    return Bot.Button(btn)
+  }
   down () {
       const btn = [
+      { label: "公告", callback:'修仙公告'},
+      { label: "修仙群", callback:'修仙群' },
+      { label: "赞助", callback:'赞助'},
+      { label: "闭关前点我查看", callback: `闭关` },
       { label: '确认闭关',enter: false },
     ]
     return Bot.Button(btn)
@@ -134,27 +150,40 @@ export default class Button {
     btn.push(...shuffle([
       { label: "修仙", callback: `修仙` },
       { label: "突破", callback: `突破` },
-      { label: "服用丹药", callback: `服用丹药` },
+      { label: "服丹药", callback: `服用丹药` },
       { label: "我的境界", callback: `我的境界` },
       { label: "决斗" },
       { label: "我的id", callback: `我的id` },
     ]))
     if(announce.test){
         btn.push(...[
-      { label: "境界列表", callback: `修仙境界列表` },
-      { label: "排行榜", enter: true },
-      { label: "全服排行榜", enter: true },
-      { label: "修仙公告", callback:'修仙公告'},
+      { label: "境界表", callback: `修仙境界列表` },
+      { label: "群行榜", callback:'排行榜' },
+      { label: "全服榜", callback:'全服排行榜' },
+      { label: "公告", callback:'修仙公告'},
+      { label: "闭关", enter: true },
+      { label: "妖兽表", callback: `妖兽列表` },
+      { label: "修仙群", callback:'修仙群' },
+      { label: "赞助", callback:'赞助'},
+      { label: "宗门", callback:'宗门' },
+      { label: "周本", callback:'周本信息' },
     ])
     }
     else{
         btn.push(...[
       { label: "境界列表", callback: `修仙境界列表` },
-      { label: "排行榜", enter: true },
-      { label: "全服排行榜", enter: true },
+      { label: "群行榜", callback:'排行榜' },
+      { label: "全服榜", callback:'全服排行榜' },
+      { label: "公告", callback:'修仙公告'},
+      { label: "闭关", enter: true },
+      { label: "妖兽表", callback: `妖兽列表` },
+      { label: "修仙群", callback:'修仙群' },
+      { label: "赞助", callback:'赞助' },
+      { label: "宗门", callback:'宗门' },
+      { label: "周本", callback:'周本信息' },
     ])
     }
-    return Bot.Button(btn, 3)
+    return Bot.Button(btn, 4)
   }
 }
 
