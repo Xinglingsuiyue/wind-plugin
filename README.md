@@ -1,5 +1,7 @@
 # wind-plugin
 
+### 不再更新readme,可以自行查看apps里面的正则了解有哪些功能,另外由于主要更新给QQBot使用,其他的野生bot使用可能会有些bug,自行提issues,我会尽量适配
+
 ### 访问量
 
 [![访问量](https://profile-counter.glitch.me/wind-plugin/count.svg)](https://gitee.com/wind-trace-typ/wind-plugin)
