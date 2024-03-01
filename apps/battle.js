@@ -90,8 +90,10 @@ export class xiuxian extends plugin {// 修炼
     if (at_data === null) {
       e.reply('请输入正确的id')
     }
-    if (!at_data.group_id.includes(e.group_id)) {
-      at_data.group_id += ',' + e.group_id // 使用字符串拼接来添加群组id
+    let group_id=e.group_id
+    if(typeof group_id!='string') group_id=JSON.stringify(group_id)
+    if (!at_data.group_id.includes(group_id)) {
+      at_data.group_id += ',' + group_id // 使用字符串拼接来添加群组id
     }
     let at_id = at_data.user_id
     let exe = Number(at_data.experience)
@@ -122,7 +124,9 @@ export class xiuxian extends plugin {// 修炼
     }
 
     /** 使用逗号拼接玩家的所在群号 */
-    if (!at_data.group_id.includes(e.group_id)) at_data.group_id += ',' + e.group_id
+    let group_id=e.group_id
+    if(typeof group_id!='string') group_id=JSON.stringify(group_id)
+    if (!at_data.group_id.includes(group_id)) at_data.group_id += ',' + group_id
 
     let at_id = at_data.user_id
     /** 更新玩家等级 */
@@ -156,7 +160,9 @@ export class xiuxian extends plugin {// 修炼
     if (at_data === null) return await e.reply(e.reply('请输入正确的id'))
 
     /** 使用字符串拼接来添加群组id */
-    if (!at_data.group_id.includes(e.group_id)) at_data.group_id += ',' + e.group_id
+    let group_id=e.group_id
+    if(typeof group_id!='string') group_id=JSON.stringify(group_id)
+    if (!at_data.group_id.includes(group_id)) at_data.group_id += ',' + group_id
     let at_id = at_data.user_id
     let exe = Number(at_data.level)
     at_data.level = exe - Number(exp)
@@ -185,8 +191,10 @@ export class xiuxian extends plugin {// 修炼
     if (at_data === null) {
       e.reply('请输入正确的id')
     }
-    if (!at_data.group_id.includes(e.group_id)) {
-      at_data.group_id += ',' + e.group_id // 使用字符串拼接来添加群组id
+    let group_id=e.group_id
+    if(typeof group_id!='string') group_id=JSON.stringify(group_id)
+    if (!at_data.group_id.includes(group_id)) {
+      at_data.group_id += ',' + group_id // 使用字符串拼接来添加群组id
     }
     let at_id = at_data.user_id
     let exe = Number(at_data.experience)
