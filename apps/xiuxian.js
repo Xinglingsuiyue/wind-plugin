@@ -150,6 +150,7 @@ export class xiuxian extends plugin {// 修炼
 
   async myid (e) {
     let user_id = e.user_id
+    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
     if (user_id.length > 30) btn = isqbot.btn
     let group_id=e.group_id
     if(typeof group_id!='string') group_id=JSON.stringify(group_id) 
@@ -173,6 +174,7 @@ export class xiuxian extends plugin {// 修炼
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
+    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
     if (!e.isMaster) {
       if (user_id.length > 30) return await e.reply(['哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡', btn])
       return await e.reply('哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡')
@@ -224,6 +226,7 @@ export class xiuxian extends plugin {// 修炼
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
+    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
     if (!e.isMaster) {
       if (user_id.length > 30) return await e.reply(['哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡', btn])
       return await e.reply('哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡')
@@ -296,6 +299,7 @@ export class xiuxian extends plugin {// 修炼
 
   async rankings (e) {
     let user_id = e.user_id
+    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
@@ -366,6 +370,7 @@ export class xiuxian extends plugin {// 修炼
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
+    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
     let group_data = await xiuxiandb.getTopUsers2(all_limit)
     if (group_data.length == 0) { // 如果文件不存在
       return await e.reply('暂无修炼者～')
@@ -403,6 +408,7 @@ export class xiuxian extends plugin {// 修炼
 
   async view (e) {
     let user_id = e.user_id
+    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
     if (user_id.length > 30) btn = isqbot.btn
     console.log('[wind-plugin]', e.msg)
     let user_data = await xiuxiandb.getUserInfo(user_id)
@@ -427,6 +433,7 @@ export class xiuxian extends plugin {// 修炼
 
   async list (e) {
     let user_id = e.user_id
+    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
@@ -443,6 +450,7 @@ export class xiuxian extends plugin {// 修炼
 
   async xiuxian (e) {
     let user_id = e.user_id
+    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
@@ -524,6 +532,7 @@ export class xiuxian extends plugin {// 修炼
 
   async break (e) {
     let user_id = e.user_id
+    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
