@@ -77,6 +77,7 @@ export class xiuxian extends plugin {// 修炼
 
   async give_exp (e) {
     let user_id = e.user_id
+    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
@@ -109,6 +110,7 @@ export class xiuxian extends plugin {// 修炼
 
   async give_level (e) {
     let user_id = e.user_id
+    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
@@ -146,6 +148,7 @@ export class xiuxian extends plugin {// 修炼
 
   async de_level (e) {
     let user_id = e.user_id
+    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
@@ -178,6 +181,7 @@ export class xiuxian extends plugin {// 修炼
 
   async de_exp (e) {
     let user_id = e.user_id
+    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
@@ -229,6 +233,7 @@ export class xiuxian extends plugin {// 修炼
 
   async battle (e) {
     let user_id = e.user_id
+    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
