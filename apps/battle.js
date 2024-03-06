@@ -40,12 +40,6 @@ export class xiuxian extends plugin {// 修炼
           reg: '^#?(战斗|决斗|pk|PK|攻打|battle)(.*)$', // 匹配消息正则，命令正则
           /** 执行方法 */
           fnc: 'battle'
-        },
-        {
-          /** 命令正则匹配 */
-          reg: '^#?扣除境界(.*)$', // 匹配消息正则，命令正则
-          /** 执行方法 */
-          fnc: 'de_level'
         }
       ]
     })
