@@ -3,7 +3,7 @@ if (!global.segment) {
     global.segment = (await import("oicq")).segment
 }
 const files = fs
-    .readdirSync('.plugins/wind-plugin/apps')
+    .readdirSync('./plugins/wind-plugin/apps')
     .filter( file => file.endsWith('.js'))
 let ret = []
 files.forEach((file) => {
