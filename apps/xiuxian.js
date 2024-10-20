@@ -401,13 +401,23 @@ export class xiuxian extends plugin {// 修炼
           user_id: e.user_id
         })
       }
-      let forwardMsg = await e.group.makeForwardMsg(MsgList)
-      if (typeof forwardMsg.data != 'string') { forwardMsg.data = JSON.stringify(forwardMsg.data) }
+      let forwardMsg
+      if(!e.isGroup){
+			forwardMsg = await e.friend.makeForwardMsg(MsgList);
+		}
+		else{
+			forwardMsg = await e.group.makeForwardMsg(MsgList);
+		}
+      if (typeof (forwardMsg.data) === "object") {
+      let detail = forwardMsg.data?.meta?.detail
+      if (detail) {
+        detail.news = [ { text: '修仙排行榜～' } ]
+      }
+    } else {
       forwardMsg.data = forwardMsg.data
-        .replace(/\n/g, '')
-        .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
-        .replace(/___+/, '<title color="#777777" size="26">修仙排行榜～</title>')
-      return await e.reply(forwardMsg)
+        .replace(/\n/g, "")
+        .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, "___")
+        .replace(/___+/, `<title color="#777777" size="26">修仙排行榜～</title>`)
     }
     await e.reply('暂时还未适配')
   }
