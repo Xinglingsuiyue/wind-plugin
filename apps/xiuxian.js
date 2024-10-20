@@ -333,11 +333,17 @@ export class xiuxian extends plugin {// 修炼
         })
       }
       let forwardMsg = await e.group.makeForwardMsg(MsgList)
-      if (typeof forwardMsg.data != 'string') { forwardMsg.data = JSON.stringify(forwardMsg.data) }
-      forwardMsg.data = forwardMsg.data
-        .replace(/\n/g, '')
-        .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
-        .replace(/___+/, '<title color="#777777" size="26">修仙排行榜～</title>')
+      if (typeof (forwardMsg.data) === "object") {
+        let detail = forwardMsg.data?.meta?.detail
+        if (detail) {
+            detail.news = [ { text: '你被嘲笑了！快来看看吧～' } ]
+        }
+        } else {
+            forwardMsg.data = forwardMsg.data
+                .replace(/\n/g, "")
+                .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, "___")
+                .replace(/___+/, `<title color="#777777" size="26">你被嘲笑了！快来看看吧～</title>`)
+        }
       return await e.reply(forwardMsg)
     }
     await e.reply('暂时还未适配')
