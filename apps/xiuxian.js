@@ -332,7 +332,13 @@ export class xiuxian extends plugin {// 修炼
           user_id: e.user_id
         })
       }
-      let forwardMsg = await e.group.makeForwardMsg(MsgList)
+      let forwardMsg
+      if(!e.isGroup){
+			forwardMsg = await e.friend.makeForwardMsg(MsgList);
+		}
+		else{
+			forwardMsg = await e.group.makeForwardMsg(MsgList);
+		}
       if (typeof (forwardMsg.data) === "object") {
         let detail = forwardMsg.data?.meta?.detail
         if (detail) {
