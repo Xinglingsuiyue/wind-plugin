@@ -150,10 +150,10 @@ export class xiuxian extends plugin {// 修炼
 
   async myid (e) {
     let user_id = e.user_id
-    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
+    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
     if (user_id.length > 30) btn = isqbot.btn
-    let group_id=e.group_id
-    if(typeof group_id!='string') group_id=JSON.stringify(group_id) 
+    let group_id = e.group_id
+    if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
     let user_data = await xiuxiandb.getUserInfo(user_id)
     if (user_data === null) {
       return e.reply('\r\r#请先使用【修仙】自动分配id')
@@ -174,15 +174,15 @@ export class xiuxian extends plugin {// 修炼
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
-    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
+    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
     if (!e.isMaster) {
       if (user_id.length > 30) return await e.reply(['哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡', btn])
       return await e.reply('哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡')
     }
     let numreg = /[1-9][0-9]{0,12}/
     let numret = parseInt(numreg.exec(e.msg))
-    let group_id=e.group_id
-    if(typeof group_id!='string') group_id=JSON.stringify(group_id)
+    let group_id = e.group_id
+    if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
     let user_data = await xiuxiandb.getUserInfo(user_id)
     if (user_data === null) {
       // let idd=await xiuxiandb.getMaxId();
@@ -194,7 +194,7 @@ export class xiuxian extends plugin {// 修炼
         experience: 0,
         level: 0,
         levelname: '凡人',
-        group_id: group_id
+        group_id
       }
       await xiuxiandb.updateUserInfo(user_id, user_data)
       user_data = await xiuxiandb.getUserInfo(user_id)
@@ -226,15 +226,15 @@ export class xiuxian extends plugin {// 修炼
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
-    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
+    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
     if (!e.isMaster) {
       if (user_id.length > 30) return await e.reply(['哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡', btn])
       return await e.reply('哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡')
     }
     let numreg = /[1-9][0-9]{0,12}/
     let numret = parseInt(numreg.exec(e.msg))
-    let group_id=e.group_id
-    if(typeof group_id!='string') group_id=JSON.stringify(group_id)
+    let group_id = e.group_id
+    if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
     let user_data = await xiuxiandb.getUserInfo(user_id)
     if (user_data === null) {
       // let idd=await xiuxiandb.getMaxId();
@@ -246,7 +246,7 @@ export class xiuxian extends plugin {// 修炼
         experience: 0,
         level: 0,
         levelname: '凡人',
-        group_id: group_id
+        group_id
       }
       await xiuxiandb.updateUserInfo(user_id, user_data)
       user_data = await xiuxiandb.getUserInfo(user_id)
@@ -299,12 +299,12 @@ export class xiuxian extends plugin {// 修炼
 
   async rankings (e) {
     let user_id = e.user_id
-    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
+    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
-    let group_id=e.group_id
-    if(typeof group_id!='string') group_id=JSON.stringify(group_id)
+    let group_id = e.group_id
+    if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
     let group_data = await xiuxiandb.getTopUsers(group_id, group_limit)
     if (group_data.length == 0) { // 如果文件不存在
       return await e.reply('本群暂无修炼者～')
@@ -333,23 +333,22 @@ export class xiuxian extends plugin {// 修炼
         })
       }
       let forwardMsg
-      if(!e.isGroup){
-			forwardMsg = await e.friend.makeForwardMsg(MsgList);
-		}
-		else{
-			forwardMsg = await e.group.makeForwardMsg(MsgList);
-		}
-      if (typeof (forwardMsg.data) === "object") {
+      if (!e.isGroup) {
+        forwardMsg = await e.friend.makeForwardMsg(MsgList)
+      } else {
+        forwardMsg = await e.group.makeForwardMsg(MsgList)
+      }
+      if (typeof (forwardMsg.data) === 'object') {
         let detail = forwardMsg.data?.meta?.detail
         if (detail) {
-            detail.news = [ { text: '修仙排行榜～' } ]
+          detail.news = [{ text: '修仙排行榜～' }]
         }
-        } else {
-            forwardMsg.data = forwardMsg.data
-                .replace(/\n/g, "")
-                .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, "___")
-                .replace(/___+/, `<title color="#777777" size="26">修仙排行榜～</title>`)
-        }
+      } else {
+        forwardMsg.data = forwardMsg.data
+          .replace(/\n/g, '')
+          .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
+          .replace(/___+/, '<title color="#777777" size="26">修仙排行榜～</title>')
+      }
       return await e.reply(forwardMsg)
     }
     await e.reply('暂时还未适配')
@@ -382,7 +381,7 @@ export class xiuxian extends plugin {// 修炼
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
-    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
+    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
     let group_data = await xiuxiandb.getTopUsers2(all_limit)
     if (group_data.length == 0) { // 如果文件不存在
       return await e.reply('暂无修炼者～')
@@ -408,29 +407,29 @@ export class xiuxian extends plugin {// 修炼
         })
       }
       let forwardMsg
-      if(!e.isGroup){
-			forwardMsg = await e.friend.makeForwardMsg(MsgList);
-		}
-		else{
-			forwardMsg = await e.group.makeForwardMsg(MsgList);
-		}
-      if (typeof (forwardMsg.data) === "object") {
-      let detail = forwardMsg.data?.meta?.detail
-      if (detail) {
-        detail.news = [ { text: '修仙排行榜～' } ]
+      if (!e.isGroup) {
+        forwardMsg = await e.friend.makeForwardMsg(MsgList)
+      } else {
+        forwardMsg = await e.group.makeForwardMsg(MsgList)
       }
-    } else {
-      forwardMsg.data = forwardMsg.data
-        .replace(/\n/g, "")
-        .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, "___")
-        .replace(/___+/, `<title color="#777777" size="26">修仙排行榜～</title>`)
+      if (typeof (forwardMsg.data) === 'object') {
+        let detail = forwardMsg.data?.meta?.detail
+        if (detail) {
+          detail.news = [{ text: '修仙排行榜～' }]
+        }
+      } else {
+        forwardMsg.data = forwardMsg.data
+          .replace(/\n/g, '')
+          .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
+          .replace(/___+/, '<title color="#777777" size="26">修仙排行榜～</title>')
+      }
+      await e.reply('暂时还未适配')
     }
-    await e.reply('暂时还未适配')
   }
 
   async view (e) {
     let user_id = e.user_id
-    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
+    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
     if (user_id.length > 30) btn = isqbot.btn
     console.log('[wind-plugin]', e.msg)
     let user_data = await xiuxiandb.getUserInfo(user_id)
@@ -440,8 +439,8 @@ export class xiuxian extends plugin {// 修炼
       }
       return e.reply([segment.at(e.user_id), '您还是凡人，请通过#修炼和#突破开启你的仙途'])
     }
-    let group_id=e.group_id
-    if(typeof group_id!='string') group_id=JSON.stringify(group_id)
+    let group_id = e.group_id
+    if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
     if (!user_data.group_id.includes(group_id)) {
       user_data.group_id += ',' + group_id // 使用字符串拼接来添加群组id
     }
@@ -455,7 +454,7 @@ export class xiuxian extends plugin {// 修炼
 
   async list (e) {
     let user_id = e.user_id
-    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
+    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
@@ -472,7 +471,7 @@ export class xiuxian extends plugin {// 修炼
 
   async xiuxian (e) {
     let user_id = e.user_id
-    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
+    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
@@ -488,8 +487,8 @@ export class xiuxian extends plugin {// 修炼
       }
       return await e.reply([segment.at(user_id), `\n对不起,修炼失败，还有${cdtime}秒cd`])
     }
-    let group_id=e.group_id
-    if(typeof group_id!='string') group_id=JSON.stringify(group_id)
+    let group_id = e.group_id
+    if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
     await this.xxsetCd(cdtime_xiuxian)
     let user_data = await xiuxiandb.getUserInfo(user_id)
     if (user_data === null) {
@@ -502,7 +501,7 @@ export class xiuxian extends plugin {// 修炼
         experience: 0,
         level: 0,
         levelname: '凡人',
-        group_id: group_id
+        group_id
       }
       await xiuxiandb.updateUserInfo(user_id, user_data)
       user_data = await xiuxiandb.getUserInfo(user_id)
@@ -554,7 +553,7 @@ export class xiuxian extends plugin {// 修炼
 
   async break (e) {
     let user_id = e.user_id
-    if(typeof user_id!='string') user_id=JSON.stringify(user_id) 
+    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
     if (user_id.length > 30) {
       btn = isqbot.btn
     }
@@ -570,8 +569,8 @@ export class xiuxian extends plugin {// 修炼
       return await e.reply([segment.at(e.user_id), `\n对不起,突破失败，还有${cdtime}秒cd`])
     }
     await this.brsetCd(cdtime_break)
-    let group_id=e.group_id
-    if(typeof group_id!='string') group_id=JSON.stringify(group_id)
+    let group_id = e.group_id
+    if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
     let user_data = await xiuxiandb.getUserInfo(user_id)
     if (user_data === null) {
       // let idd=await xiuxiandb.getMaxId();
@@ -583,7 +582,7 @@ export class xiuxian extends plugin {// 修炼
         experience: 0,
         level: 0,
         levelname: '凡人',
-        group_id: group_id
+        group_id
       }
       await xiuxiandb.updateUserInfo(user_id, user_data)
       user_data = await xiuxiandb.getUserInfo(user_id)
