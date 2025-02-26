@@ -363,6 +363,7 @@ export class xiuxian extends plugin {// 修炼
         if (group_data.length == 0) { // 如果文件不存在
             return await e.reply('暂无修炼者～')
         }
+        let MsgList = []
         for (let i = 0; i < group_data.length; i++) {
             MsgList.push({
                 message: [segment.image(`http://q2.qlogo.cn/headimg_dl?dst_uin=${group_data[i].user_id}&spec=100`), `\nqq:${group_data[i].user_id}\n用户id:${group_data[i].id}\n境界:${group_data[i].levelname}\n灵力:${group_data[i].experience}`],
