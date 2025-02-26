@@ -7,8 +7,8 @@ const xiuxianPath = './plugins/wind-plugin/config/xiuxian.yaml'
 const xiuxiandefaultPath = './plugins/wind-plugin/config/default_config/xiuxian.yaml'
 let data = YAML.parse(fs.readFileSync(xiuxiandefaultPath, 'utf8')) // false全局关闭，true全局开启
 if (fs.existsSync(xiuxianPath)) { data = fs.readFileSync(xiuxianPath, 'utf8') } else {
-  data = YAML.stringify(data)
-  fs.writeFileSync(xiuxianPath, data, 'utf8')
+    data = YAML.stringify(data)
+    fs.writeFileSync(xiuxianPath, data, 'utf8')
 }
 let ydata = YAML.parse(data) || {}
 const levelname = ['凡人', '练气期', '筑基期', '金丹期', '元婴期', '化神期', '合体期', '大乘期', '渡劫期', '人仙境', '地仙境', '天仙境', '金仙境', '大罗金仙境', '准仙帝', '仙帝', '天人五衰境', '圣人', '大帝', '神境【预告】/ 魔境【预告】', '神魔合一境【预告】', '道祖']
@@ -28,602 +28,556 @@ const group_limit = ydata.group_limit // 群排行人数限制
 const all_limit = ydata.all_limit // 全服排行人数限制
 let btn
 export class xiuxian extends plugin {// 修炼
-  constructor () {
-    super({
-      /** 功能名称 */
-      name: '轻量修炼',
-      /** 功能描述 */
-      dsc: '轻量修仙',
-      event: 'message',
-      /** 优先级，数字越小等级越高 */
-      priority: -999,
-      rule: [
-        {
-          /** 命令正则匹配 */
-          reg: '^#?(我的境界|查看境界)$', // 匹配消息正则，命令正则
-          /** 执行方法 */
-          fnc: 'view'
-        },
-        {
-          /** 命令正则匹配 */
-          reg: '^#?(修炼|修仙|服用丹药)$', // 匹配消息正则，命令正则
-          /** 执行方法 */
-          fnc: 'xiuxian'
-        },
-        {
-          /** 命令正则匹配 */
-          reg: '^#?突破$', // 匹配消息正则，命令正则
-          /** 执行方法 */
-          fnc: 'break'
-        },
-        {
-          /** 命令正则匹配 */
-          reg: '^#?(修仙|修炼)?境界列表$', // 匹配消息正则，命令正则
-          /** 执行方法 */
-          fnc: 'list'
-        },
-        {
-          /** 命令正则匹配 */
-          reg: '^#?排行榜$', // 匹配消息正则，命令正则
-          /** 执行方法 */
-          fnc: 'rankings'
-        },
-        {
-          /** 命令正则匹配 */
-          reg: '^#?我要境界(.*)$', // 匹配消息正则，命令正则
-          /** 执行方法 */
-          fnc: 'giveme_level'
-        },
-        {
-          /** 命令正则匹配 */
-          reg: '^#?我要灵力(.*)$', // 匹配消息正则，命令正则
-          /** 执行方法 */
-          fnc: 'giveme_exp'
-        },
-        {
-          /** 命令正则匹配 */
-          reg: '^#?(修仙者|修炼者|用户)(人数|数量)$', // 匹配消息正则，命令正则
-          /** 执行方法 */
-          fnc: 'numxiuxian'
-        },
-        {
-          /** 命令正则匹配 */
-          reg: '^#?我的id$', // 匹配消息正则，命令正则
-          /** 执行方法 */
-          fnc: 'myid'
-        },
-        // {
-        /** 命令正则匹配 */
-        ///  reg: "^#?清空修仙数据$", //匹配消息正则，命令正则
-        /** 执行方法 */
-        // fnc: 'clear'
-        // },
-        {
-          reg: '#?全服(排行榜|排名)$',
-          fnc: 'allrank'
-        },
-        {
-          reg: '#?全服加灵力(.*)',
-          fnc: 'giveall_exp'
-        },
-        {
-          reg: '#?全服加境界(.*)',
-          fnc: 'giveall_level'
-        },
-        {
-          reg: '#?开始压缩(.*)',
-          fnc: 'moveback'
-        }
-      ]
-    })
-  }
-
-  async moveback (e) {
-    if (!e.isMaster) return false
-    await xiuxiandb.moveback()
-    await e.reply('压缩完成')
-  }
-
-  async clear (e) {
-    let dirpath = process.cwd() + '/data/wind-db/xiuxiandata.db'
-    if (fs.existsSync(dirpath)) { // 如果文件夹不存在
-      let files = fs.readdirSync(dirpath)
-      files.forEach(function (file) {
-        // 拼接文件或子文件夹的完整路径
-        let filepath = dirpath + '/' + file
-        // 获取文件或子文件夹的状态
-        let stats = fs.statSync(filepath)
-        // 判断是文件还是文件夹
-        if (stats.isFile()) {
-          // 如果是文件，直接删除
-          fs.unlinkSync(filepath)
-        } else if (stats.isDirectory()) {
-          // 如果是文件夹，递归调用删除文件夹的函数
-          // deleteFolder(filepath)
-        }
-      })
-      // 删除空文件夹
-      fs.rmdirSync(dirpath)
-    }
-    e.reply('清除成功！！')
-  }
-
-  async myid (e) {
-    let user_id = e.user_id
-    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
-    if (user_id.length > 30) btn = isqbot.btn
-    let group_id = e.group_id
-    if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
-    let user_data = await xiuxiandb.getUserInfo(user_id)
-    if (user_data === null) {
-      return e.reply('\r\r#请先使用【修仙】自动分配id')
-    }
-    if (!user_data.group_id.includes(group_id)) {
-      user_data.group_id += ',' + group_id // 使用字符串拼接来添加群组id
-    }
-    if (user_id.length > 30) return await e.reply([segment.at(e.user_id), `\r\r#你的id是:${user_data.id}`, btn])
-    return await e.reply([segment.at(e.user_id), `\r\r#你的id是:${user_data.id}`])
-  }
-
-  async numxiuxian (e) {
-    e.reply(JSON.stringify(await xiuxiandb.getMaxId()))
-  }
-
-  async giveme_level (e) {
-    let user_id = e.user_id
-    if (user_id.length > 30) {
-      btn = isqbot.btn
-    }
-    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
-    if (!e.isMaster) {
-      if (user_id.length > 30) return await e.reply(['哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡', btn])
-      return await e.reply('哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡')
-    }
-    let numreg = /[1-9][0-9]{0,12}/
-    let numret = parseInt(numreg.exec(e.msg))
-    let group_id = e.group_id
-    if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
-    let user_data = await xiuxiandb.getUserInfo(user_id)
-    if (user_data === null) {
-      // let idd=await xiuxiandb.getMaxId();
-      // idd++
-      // let groupid=[]
-      // await groupid.push(e.group_id)
-      user_data = { // 创建新用户
-        // "id": idd,
-        experience: 0,
-        level: 0,
-        levelname: '凡人',
-        group_id
-      }
-      await xiuxiandb.updateUserInfo(user_id, user_data)
-      user_data = await xiuxiandb.getUserInfo(user_id)
-    }
-
-    /** 储存玩家所在群组 */
-    if (!user_data.group_id.includes(group_id)) user_data.group_id += ',' + group_id
-
-    /** 增加境界 */
-    user_data.level += numret
-
-    /** 更新境界名称 */
-    user_data.levelname = xiuxiandb.levelName(user_data)
-    /** 保存数据库 */
-    await user_data.save()
-    await e.reply([segment.at(e.user_id), `恭喜您，获得了境界${numret}层`])
-
-    /** 获取灵力名称、突破下境界所需灵力值 */
-    const { need, pwname } = xiuxiandb.experience(user_data)
-
-    const msg = [segment.at(e.user_id), `\r\r#id:${user_data.id},\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience},\r>您还需要:${need}点${pwname}突破下一境界`]
-    /** QQBot加入按钮 */
-    if (user_id.length > 30) msg.push(btn)
-    return await e.reply(msg)
-  }
-
-  async giveme_exp (e) {
-    let user_id = e.user_id
-    if (user_id.length > 30) {
-      btn = isqbot.btn
-    }
-    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
-    if (!e.isMaster) {
-      if (user_id.length > 30) return await e.reply(['哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡', btn])
-      return await e.reply('哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡')
-    }
-    let numreg = /[1-9][0-9]{0,12}/
-    let numret = parseInt(numreg.exec(e.msg))
-    let group_id = e.group_id
-    if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
-    let user_data = await xiuxiandb.getUserInfo(user_id)
-    if (user_data === null) {
-      // let idd=await xiuxiandb.getMaxId();
-      // idd++
-      // let groupid=[]
-      // await groupid.push(e.group_id)
-      user_data = { // 创建新用户
-        // "id": idd,
-        experience: 0,
-        level: 0,
-        levelname: '凡人',
-        group_id
-      }
-      await xiuxiandb.updateUserInfo(user_id, user_data)
-      user_data = await xiuxiandb.getUserInfo(user_id)
-    }
-    if (!user_data.group_id.includes(group_id)) {
-      user_data.group_id += ',' + group_id // 使用字符串拼接来添加群组id
-    }
-    user_data.experience += numret
-    await user_data.save()
-
-    /** 获取灵力名称、突破下境界所需灵力值 */
-    const { need, pwname } = xiuxiandb.experience(user_data)
-    if (user_id.length > 30) return await e.reply([segment.at(e.user_id), `\r\r#id:${user_data.id},\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience},\r>您还需要:${need}点${pwname}突破下一境界`, btn])
-    return await e.reply([segment.at(e.user_id), `\r\r#id:${user_data.id},\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience},\r>您还需要:${need}点${pwname}突破下一境界`])
-  }
-
-  async xxsetCd (seconds = 60) {
-    let ext = new Date() * 1 + seconds * 1000
-    await redis.set(`wind:xiuxian-cd:${this.e.user_id}`, ext + '', { EX: seconds })
-  }
-
-  async xxinCd () {
-    let ext = await redis.get(`wind:xiuxian-cd:${this.e.user_id}`)
-    if (!ext || isNaN(ext)) {
-      return false
-    }
-    let cd = (new Date() * 1) - ext
-    if (cd < 0 && Math.abs(cd)) {
-      return Math.ceil(0 - cd / 1000)
-    }
-    return false
-  }
-
-  async brsetCd (seconds = 60) {
-    let ext = new Date() * 1 + seconds * 1000
-    await redis.set(`wind:break-cd:${this.e.user_id}`, ext + '', { EX: seconds })
-  }
-
-  async brinCd () {
-    let ext = await redis.get(`wind:break-cd:${this.e.user_id}`)
-    if (!ext || isNaN(ext)) {
-      return false
-    }
-    let cd = (new Date() * 1) - ext
-    if (cd < 0 && Math.abs(cd) < 100 * 60 * 1000) {
-      return Math.ceil(0 - cd / 1000)
-    }
-    return false
-  }
-
-  async rankings (e) {
-    let user_id = e.user_id
-    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
-    if (user_id.length > 30) {
-      btn = isqbot.btn
-    }
-    let group_id = e.group_id
-    if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
-    let group_data = await xiuxiandb.getTopUsers(group_id, group_limit)
-    if (group_data.length == 0) { // 如果文件不存在
-      return await e.reply('本群暂无修炼者～')
-    }
-
-    /** 获取灵力名称、突破下境界所需灵力值 */
-    const { pwname } = xiuxiandb.experience(group_data[0])
-    if (user_id.length <= 5 || user_id.length > 15) {
-      // 如果用户id长度小于等于5或者大于15，就用文本的方式展示前N名的用户信息，N为group_data的长度
-      let remsg = `\r\r#群排行:\r>#第1名  ➠➠  id:${group_data[0].id}\r>境界:${group_data[0].levelname},${pwname}:${group_data[0].experience}`
-      for (let i = 1; i < group_data.length; i++) {
-        const { pwname } = xiuxiandb.experience(group_data[i])
-        remsg = remsg + `\r>#第${i + 1}名  ➠➠  id:${group_data[i].id}\r>境界:${group_data[i].levelname},${pwname}:${group_data[i].experience}`
-      }
-      if (user_id.length > 30) return await e.reply([remsg, btn])
-      return await e.reply(remsg)
-    }
-    if (user_id.length < 12) {
-      // 如果用户id长度小于12，就用转发的方式展示前N名的用户信息，N为group_data的长度
-      let MsgList = []
-      for (let i = 0; i < group_data.length; i++) {
-        MsgList.push({
-          message: [segment.image(`https://tenapi.cn/v2/qqimg?qq=${group_data[i].user_id}`), '\n用户id：', group_data[i].id, '\n境界：', group_data[i].levelname, '\n灵力：' + group_data[i].experience],
-          nickname: e.nickname,
-          user_id: e.user_id
+    constructor () {
+        super({
+            /** 功能名称 */
+            name: '轻量修炼',
+            /** 功能描述 */
+            dsc: '轻量修仙',
+            event: 'message',
+            /** 优先级，数字越小等级越高 */
+            priority: -999,
+            rule: [
+                {
+                    /** 命令正则匹配 */
+                    reg: '^#?(我的境界|查看境界)$', // 匹配消息正则，命令正则
+                    /** 执行方法 */
+                    fnc: 'view'
+                },
+                {
+                    /** 命令正则匹配 */
+                    reg: '^#?(修炼|修仙|服用丹药)$', // 匹配消息正则，命令正则
+                    /** 执行方法 */
+                    fnc: 'xiuxian'
+                },
+                {
+                    /** 命令正则匹配 */
+                    reg: '^#?突破$', // 匹配消息正则，命令正则
+                    /** 执行方法 */
+                    fnc: 'break'
+                },
+                {
+                    /** 命令正则匹配 */
+                    reg: '^#?(修仙|修炼)?境界列表$', // 匹配消息正则，命令正则
+                    /** 执行方法 */
+                    fnc: 'list'
+                },
+                {
+                    /** 命令正则匹配 */
+                    reg: '^#?排行榜$', // 匹配消息正则，命令正则
+                    /** 执行方法 */
+                    fnc: 'rankings'
+                },
+                {
+                    /** 命令正则匹配 */
+                    reg: '^#?我要境界(.*)$', // 匹配消息正则，命令正则
+                    /** 执行方法 */
+                    fnc: 'giveme_level'
+                },
+                {
+                    /** 命令正则匹配 */
+                    reg: '^#?我要灵力(.*)$', // 匹配消息正则，命令正则
+                    /** 执行方法 */
+                    fnc: 'giveme_exp'
+                },
+                {
+                    /** 命令正则匹配 */
+                    reg: '^#?(修仙者|修炼者|用户)(人数|数量)$', // 匹配消息正则，命令正则
+                    /** 执行方法 */
+                    fnc: 'numxiuxian'
+                },
+                {
+                    /** 命令正则匹配 */
+                    reg: '^#?我的id$', // 匹配消息正则，命令正则
+                    /** 执行方法 */
+                    fnc: 'myid'
+                },
+                // {
+                /** 命令正则匹配 */
+                ///  reg: "^#?清空修仙数据$", //匹配消息正则，命令正则
+                /** 执行方法 */
+                // fnc: 'clear'
+                // },
+                {
+                    reg: '#?全服(排行榜|排名)$',
+                    fnc: 'allrank'
+                },
+                {
+                    reg: '#?全服加灵力(.*)',
+                    fnc: 'giveall_exp'
+                },
+                {
+                    reg: '#?全服加境界(.*)',
+                    fnc: 'giveall_level'
+                },
+                {
+                    reg: '#?开始压缩(.*)',
+                    fnc: 'moveback'
+                }
+            ]
         })
-      }
-      let forwardMsg
-      if (!e.isGroup) {
-        forwardMsg = await e.friend.makeForwardMsg(MsgList)
-      } else {
-        forwardMsg = await e.group.makeForwardMsg(MsgList)
-      }
-      if (typeof (forwardMsg.data) === 'object') {
-        let detail = forwardMsg.data?.meta?.detail
-        if (detail) {
-          detail.news = [{ text: '修仙排行榜～' }]
+    }
+
+    async moveback (e) {
+        if (!e.isMaster) return false
+        await xiuxiandb.moveback()
+        await e.reply('压缩完成')
+    }
+
+    async clear (e) {
+        let dirpath = process.cwd() + '/data/wind-db/xiuxiandata.db'
+        if (fs.existsSync(dirpath)) { // 如果文件夹不存在
+            let files = fs.readdirSync(dirpath)
+            files.forEach(function (file) {
+                // 拼接文件或子文件夹的完整路径
+                let filepath = dirpath + '/' + file
+                // 获取文件或子文件夹的状态
+                let stats = fs.statSync(filepath)
+                // 判断是文件还是文件夹
+                if (stats.isFile()) {
+                    // 如果是文件，直接删除
+                    fs.unlinkSync(filepath)
+                } else if (stats.isDirectory()) {
+                    // 如果是文件夹，递归调用删除文件夹的函数
+                    // deleteFolder(filepath)
+                }
+            })
+            // 删除空文件夹
+            fs.rmdirSync(dirpath)
         }
-      } else {
-        forwardMsg.data = forwardMsg.data
-          .replace(/\n/g, '')
-          .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
-          .replace(/___+/, '<title color="#777777" size="26">修仙排行榜～</title>')
-      }
-      return await e.reply(forwardMsg)
+        e.reply('清除成功！！')
     }
-    await e.reply('暂时还未适配')
-  }
 
-  async giveall_exp (e) {
-    if (!e.isMaster) {
-      return false
-    }
-    await e.reply('添加中请耐心等待')
-    let numreg = /[1-9][0-9]{0,12}/
-    let value = Number(numreg.exec(e.msg))
-    await xiuxiandb.addExperience(value)
-    await e.reply(`添加成功,全服增加灵力${value}`)
-  }
-
-  async giveall_level (e) {
-    if (!e.isMaster) {
-      return false
-    }
-    await e.reply('添加中请耐心等待')
-    let numreg = /[1-9][0-9]{0,12}/
-    let value = Number(numreg.exec(e.msg))
-    await xiuxiandb.addLevel(value)
-    await e.reply(`添加成功,全服增加境界${value}`)
-  }
-
-  async allrank (e) {
-    let user_id = e.user_id
-    if (user_id.length > 30) {
-      btn = isqbot.btn
-    }
-    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
-    let group_data = await xiuxiandb.getTopUsers2(all_limit)
-    if (group_data.length == 0) { // 如果文件不存在
-      return await e.reply('暂无修炼者～')
-    }
-    if (user_id.length <= 5 || user_id.length > 15) {
-      // 如果用户id长度小于等于5或者大于15，就用文本的方式展示前N名的用户信息，N为group_data的长度
-      let remsg = '\r\r#全服排行:'
-      for (let i = 0; i < group_data.length; i++) {
-        const { pwname } = xiuxiandb.experience(group_data[i])
-        remsg = remsg + `\r>#第${i + 1}名  ➠➠  id:${group_data[i].id}\r>境界:${group_data[i].levelname},${pwname}:${group_data[i].experience}`
-      }
-      if (user_id.length > 30) return await e.reply([remsg, btn])
-      return await e.reply(remsg)
-    }
-    if (user_id.length < 12) {
-      // 如果用户id长度小于12，就用转发的方式展示前N名的用户信息，N为group_data的长度
-      let MsgList = []
-      for (let i = 0; i < group_data.length; i++) {
-        MsgList.push({
-          message: [segment.image(`https://tenapi.cn/v2/qqimg?qq=${group_data[i].user_id}`), '\n用户id：', group_data[i].id, '\n境界：', group_data[i].levelname, '\n灵力：' + group_data[i].experience],
-          nickname: e.nickname,
-          user_id: e.user_id
-        })
-      }
-      let forwardMsg
-      if (!e.isGroup) {
-        forwardMsg = await e.friend.makeForwardMsg(MsgList)
-      } else {
-        forwardMsg = await e.group.makeForwardMsg(MsgList)
-      }
-      if (typeof (forwardMsg.data) === 'object') {
-        let detail = forwardMsg.data?.meta?.detail
-        if (detail) {
-          detail.news = [{ text: '修仙排行榜～' }]
+    async myid (e) {
+        let user_id = e.user_id
+        if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
+        if (user_id.length > 30) btn = isqbot.btn
+        let group_id = e.group_id
+        if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
+        let user_data = await xiuxiandb.getUserInfo(user_id)
+        if (user_data === null) {
+            return e.reply('\r\r#请先使用【修仙】自动分配id')
         }
-      } else {
-        forwardMsg.data = forwardMsg.data
-          .replace(/\n/g, '')
-          .replace(/<title color="#777777" size="26">(.+?)<\/title>/g, '___')
-          .replace(/___+/, '<title color="#777777" size="26">修仙排行榜～</title>')
-      }
-      await e.reply('暂时还未适配')
+        if (!user_data.group_id.includes(group_id)) {
+            user_data.group_id += ',' + group_id // 使用字符串拼接来添加群组id
+        }
+        if (user_id.length > 30) return await e.reply([segment.at(e.user_id), `\r\r#你的id是:${user_data.id}`, btn])
+        return await e.reply([segment.at(e.user_id), `\r\r#你的id是:${user_data.id}`])
     }
-  }
 
-  async view (e) {
-    let user_id = e.user_id
-    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
-    if (user_id.length > 30) btn = isqbot.btn
-    console.log('[wind-plugin]', e.msg)
-    let user_data = await xiuxiandb.getUserInfo(user_id)
-    if (user_data === null) {
-      if (user_id.length > 30) {
-        return e.reply([segment.at(e.user_id), '您还是凡人，请通过#修炼和#突破开启你的仙途', btn])
-      }
-      return e.reply([segment.at(e.user_id), '您还是凡人，请通过#修炼和#突破开启你的仙途'])
+    async numxiuxian (e) {
+        e.reply(JSON.stringify(await xiuxiandb.getMaxId()))
     }
-    let group_id = e.group_id
-    if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
-    if (!user_data.group_id.includes(group_id)) {
-      user_data.group_id += ',' + group_id // 使用字符串拼接来添加群组id
-    }
-    /** 获取灵力名称、突破下境界所需灵力值 */
-    const { need, pwname } = xiuxiandb.experience(user_data)
-    if (user_id.length > 30) {
-      return await e.reply([segment.at(e.user_id), `\r#你的id:${user_data.id},\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience},\r>您还需要:${need}点灵力突破下一境界`, btn])
-    }
-    await e.reply([segment.at(e.user_id), `\r#你的id:${user_data.id},\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience},\r>您还需要:${need}点灵力突破下一境界`])
-  }
 
-  async list (e) {
-    let user_id = e.user_id
-    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
-    if (user_id.length > 30) {
-      btn = isqbot.btn
-    }
-    let msg = levelname[0] + '\n'
-    for (let j = 1; j < levelname.length; j++) {
-      msg = msg + levelname[j] + '\n'
-    }
-    msg += '\r#凡境每个境界分九层,仙境每个境界分初期中期后期圆满四层,仙帝之后则还有不同,自行探索吧!\r#欸嘿!到大帝境界后别努力了,道祖境界你达不到的doge!!\r#后期修行困难可以选择#服用丹药,有40%的成功率.\r#预计将在大帝之后开放神魔境，可以自选成神或成魔，默认为大帝，选择成神或者成魔之后将无法再作改变，等到神魔合一境才可回归正途'
-    if (user_id.length > 30) {
-      return e.reply([msg, btn])
-    }
-    e.reply(msg)
-  }
+    async giveme_level (e) {
+        let user_id = e.user_id
+        if (user_id.length > 30) {
+            btn = isqbot.btn
+        }
+        if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
+        if (!e.isMaster) {
+            if (user_id.length > 30) return await e.reply(['哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡', btn])
+            return await e.reply('哈哈，你也想要我的境界吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡')
+        }
+        let numreg = /[1-9][0-9]{0,12}/
+        let numret = parseInt(numreg.exec(e.msg))
+        let group_id = e.group_id
+        if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
+        let user_data = await xiuxiandb.getUserInfo(user_id)
+        if (user_data === null) {
+            // let idd=await xiuxiandb.getMaxId();
+            // idd++
+            // let groupid=[]
+            // await groupid.push(e.group_id)
+            user_data = { // 创建新用户
+                // "id": idd,
+                experience: 0,
+                level: 0,
+                levelname: '凡人',
+                group_id
+            }
+            await xiuxiandb.updateUserInfo(user_id, user_data)
+            user_data = await xiuxiandb.getUserInfo(user_id)
+        }
 
-  async xiuxian (e) {
-    let user_id = e.user_id
-    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
-    if (user_id.length > 30) {
-      btn = isqbot.btn
-    }
-    console.log('[wind-plugin]', e.msg)
-    let cdtime = await this.xxinCd()
-    if (this.e.isMaster && !master_cd) {
-      cdtime = 0
-    }
-    if (cdtime > cdtime_xiuxian) return await e.reply(`\r#您还在闭关中,还有${cdtime}秒cd`)
-    if (cdtime) {
-      if (user_id.length > 30) {
-        return await e.reply([segment.at(user_id), `\n对不起,修炼失败，还有${cdtime}秒cd`, btn])
-      }
-      return await e.reply([segment.at(user_id), `\n对不起,修炼失败，还有${cdtime}秒cd`])
-    }
-    let group_id = e.group_id
-    if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
-    await this.xxsetCd(cdtime_xiuxian)
-    let user_data = await xiuxiandb.getUserInfo(user_id)
-    if (user_data === null) {
-      // let idd=await xiuxiandb.getMaxId();
-      // idd++
-      // let groupid=[]
-      // await groupid.push(e.group_id)
-      user_data = { // 创建新用户
-        // "id": idd,
-        experience: 0,
-        level: 0,
-        levelname: '凡人',
-        group_id
-      }
-      await xiuxiandb.updateUserInfo(user_id, user_data)
-      user_data = await xiuxiandb.getUserInfo(user_id)
-    }
-    if (!user_data.group_id.includes(group_id)) {
-      user_data.group_id += ',' + group_id // 使用字符串拼接来添加群组id
-    }
-    let experience_ = 0
-    let pills = Math.random() * 100
-    /** 获取灵力名称、突破下境界所需灵力值 */
-    const { pwname } = xiuxiandb.experience(user_data)
+        /** 储存玩家所在群组 */
+        if (!user_data.group_id.includes(group_id)) user_data.group_id += ',' + group_id
 
-    if (e.msg.includes('丹药')) {
-      if (pills > (100 - pill_per)) {
-        user_data.experience += pill_up
+        /** 增加境界 */
+        user_data.level += numret
+
+        /** 更新境界名称 */
+        user_data.levelname = xiuxiandb.levelName(user_data)
+        /** 保存数据库 */
+        await user_data.save()
+        await e.reply([segment.at(e.user_id), `恭喜您，获得了境界${numret}层`])
+
+        /** 获取灵力名称、突破下境界所需灵力值 */
+        const { need, pwname } = xiuxiandb.experience(user_data)
+
+        const msg = [segment.at(e.user_id), `\r\r#id:${user_data.id},\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience},\r>您还需要:${need}点${pwname}突破下一境界`]
+        /** QQBot加入按钮 */
+        if (user_id.length > 30) msg.push(btn)
+        return await e.reply(msg)
+    }
+
+    async giveme_exp (e) {
+        let user_id = e.user_id
+        if (user_id.length > 30) {
+            btn = isqbot.btn
+        }
+        if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
+        if (!e.isMaster) {
+            if (user_id.length > 30) return await e.reply(['哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡', btn])
+            return await e.reply('哈哈，你也想要我的灵力吗，咦，不给你，哈哈哈哈,🤣👉🏻🤡')
+        }
+        let numreg = /[1-9][0-9]{0,12}/
+        let numret = parseInt(numreg.exec(e.msg))
+        let group_id = e.group_id
+        if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
+        let user_data = await xiuxiandb.getUserInfo(user_id)
+        if (user_data === null) {
+            // let idd=await xiuxiandb.getMaxId();
+            // idd++
+            // let groupid=[]
+            // await groupid.push(e.group_id)
+            user_data = { // 创建新用户
+                // "id": idd,
+                experience: 0,
+                level: 0,
+                levelname: '凡人',
+                group_id
+            }
+            await xiuxiandb.updateUserInfo(user_id, user_data)
+            user_data = await xiuxiandb.getUserInfo(user_id)
+        }
+        if (!user_data.group_id.includes(group_id)) {
+            user_data.group_id += ',' + group_id // 使用字符串拼接来添加群组id
+        }
+        user_data.experience += numret
+        await user_data.save()
+
+        /** 获取灵力名称、突破下境界所需灵力值 */
+        const { need, pwname } = xiuxiandb.experience(user_data)
+        if (user_id.length > 30) return await e.reply([segment.at(e.user_id), `\r\r#id:${user_data.id},\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience},\r>您还需要:${need}点${pwname}突破下一境界`, btn])
+        return await e.reply([segment.at(e.user_id), `\r\r#id:${user_data.id},\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience},\r>您还需要:${need}点${pwname}突破下一境界`])
+    }
+
+    async xxsetCd (seconds = 60) {
+        let ext = new Date() * 1 + seconds * 1000
+        await redis.set(`wind:xiuxian-cd:${this.e.user_id}`, ext + '', { EX: seconds })
+    }
+
+    async xxinCd () {
+        let ext = await redis.get(`wind:xiuxian-cd:${this.e.user_id}`)
+        if (!ext || isNaN(ext)) {
+            return false
+        }
+        let cd = (new Date() * 1) - ext
+        if (cd < 0 && Math.abs(cd)) {
+            return Math.ceil(0 - cd / 1000)
+        }
+        return false
+    }
+
+    async brsetCd (seconds = 60) {
+        let ext = new Date() * 1 + seconds * 1000
+        await redis.set(`wind:break-cd:${this.e.user_id}`, ext + '', { EX: seconds })
+    }
+
+    async brinCd () {
+        let ext = await redis.get(`wind:break-cd:${this.e.user_id}`)
+        if (!ext || isNaN(ext)) {
+            return false
+        }
+        let cd = (new Date() * 1) - ext
+        if (cd < 0 && Math.abs(cd) < 100 * 60 * 1000) {
+            return Math.ceil(0 - cd / 1000)
+        }
+        return false
+    }
+
+    async rankings (e) {
+        let user_id = e.user_id
+        if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
+        if (user_id.length > 30) {
+            btn = isqbot.btn
+        }
+        let group_id = e.group_id
+        if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
+        let group_data = await xiuxiandb.getTopUsers(group_id, group_limit)
+        if (group_data.length == 0) { // 如果文件不存在
+            return await e.reply('本群暂无修炼者～')
+        }
+
+        /** 获取灵力名称、突破下境界所需灵力值 */
+        const { pwname } = xiuxiandb.experience(group_data[0])
+        let MsgList = []
+        for (let i = 0; i < group_data.length; i++) {
+            MsgList.push({
+                message: [segment.image(`http://q2.qlogo.cn/headimg_dl?dst_uin=${group_data[i].user_id}&spec=100`), `\nqq:${group_data[i].user_id}\n用户id:${group_data[i].id}\n境界:${group_data[i].levelname}\n灵力:${group_data[i].experience}`],
+                nickname: e.bot.nickname,
+                user_id: e.bot.uin
+            })
+        }
+        let forwardMsg
+        if (e.group?.makeForwardMsg) {
+            forwardMsg = await e.group.makeForwardMsg(MsgList)
+        } else if (e.friend?.makeForwardMsg) {
+            forwardMsg = await e.friend.makeForwardMsg(MsgList)
+        } else {
+            forwardMsg = await Bot.makeForwardMsg(MsgList)
+        }
+        return await e.reply(forwardMsg)
+    }
+
+    async giveall_exp (e) {
+        if (!e.isMaster) {
+            return false
+        }
+        await e.reply('添加中请耐心等待')
+        let numreg = /[1-9][0-9]{0,12}/
+        let value = Number(numreg.exec(e.msg))
+        await xiuxiandb.addExperience(value)
+        await e.reply(`添加成功,全服增加灵力${value}`)
+    }
+
+    async giveall_level (e) {
+        if (!e.isMaster) {
+            return false
+        }
+        await e.reply('添加中请耐心等待')
+        let numreg = /[1-9][0-9]{0,12}/
+        let value = Number(numreg.exec(e.msg))
+        await xiuxiandb.addLevel(value)
+        await e.reply(`添加成功,全服增加境界${value}`)
+    }
+
+    async allrank (e) {
+        let user_id = e.user_id
+        if (user_id.length > 30) {
+            btn = isqbot.btn
+        }
+        if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
+        let group_data = await xiuxiandb.getTopUsers2(all_limit)
+        if (group_data.length == 0) { // 如果文件不存在
+            return await e.reply('暂无修炼者～')
+        }
+        for (let i = 0; i < group_data.length; i++) {
+            MsgList.push({
+                message: [segment.image(`http://q2.qlogo.cn/headimg_dl?dst_uin=${group_data[i].user_id}&spec=100`), `\nqq:${group_data[i].user_id}\n用户id:${group_data[i].id}\n境界:${group_data[i].levelname}\n灵力:${group_data[i].experience}`],
+                nickname: e.bot.nickname,
+                user_id: e.bot.uin
+            })
+        }
+        let forwardMsg
+        if (e.group?.makeForwardMsg) {
+            forwardMsg = await e.group.makeForwardMsg(MsgList)
+        } else if (e.friend?.makeForwardMsg) {
+            forwardMsg = await e.friend.makeForwardMsg(MsgList)
+        } else {
+            forwardMsg = await Bot.makeForwardMsg(MsgList)
+        }
+        e.reply(forwardMsg)
+    }
+
+    async view (e) {
+        let user_id = e.user_id
+        if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
+        if (user_id.length > 30) btn = isqbot.btn
+        console.log('[wind-plugin]', e.msg)
+        let user_data = await xiuxiandb.getUserInfo(user_id)
+        if (user_data === null) {
+            if (user_id.length > 30) {
+                return e.reply([segment.at(e.user_id), '您还是凡人，请通过#修炼和#突破开启你的仙途', btn])
+            }
+            return e.reply([segment.at(e.user_id), '您还是凡人，请通过#修炼和#突破开启你的仙途'])
+        }
+        let group_id = e.group_id
+        if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
+        if (!user_data.group_id.includes(group_id)) {
+            user_data.group_id += ',' + group_id // 使用字符串拼接来添加群组id
+        }
+        /** 获取灵力名称、突破下境界所需灵力值 */
+        const { need, pwname } = xiuxiandb.experience(user_data)
+        if (user_id.length > 30) {
+            return await e.reply([segment.at(e.user_id), `\r#你的id:${user_data.id},\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience},\r>您还需要:${need}点灵力突破下一境界`, btn])
+        }
+        await e.reply([segment.at(e.user_id), `\r#你的id:${user_data.id},\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience},\r>您还需要:${need}点灵力突破下一境界`])
+    }
+
+    async list (e) {
+        let user_id = e.user_id
+        if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
+        if (user_id.length > 30) {
+            btn = isqbot.btn
+        }
+        let msg = levelname[0] + '\n'
+        for (let j = 1; j < levelname.length; j++) {
+            msg = msg + levelname[j] + '\n'
+        }
+        msg += '\r#凡境每个境界分九层,仙境每个境界分初期中期后期圆满四层,仙帝之后则还有不同,自行探索吧!\r#欸嘿!到大帝境界后别努力了,道祖境界你达不到的doge!!\r#后期修行困难可以选择#服用丹药,有40%的成功率.\r#预计将在大帝之后开放神魔境，可以自选成神或成魔，默认为大帝，选择成神或者成魔之后将无法再作改变，等到神魔合一境才可回归正途'
+        if (user_id.length > 30) {
+            return e.reply([msg, btn])
+        }
+        e.reply(msg)
+    }
+
+    async xiuxian (e) {
+        let user_id = e.user_id
+        if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
+        if (user_id.length > 30) {
+            btn = isqbot.btn
+        }
+        console.log('[wind-plugin]', e.msg)
+        let cdtime = await this.xxinCd()
+        if (this.e.isMaster && !master_cd) {
+            cdtime = 0
+        }
+        if (cdtime > cdtime_xiuxian) return await e.reply(`\r#您还在闭关中,还有${cdtime}秒cd`)
+        if (cdtime) {
+            if (user_id.length > 30) {
+                return await e.reply([segment.at(user_id), `\n对不起,修炼失败，还有${cdtime}秒cd`, btn])
+            }
+            return await e.reply([segment.at(user_id), `\n对不起,修炼失败，还有${cdtime}秒cd`])
+        }
+        let group_id = e.group_id
+        if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
+        await this.xxsetCd(cdtime_xiuxian)
+        let user_data = await xiuxiandb.getUserInfo(user_id)
+        if (user_data === null) {
+            // let idd=await xiuxiandb.getMaxId();
+            // idd++
+            // let groupid=[]
+            // await groupid.push(e.group_id)
+            user_data = { // 创建新用户
+                // "id": idd,
+                experience: 0,
+                level: 0,
+                levelname: '凡人',
+                group_id
+            }
+            await xiuxiandb.updateUserInfo(user_id, user_data)
+            user_data = await xiuxiandb.getUserInfo(user_id)
+        }
+        if (!user_data.group_id.includes(group_id)) {
+            user_data.group_id += ',' + group_id // 使用字符串拼接来添加群组id
+        }
+        let experience_ = 0
+        let pills = Math.random() * 100
+        /** 获取灵力名称、突破下境界所需灵力值 */
+        const { pwname } = xiuxiandb.experience(user_data)
+
+        if (e.msg.includes('丹药')) {
+            if (pills > (100 - pill_per)) {
+                user_data.experience += pill_up
+                let lev = user_data.level
+                let exerp = 1000 * (lev - 110) + 30500
+                let need
+                if (user_data.experience < level_exp[lev] && user_data.level < 111) need = level_exp[lev] - user_data.experience
+                else if (user_data.level > 110 && user_data.experience < exerp) need = exerp - user_data.experience
+                else need = 0
+                /** 保存数据库 */
+                await user_data.save()
+                user_data = await xiuxiandb.getUserInfo(user_id)
+                if (user_id.length > 30) await e.reply([segment.at(user_id), `\r#用户:${user_data.id}\r#恭喜你服用丹药成功，你获得了25点${pwname}！\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience}\n您还需要:${need}点${pwname}突破下一境界`, btn])
+                else await e.reply([segment.at(user_id), `\r#用户:${user_data.id}\r#恭喜你服用丹药成功，你获得了25点${pwname}！\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience}\n您还需要:${need}点${pwname}突破下一境界`])
+            } else {
+                user_data.experience -= pill_down
+                /** 保存数据库 */
+                await user_data.save()
+                if (user_id.length > 30) await e.reply([segment.at(user_id), `\r#用户:${user_data.id}\r#服用失败，由于大量丹毒你损失了7点${pwname}！\r>境界:${user_data.levelname}\r>${pwname}:${user_data.experience}`, btn])
+                else await e.reply([segment.at(user_id), `\r#用户:${user_data.id}\r#服用失败，由于大量丹毒你损失了7点${pwname}！\r>境界:${user_data.levelname}\r>${pwname}:${user_data.experience}`])
+            }
+        } else {
+            experience_ = Math.round(xiuxian_up + xiuxian_ave * Math.random())
+            user_data.experience += experience_
+            let lev = user_data.level
+            let exerp = 1000 * (lev - 110) + 30500
+            let need
+            if (user_data.experience < level_exp[lev] && user_data.level < 111) need = level_exp[lev] - user_data.experience
+            else if (user_data.level > 110 && user_data.experience < exerp) need = exerp - user_data.experience
+            else need = 0
+            /** 保存数据库 */
+            await user_data.save()
+            if (user_id.length > 30) await e.reply([segment.at(user_id), `\r#用户:${user_data.id}\r#恭喜你获得了${experience_}点${pwname}。\r>境界:${user_data.levelname}\r>${pwname}:${user_data.experience}\n您还需要:${need}点${pwname}突破下一境界`, btn])
+            else await e.reply([segment.at(user_id), `\r#用户:${user_data.id}\r#恭喜你获得了${experience_}点${pwname}。\r>境界:${user_data.levelname}\r>${pwname}:${user_data.experience}\n您还需要:${need}点${pwname}突破下一境界`])
+        }
+    }
+
+    async break (e) {
+        let user_id = e.user_id
+        if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
+        if (user_id.length > 30) {
+            btn = isqbot.btn
+        }
+        console.log('[wind-plugin]', e.msg)
+        let cdtime = await this.brinCd()
+        if (this.e.isMaster && !master_cd) {
+            cdtime = 0
+        }
+        if (cdtime) {
+            if (user_id.length > 30) {
+                return await e.reply([segment.at(e.user_id), `\n对不起,突破失败，还有${cdtime}秒cd`, btn])
+            }
+            return await e.reply([segment.at(e.user_id), `\n对不起,突破失败，还有${cdtime}秒cd`])
+        }
+        await this.brsetCd(cdtime_break)
+        let group_id = e.group_id
+        if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
+        let user_data = await xiuxiandb.getUserInfo(user_id)
+        if (user_data === null) {
+            // let idd=await xiuxiandb.getMaxId();
+            // idd++
+            // let groupid=[]
+            // await groupid.push(e.group_id)
+            user_data = { // 创建新用户
+                // "id": idd,
+                experience: 0,
+                level: 0,
+                levelname: '凡人',
+                group_id
+            }
+            await xiuxiandb.updateUserInfo(user_id, user_data)
+            user_data = await xiuxiandb.getUserInfo(user_id)
+        }
+        if (!user_data.group_id.includes(group_id)) {
+            user_data.group_id += ',' + group_id // 使用字符串拼接来添加群组id
+        }
         let lev = user_data.level
         let exerp = 1000 * (lev - 110) + 30500
-        let need
-        if (user_data.experience < level_exp[lev] && user_data.level < 111) need = level_exp[lev] - user_data.experience
-        else if (user_data.level > 110 && user_data.experience < exerp) need = exerp - user_data.experience
-        else need = 0
-        /** 保存数据库 */
+        if (user_data.experience < level_exp[lev] && user_data.level < 111) {
+            if (user_id.length > 30) {
+                return e.reply([segment.at(e.user_id), `对不起，用户:${user_data.id},\n你的修为不足,还差${level_exp[lev] - user_data.experience},请再接再厉`, btn])
+            }
+            return e.reply([segment.at(e.user_id), `对不起，用户:${user_data.id},\n你的修为不足,还差${level_exp[lev] - user_data.experience},请再接再厉`])
+        }
+        if (user_data.level > 110 && user_data.experience < exerp) {
+            if (user_id.length > 30) {
+                return e.reply([segment.at(e.user_id), `对不起，用户:${user_data.id},\n你的修为不足,还差${exerp - user_data.experience},请再接再厉`, btn])
+            }
+            return e.reply([segment.at(e.user_id), `对不起，用户:${user_data.id},\n你的修为不足,还差${exerp - user_data.experience},请再接再厉`])
+        }
+
+        const gailv = user_data.level < 110 ? 100 - user_data.level * 0.5 : 45 - user_data.level * 0.05
+
+        e.reply([segment.at(e.user_id), `用户:${user_data.id},\n你当前境界为${user_data.levelname},需要时间${(0.2 * user_data.level)}s,突破成功概率${gailv},开始突破......`])
+        let i = Math.random() * 100
+        if (i > gailv) {
+            return await e.reply([segment.at(user_id), `用户:${user_data.id},\n对不起，突破失败，请努力修行`])
+        } else {
+            user_data.level++
+        }
+
+        /** 修改境界名称 */
+        user_data.levelname = xiuxiandb.levelName(user_data)
+
+        /** 获取灵力名称、突破下境界所需灵力值 */
+        const { need, pwname } = xiuxiandb.experience(user_data)
+
+        setTimeout(() => { // 延迟5秒
+            if (user_id.length > 30) { e.reply([segment.at(e.user_id), `\r#用户:${user_data.id}\r#恭喜你已突破成功！\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience}\r>您还需要:${need}点${pwname}突破下一境界`, btn]) } else { e.reply([segment.at(e.user_id), `\r#用户:${user_data.id}\r#恭喜你已突破成功！\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience}\r>您还需要:${need}点${pwname}突破下一境界`]) }
+        }, 200 * (user_data.level + 1))// 设置延时
         await user_data.save()
-        user_data = await xiuxiandb.getUserInfo(user_id)
-        if (user_id.length > 30) await e.reply([segment.at(user_id), `\r#用户:${user_data.id}\r#恭喜你服用丹药成功，你获得了25点${pwname}！\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience}\n您还需要:${need}点${pwname}突破下一境界`, btn])
-        else await e.reply([segment.at(user_id), `\r#用户:${user_data.id}\r#恭喜你服用丹药成功，你获得了25点${pwname}！\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience}\n您还需要:${need}点${pwname}突破下一境界`])
-      } else {
-        user_data.experience -= pill_down
-        /** 保存数据库 */
-        await user_data.save()
-        if (user_id.length > 30) await e.reply([segment.at(user_id), `\r#用户:${user_data.id}\r#服用失败，由于大量丹毒你损失了7点${pwname}！\r>境界:${user_data.levelname}\r>${pwname}:${user_data.experience}`, btn])
-        else await e.reply([segment.at(user_id), `\r#用户:${user_data.id}\r#服用失败，由于大量丹毒你损失了7点${pwname}！\r>境界:${user_data.levelname}\r>${pwname}:${user_data.experience}`])
-      }
-    } else {
-      experience_ = Math.round(xiuxian_up + xiuxian_ave * Math.random())
-      user_data.experience += experience_
-      let lev = user_data.level
-      let exerp = 1000 * (lev - 110) + 30500
-      let need
-      if (user_data.experience < level_exp[lev] && user_data.level < 111) need = level_exp[lev] - user_data.experience
-      else if (user_data.level > 110 && user_data.experience < exerp) need = exerp - user_data.experience
-      else need = 0
-      /** 保存数据库 */
-      await user_data.save()
-      if (user_id.length > 30) await e.reply([segment.at(user_id), `\r#用户:${user_data.id}\r#恭喜你获得了${experience_}点${pwname}。\r>境界:${user_data.levelname}\r>${pwname}:${user_data.experience}\n您还需要:${need}点${pwname}突破下一境界`, btn])
-      else await e.reply([segment.at(user_id), `\r#用户:${user_data.id}\r#恭喜你获得了${experience_}点${pwname}。\r>境界:${user_data.levelname}\r>${pwname}:${user_data.experience}\n您还需要:${need}点${pwname}突破下一境界`])
     }
-  }
-
-  async break (e) {
-    let user_id = e.user_id
-    if (typeof user_id != 'string') user_id = JSON.stringify(user_id)
-    if (user_id.length > 30) {
-      btn = isqbot.btn
-    }
-    console.log('[wind-plugin]', e.msg)
-    let cdtime = await this.brinCd()
-    if (this.e.isMaster && !master_cd) {
-      cdtime = 0
-    }
-    if (cdtime) {
-      if (user_id.length > 30) {
-        return await e.reply([segment.at(e.user_id), `\n对不起,突破失败，还有${cdtime}秒cd`, btn])
-      }
-      return await e.reply([segment.at(e.user_id), `\n对不起,突破失败，还有${cdtime}秒cd`])
-    }
-    await this.brsetCd(cdtime_break)
-    let group_id = e.group_id
-    if (typeof group_id != 'string') group_id = JSON.stringify(group_id)
-    let user_data = await xiuxiandb.getUserInfo(user_id)
-    if (user_data === null) {
-      // let idd=await xiuxiandb.getMaxId();
-      // idd++
-      // let groupid=[]
-      // await groupid.push(e.group_id)
-      user_data = { // 创建新用户
-        // "id": idd,
-        experience: 0,
-        level: 0,
-        levelname: '凡人',
-        group_id
-      }
-      await xiuxiandb.updateUserInfo(user_id, user_data)
-      user_data = await xiuxiandb.getUserInfo(user_id)
-    }
-    if (!user_data.group_id.includes(group_id)) {
-      user_data.group_id += ',' + group_id // 使用字符串拼接来添加群组id
-    }
-    let lev = user_data.level
-    let exerp = 1000 * (lev - 110) + 30500
-    if (user_data.experience < level_exp[lev] && user_data.level < 111) {
-      if (user_id.length > 30) {
-        return e.reply([segment.at(e.user_id), `对不起，用户:${user_data.id},\n你的修为不足,还差${level_exp[lev] - user_data.experience},请再接再厉`, btn])
-      }
-      return e.reply([segment.at(e.user_id), `对不起，用户:${user_data.id},\n你的修为不足,还差${level_exp[lev] - user_data.experience},请再接再厉`])
-    }
-    if (user_data.level > 110 && user_data.experience < exerp) {
-      if (user_id.length > 30) {
-        return e.reply([segment.at(e.user_id), `对不起，用户:${user_data.id},\n你的修为不足,还差${exerp - user_data.experience},请再接再厉`, btn])
-      }
-      return e.reply([segment.at(e.user_id), `对不起，用户:${user_data.id},\n你的修为不足,还差${exerp - user_data.experience},请再接再厉`])
-    }
-
-    const gailv = user_data.level < 110 ? 100 - user_data.level * 0.5 : 45 - user_data.level * 0.05
-
-    e.reply([segment.at(e.user_id), `用户:${user_data.id},\n你当前境界为${user_data.levelname},需要时间${(0.2 * user_data.level)}s,突破成功概率${gailv},开始突破......`])
-    let i = Math.random() * 100
-    if (i > gailv) {
-      return await e.reply([segment.at(user_id), `用户:${user_data.id},\n对不起，突破失败，请努力修行`])
-    } else {
-      user_data.level++
-    }
-
-    /** 修改境界名称 */
-    user_data.levelname = xiuxiandb.levelName(user_data)
-
-    /** 获取灵力名称、突破下境界所需灵力值 */
-    const { need, pwname } = xiuxiandb.experience(user_data)
-
-    setTimeout(() => { // 延迟5秒
-      if (user_id.length > 30) { e.reply([segment.at(e.user_id), `\r#用户:${user_data.id}\r#恭喜你已突破成功！\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience}\r>您还需要:${need}点${pwname}突破下一境界`, btn]) } else { e.reply([segment.at(e.user_id), `\r#用户:${user_data.id}\r#恭喜你已突破成功！\r>境界:${user_data.levelname},\r>${pwname}:${user_data.experience}\r>您还需要:${need}点${pwname}突破下一境界`]) }
-    }, 200 * (user_data.level + 1))// 设置延时
-    await user_data.save()
-  }
 }
