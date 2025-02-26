@@ -315,7 +315,7 @@ export class xiuxian extends plugin {// 修炼
         let MsgList = []
         for (let i = 0; i < group_data.length; i++) {
             MsgList.push({
-                message: [segment.image(`http://q2.qlogo.cn/headimg_dl?dst_uin=${group_data[i].user_id}&spec=100`), `\nqq:${group_data[i].user_id}\n用户id:${group_data[i].id}\n境界:${group_data[i].levelname}\n灵力:${group_data[i].experience}`],
+                message: [segment.image(`http://q2.qlogo.cn/headimg_dl?dst_uin=${group_data[i].user_id}&spec=100`), `\n第${i+1}名\nqq:${group_data[i].user_id}\n用户id:${group_data[i].id}\n境界:${group_data[i].levelname}\n灵力:${group_data[i].experience}`],
                 nickname: e.bot.nickname,
                 user_id: e.bot.uin
             })
@@ -366,7 +366,7 @@ export class xiuxian extends plugin {// 修炼
         let MsgList = []
         for (let i = 0; i < group_data.length; i++) {
             MsgList.push({
-                message: [segment.image(`http://q2.qlogo.cn/headimg_dl?dst_uin=${group_data[i].user_id}&spec=100`), `\nqq:${group_data[i].user_id}\n用户id:${group_data[i].id}\n境界:${group_data[i].levelname}\n灵力:${group_data[i].experience}`],
+                message: [segment.image(`http://q2.qlogo.cn/headimg_dl?dst_uin=${group_data[i].user_id}&spec=100`), `\n第${i+1}名\nqq:${group_data[i].user_id}\n用户id:${group_data[i].id}\n境界:${group_data[i].levelname}\n灵力:${group_data[i].experience}`],
                 nickname: e.bot.nickname,
                 user_id: e.bot.uin
             })
