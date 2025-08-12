@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model } from 'sequelize'
-import { Data } from '#miao'
+import { Data } from '../components/index.js'
 
 Data.createDir('/data/wind-db', 'root')
 let dbPath = process.cwd() + '/data/wind-db/xiuxiandata.db'
