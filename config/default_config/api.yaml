@@ -1,0 +1,27 @@
+#::隔开的第一个元素为触发指令，后面接视频api，当同一类有多个api可用::隔开，每次触发会随机选择一个api使用
+#- 怼脸自拍::https://api.yujn.cn/api/duilian.php
+#- 黑丝::http://api.yujn.cn/api/heisis.php
+#- 白丝::http://api.yujn.cn/api/baisis.php
+- cos::http://api.yujn.cn/api/COS.php
+- 漫展::https://api.yujn.cn/api/manzhan.php
+#- loli::http://api.yujn.cn/api/luoli.php
+#- 慢摇::http://api.yujn.cn/api/manyao.php
+#- 女高::http://api.yujn.cn/api/nvgao.php
+#- 吊带::http://api.yujn.cn/api/diaodai.php
+#- 清纯::http://api.yujn.cn/api/qingchun.php
+#- 小姐姐::http://api.yujn.cn/api/juhexjj.php
+- 穿搭::http://api.yujn.cn/api/chuanda.php
+- 鞠婧祎::http://api.yujn.cn/api/jjy.php
+- 欲梦::http://api.yujn.cn/api/ndym.php
+#- 漫画芋::http://api.yujn.cn/api/manhuay.php
+#- 身材::http://api.yujn.cn/api/wmsc.php
+- 舞蹈::http://api.yujn.cn/api/shwd.php::http://api.yujn.cn/api/rewu.php
+- 翻唱::http://api.yujn.cn/api/ks_fc.php
+#- 章若楠::http://api.yujn.cn/api/zrn.php
+- 古风::http://api.yujn.cn/api/hanfu.php
+#- 玉足::http://api.yujn.cn/api/yuzu.php::http://api.yujn.cn/api/jpmt.php
+- 变装::http://api.yujn.cn/api/bianzhuang.php?::http://api.yujn.cn/api/ksbianzhuang.php
+- 世界杯::http://api.yujn.cn/api/zuqiu.php
+- 海::http://api.yujn.cn/api/haibian.php
+- 帅哥::http://api.yujn.cn/api/xgg.php 
+#- 随机::http://api.yujn.cn/api/sjsp.php
