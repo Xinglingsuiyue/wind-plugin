@@ -36,7 +36,7 @@ export class video extends plugin {
       dsc: 'wind-video',
       /** https://oicqjs.github.io/oicq/#events */
       event: 'message',
-      priority: -999999,
+      priority: 100,
       rule: [
         {
           reg,
@@ -56,5 +56,6 @@ export class video extends plugin {
     logger.info(url)
     await e.reply(segment.video(url))
     await e.reply(['当前为视频板块', btn])
+    return false
   }
 }
