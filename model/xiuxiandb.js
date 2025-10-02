@@ -238,7 +238,7 @@ const COLUMNS = {
   },
   group_id: {
     type: xiuxiandb.Types.STRING, // 如果group_id是字符串数组，否则可以修改
-    allowNull: false
+    allowNull: true
   },
   level: {
     type: xiuxiandb.Types.INTEGER,
