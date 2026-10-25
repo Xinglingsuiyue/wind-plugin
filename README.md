@@ -1,11 +1,5 @@
 # wind-plugin
 
-### 不再更新readme,可以自行查看apps里面的正则了解有哪些功能,另外由于主要更新给QQBot使用,其他的野生bot使用可能会有些bug,自行提issues,我会尽量适配
-
-### 访问量
-
-[![访问量](https://profile-counter.glitch.me/wind-plugin/count.svg)](https://gitee.com/wind-trace-typ/wind-plugin)
-
 #### 介绍
 
 1.  各大平台热搜榜单
@@ -57,5 +51,4 @@ git clone https://gitee.com/wind-trace-typ/wind-plugin.git ./plugins/wind-plugin
 1.  作者qq：[459521475](https://tenapi.cn/v2/qqcard?qq=459521475)
 2.  交流群：[761464165](https://qm.qq.com/cgi-bin/qm/qr?k=HUsXvhqzxSiGUCKQclf3NbcXp5gsC4h3&jump_from=webapi&authKey=/PHLSFBIFLvTOJTrtzNdaF1xmdkjglqVD4U8w90CBDJoGpDPqsGkUSzHSET7/Ykh)
 3.  部分代码来自[miao-plugin](https://gitee.com/yoimiya-kokomi/miao-plugin),[TianRu-plugin](https://gitee.com/HDTianRu/TianRu-plugin),[akasha-terminal-plugin](https://gitee.com/go-farther-and-farther/akasha-terminal-plugin),特此声明感谢
-4.  爱发电
-![输入图片说明](resources/afdian-%5B%E6%9C%AA%E8%AE%A4%E8%AF%81%5Dwind(1).jpg)
+4. 原作者已停止更新本仓库也只是完善了一部分修仙功能，以上readme内容为原作者的
