@@ -51,4 +51,4 @@ git clone https://gitee.com/wind-trace-typ/wind-plugin.git ./plugins/wind-plugin
 1.  作者qq：[459521475](https://tenapi.cn/v2/qqcard?qq=459521475)
 2.  交流群：[761464165](https://qm.qq.com/cgi-bin/qm/qr?k=HUsXvhqzxSiGUCKQclf3NbcXp5gsC4h3&jump_from=webapi&authKey=/PHLSFBIFLvTOJTrtzNdaF1xmdkjglqVD4U8w90CBDJoGpDPqsGkUSzHSET7/Ykh)
 3.  部分代码来自[miao-plugin](https://gitee.com/yoimiya-kokomi/miao-plugin),[TianRu-plugin](https://gitee.com/HDTianRu/TianRu-plugin),[akasha-terminal-plugin](https://gitee.com/go-farther-and-farther/akasha-terminal-plugin),特此声明感谢
-4. 原作者已停止更新本仓库也只是完善了一部分修仙功能，以上readme内容为原作者的
+4. 原作者已停止更新本仓库也只是完善了一部分修仙功能，以上readme内容为原作者的，安装地址也是原仓库的需要的可自行更换为本仓库地址
