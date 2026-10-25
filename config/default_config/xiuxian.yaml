@@ -1,13 +1,38 @@
-master_cd: false #主人是否需要cd
-cdtime_xiuxian: 2 #修炼的冷却时间,单位分钟
-cdtime_break: 0.5 #突破的冷却时间,单位分钟
+﻿master_cd: false #主人是否需要cd
+cdtime_xiuxian: 1 #修炼的冷却时间,单位分钟
+cdtime_break: 0.1 #突破的冷却时间,单位分钟
 cdtime_down: 6 #闭关冷却,单位小时
 down_up: 800 #闭关保底提升值
 down_ave: 1000 #闭关提升波动幅度
-pill_up: 25 #丹药提升灵力值
+# 闭关收益为正常修炼的百分比
+down_rate: 80
+pill_up: 50 #丹药提升灵力值
 pill_down: 7 #丹药降低灵力值
-pill_per: 40 #丹药成功概率
+pill_per: 30 #丹药成功概率
 xiuxian_up: 5 #修仙提升保底
 xiuxian_ave: 10 #修仙提升波动幅度
 group_limit: 30 #群排行人数限制
 all_limit: 100 #全服排行人数限制
+
+# 丹药配置：success 成功率(%), up 成功增加灵力, down 失败扣除灵力；成功率最高 50%
+pills:
+  仙丹:
+    success: 0.1
+    up: 5000
+    down: 50
+  黄丹:
+    success: 50
+    up: 30
+    down: 5
+  玄丹:
+    success: 40
+    up: 60
+    down: 15
+  地丹:
+    success: 30
+    up: 100
+    down: 30
+  天丹:
+    success: 20
+    up: 200
+    down: 50

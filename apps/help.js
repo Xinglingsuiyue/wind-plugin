@@ -18,6 +18,10 @@ export class help extends plugin {
 					reg: "^#?(wind|风|Wind|WIND)(命令|帮助|菜单|help|说明|功能|指令|使用说明)$",
 					fnc: 'help'
 				},
+				{
+					reg: "^#?(修仙|修炼)(帮助|菜单|说明|指令)$",
+					fnc: 'xiuxianHelp'
+				},
                 {
                     reg: "^#?(wind|风|Wind|WIND)版本$",
 					fnc: 'versionInfo'
@@ -63,6 +67,36 @@ async help (e) {
       }
     })
 
+    helpGroup.push(group)
+  })
+  let themeData = await HelpTheme.getThemeData(diyCfg.helpCfg || {}, sysCfg.helpCfg || {})
+  return await Common.render('help/index', {
+    helpCfg: helpConfig,
+    helpGroup,
+    ...themeData,
+    element: 'default'
+  }, { e, scale: 1.2 })
+}
+
+async xiuxianHelp (e) {
+  const { helpCfg: customCfg, helpList } = await import('../config/xiuxian_help.js')
+  let { diyCfg, sysCfg } = await Data.importCfg('help')
+  let helpConfig = lodash.defaults({ ...customCfg }, diyCfg.helpCfg || {}, sysCfg.helpCfg || {})
+  let helpGroup = []
+  lodash.forEach(helpList, (group) => {
+    if (group.auth && group.auth === 'master' && !e.isMaster) {
+      return true
+    }
+    lodash.forEach(group.list, (help) => {
+      let icon = help.icon * 1
+      if (!icon) {
+        help.css = 'display:none'
+      } else {
+        let x = (icon - 1) % 10
+        let y = (icon - x - 1) / 10
+        help.css = `background-position:-${x * 50}px -${y * 50}px`
+      }
+    })
     helpGroup.push(group)
   })
   let themeData = await HelpTheme.getThemeData(diyCfg.helpCfg || {}, sysCfg.helpCfg || {})

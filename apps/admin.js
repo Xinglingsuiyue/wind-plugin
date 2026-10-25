@@ -12,6 +12,8 @@ else{
     fs.writeFileSync(blackPath, data, 'utf8');
 }
 let black = YAML.parse(data) || {};
+if (typeof black.all !== 'boolean') black.all = true
+if (!Array.isArray(black.group)) black.group = []
 export class slander extends plugin {
     constructor() {
         super({
@@ -22,7 +24,7 @@ export class slander extends plugin {
             priority: -999999,
             rule: [
                 {
-                    reg: '^(#?(战斗|决斗|pk|PK|攻打|battle)(.*)|#?清理妖兽|#?突破|#?(修炼|修仙|服用丹药)|闭关|打卡)$',
+                    reg: '^(#?(战斗|决斗|pk|PK|攻打|battle)(.*)|#?清理妖兽|#?突破|#?(修炼|修仙|服用丹药(?:\\s*[天地玄黄仙]丹)?|选择丹药(?:\\s*[天地玄黄仙]丹)?|丹药列表)|#?闭关(?:\\s*\\d+(?:\\.\\d+)?\\s*(?:小时|分钟|h|min))?|#?(确认闭关|出关|打断闭关|提前出关)|#?(修炼打卡)|#?妖兽(列表|表))$',
                     fnc: 'black'
                 },
                 {
@@ -45,12 +47,14 @@ export class slander extends plugin {
         })
     }
     async black(e){
-        if(black.all&&!black.group.includes(e.group_id)) return false
+        if (!e.group_id) return false
+        if(black.all && !black.group.includes(e.group_id)) return false
         e.reply("当前群聊修仙功能已关闭,请联系机器人管理员开启")
         return true
     }
     async turnoff(e){
 		if(!e.isMaster) return await e.reply("你看起来真是个笨蛋呢")
+		if(!e.group_id) return await e.reply("请到群里使用该指令")
 		if(black.group.includes(e.group_id)) return await e.reply("当前群修仙为关闭状态")
 		black.group.push(e.group_id);
 		let yaml = YAML.stringify(black)
@@ -59,12 +63,12 @@ export class slander extends plugin {
     }
     async turnon(e){
 		if(!e.isMaster) return await e.reply("你看起来真是个笨蛋呢")
-		if(!black.group) return await e.reply("当前是开启状态");
+		if(!e.group_id) return await e.reply("请到群里使用该指令")
 		let index = black.group.indexOf(e.group_id)
 		if(index > -1){
             black.group.splice(index, 1) 
             let yaml = YAML.stringify(black) 
-            fs.writeFileSync(blackPath, yaml, "utf8")
+            await fs.writeFileSync(blackPath, yaml, "utf8")
             return await e.reply(`已开启群修仙`);
         }else{
             return await e.reply(`当前是开启状态`); 
@@ -76,21 +80,22 @@ export class slander extends plugin {
 		if(msg.includes("开启")){
 			black.all=true
 			let yaml = YAML.stringify(black) 
-            fs.writeFileSync(blackPath, yaml, "utf8")
+            await fs.writeFileSync(blackPath, yaml, "utf8")
             return await e.reply(`已全局开启修仙【除开单独关闭过的群】`);
 		}
 		if(msg.includes("关闭")){
 			black.all=false
 			let yaml = YAML.stringify(black) 
-            fs.writeFileSync(blackPath, yaml, "utf8")
+            await fs.writeFileSync(blackPath, yaml, "utf8")
             return await e.reply(`已全局关闭修仙`);
 		}
     }
     async allon(e){
+		if(!e.isMaster) return await e.reply("你看起来真是个笨蛋呢")
 		black.all=true
 		black.group=[]
 		let yaml = YAML.stringify(black) 
-        fs.writeFileSync(blackPath, yaml, "utf8")
+        await fs.writeFileSync(blackPath, yaml, "utf8")
         return await e.reply(`已全部开启修仙`);
     }
 }

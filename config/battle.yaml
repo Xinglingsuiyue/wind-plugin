@@ -1,0 +1,9 @@
+master_battled: true
+master_cd: false
+cdtime_battle: 2
+d1_battle: 30
+d2_battle: 40
+d3_battle: 40
+d4_battle: 50
+beclear: 0.05
+toclear: 0.02

@@ -86,12 +86,15 @@ export class xiuxian extends plugin {// 修炼
     }
     if (!e.at) {
       at_data = await xiuxiandb.getUserById(uid)
+      // 兼容直接输入 QQ 号
+      if (!at_data) at_data = await xiuxiandb.getUserInfo(String(uid))
+      if (!at_data) return e.reply('请输入正确的用户id')
       at_id = at_data.user_id
     }
     if (at_data === null) {
       return e.reply('请输入正确的用户id')
     }
-    if (!at_data.group_id.includes(e.group_id)) {
+    if (!(at_data.group_id || '').includes(e.group_id)) {
       return e.reply('请输入正确的用户id')
     }
     if (at_id == user_id) {
@@ -193,6 +196,7 @@ export class xiuxian extends plugin {// 修炼
         user_data.level += level_user
         at_data.level -= level_user
         at_data.experience -= experience_user
+        if (at_data.level < 0) at_data.level = 0
 
         /** 更新境界名称 */
         at_data.levelname = xiuxiandb.levelName(at_data)

@@ -3,7 +3,7 @@ import BaseModel, { sequelize } from './BaseModel.js'
 import { Sequelize } from 'sequelize'
 
 /** 灵力各境界名称 */
-const power_name = ['灵力', '仙力', '魔力[非最终版]', '帝源', '混沌之力']
+const power_name = ['灵力', '仙力', '帝源', '混沌之力']
 /** 境界所需灵力 */
 const level_exp = [0, 50, 100, 150, 200, 250, 300, 350, 400/* 炼气 */, 460, 520, 580, 640, 700, 760, 820, 880, 940/* 筑基 */, 1010, 1080, 1150, 1220, 1290, 1360, 1430, 1500, 1570/* 金丹 */, 1650, 1730, 1810, 1890, 1970, 2050, 2130, 2210, 2290/* 元婴 */, 2380, 2470, 2560, 2650, 2740, 2830, 2920, 3010, 3100/* 化神 */, 3200, 3300, 3400, 3500, 3600, 3700, 3800, 3900, 4000/* 合体 */, 4100, 4200, 4300, 4400, 4500, 4600, 4700, 4800, 4900/* 大乘 */, 5000, 5100, 5200, 5300, 5400, 5500, 5600, 5700, 5800/* 渡劫 */, 6000, 6200, 6400, 6600/* 人仙 */, 6900, 7200, 7500, 7800/* 地仙 */, 8150, 8500, 8850, 9200/* 天仙 */, 9600, 10000, 10400, 10800/* 金仙 */, 11200, 11600, 12000, 12400/* 大罗金仙 */, 13000, 13800/* 准仙帝 */, 14600, 15500/* 仙帝 */, 16500, 17500, 18500, 19500, 20500/* 天人五衰 */, 21500, 22500, 23500, 24500, 25500, 26500, 27500, 28500, 29500, 30500/* 圣人 */]
 /** 玩家境界名称 */
@@ -20,12 +20,13 @@ class xiuxiandb extends BaseModel {
     }
   }
 
-  static async addExperience (value) { // 尝试从数据库中查询所有用户记录
-    let users = await xiuxiandb.findAll() // 遍历每个用户记录
-    for (let user of users) { // 根据value的大小，给用户的level加上对应的数值
-      user.experience += value
-      await user.save()
-    }
+  static async addExperience (value) { // 批量增加灵力，避免逐条保存过慢
+    const num = Number(value)
+    if (!Number.isFinite(num)) return
+    await xiuxiandb.update(
+      { experience: sequelize.literal(`experience + ${num}`) },
+      { where: { id: { [Sequelize.Op.gt]: 0 } } }
+    )
   }
 
   static async moveback () {
@@ -50,7 +51,7 @@ class xiuxiandb extends BaseModel {
             break
           }
         }
-        user.levelname = `大帝第${user.level - 110}重天`
+        user.levelname = this.levelName(user)
       }
       if (user.level >= 10000) {
         for (i = 10000; i > 110; i--) {
@@ -60,7 +61,7 @@ class xiuxiandb extends BaseModel {
             break
           }
         }
-        user.levelname = '道祖'
+        user.levelname = this.levelName(user)
       }
       await user.save()
     }
@@ -98,14 +99,23 @@ class xiuxiandb extends BaseModel {
     }
   }
 
+  static groupWhere (group_id) {
+    // group_id 以逗号分隔存储，使用边界匹配避免 123 命中 1234
+    const id = String(group_id)
+    return {
+      [Sequelize.Op.or]: [
+        { group_id: id },
+        { group_id: { [Sequelize.Op.like]: `${id},%` } },
+        { group_id: { [Sequelize.Op.like]: `%,${id}` } },
+        { group_id: { [Sequelize.Op.like]: `%,${id},%` } }
+      ]
+    }
+  }
+
   static async getTopUsers (group_id, limit) {
-    // 尝试从数据库中查询用户记录，按照境界的三倍加上灵力值降序排序，限制返回数量为limit
+    // 按境界的平方加灵力值降序排序，限制返回数量为limit
     let users = await xiuxiandb.findAll({
-      where: {
-        group_id: {
-          [Sequelize.Op.like]: `%${group_id}%`
-        }
-      },
+      where: xiuxiandb.groupWhere(group_id),
       order: [
         [sequelize.literal('level * level + experience'), 'DESC'] // 使用sequelize.literal来包裹自定义的排序条件
       ],
@@ -116,6 +126,11 @@ class xiuxiandb extends BaseModel {
     } else {
       return []
     }
+  }
+
+  static async countUsers (group_id) {
+    if (group_id === undefined || group_id === null) return xiuxiandb.count()
+    return xiuxiandb.count({ where: xiuxiandb.groupWhere(group_id) })
   }
 
   static async getTopUsers2 (limit) {
@@ -155,8 +170,8 @@ class xiuxiandb extends BaseModel {
   }
 
   static async isInGroup (user_id, group_id) {
-    // 尝试从数据库中查询用户记录，根据user_id和group_id
-    let user = await xiuxiandb.findOne({ where: { user_id, group_id } })
+    // 根据user_id和group_id查询，group_id 为逗号分隔列表
+    let user = await xiuxiandb.findOne({ where: { user_id, ...xiuxiandb.groupWhere(group_id) } })
     if (user) {
       // 如果查询结果不为空，说明用户已经加入了该群组，返回true
       return true
@@ -169,7 +184,7 @@ class xiuxiandb extends BaseModel {
   // 定义一个静态方法，用来通过group_id查询用户的修仙信息
   static async getUsersByGroupId (group_id) {
     // 尝试从数据库中查询用户记录，如果不存在，就返回空数组
-    let users = await xiuxiandb.findAll({ where: { group_id } })
+    let users = await xiuxiandb.findAll({ where: xiuxiandb.groupWhere(group_id) })
     if (users) {
       return users
     } else {
@@ -192,11 +207,14 @@ class xiuxiandb extends BaseModel {
 
   /** 传入玩家信息，返回对应的境界名称 */
   static levelName (info) {
-    let levelname
-    if (info.level < 111) levelname = levelName[info.level]
-    if (info.level > 110 && info.level < 10000) levelname = `大帝第${info.level - 110}重天`
-    if (info.level >= 10000) levelname = '道祖'
-    return levelname
+    const lev = info.level
+    if (lev < 111) return levelName[lev]
+    if (lev >= 10000) return '道祖'
+    // 大帝 → 神帝/魔帝 → 神境/魔境 → 神魔境，每个境界九重天
+    if (lev <= 119) return `大帝第${lev - 110}重天`
+    if (lev <= 128) return `神帝/魔帝第${lev - 119}重天`
+    if (lev <= 137) return `神境/魔境第${lev - 128}重天`
+    return `神魔境第${lev - 137}重天`
   }
 
   /** 传入玩家信息，返回对应灵力名称、突破下境界所需灵力值 */
@@ -214,12 +232,11 @@ class xiuxiandb extends BaseModel {
     }
 
     /** 灵力名称 */
-    let pwname = 0
-    if (info.level < 73) pwname = power_name[0]
+    let pwname = power_name[0]
     if (info.level > 72 && info.level < 111) pwname = power_name[1]
-    if (info.experience < 0) pwname = power_name[2]
-    if (info.level > 110 && info.level < 10000) pwname = power_name[3]
-    if (info.level >= 10000) pwname = power_name[4]
+    if (info.level > 110 && info.level < 10000) pwname = power_name[2]
+    if (info.level >= 10000) pwname = power_name[3]
+    if (info.experience < 0) pwname = '魔气'
 
     return { need, pwname }
   }
