@@ -48,7 +48,7 @@ export const helpList = [{
   list: [{
     icon: 109,
     title: '闭关 2小时',
-    desc: '自选闭关时长，收益为修炼的80%'
+    desc: '自选闭关时长，按修炼冷却折算次数，每次收益为修炼的80%'
   }, {
     icon: 110,
     title: '确认闭关',

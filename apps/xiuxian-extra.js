@@ -8,8 +8,12 @@ let xdata = YAML.parse(fs.readFileSync(xiuxiandefaultPath, 'utf8')) || {}
 if (fs.existsSync(xiuxianPath)) xdata = YAML.parse(fs.readFileSync(xiuxianPath, 'utf8')) || {}
 
 const down_rate = (xdata.down_rate ?? 80) / 100 // 闭关收益为正常修炼的百分比
-const perMinuteMin = (xdata.xiuxian_up ?? 5) * down_rate / (xdata.cdtime_xiuxian ?? 1)
-const perMinuteMax = ((xdata.xiuxian_up ?? 5) + (xdata.xiuxian_ave ?? 10)) * down_rate / (xdata.cdtime_xiuxian ?? 1)
+const cdtime_xiuxian = xdata.cdtime_xiuxian ?? 1 // 修炼冷却（分钟），闭关按此冷却折算修炼次数
+// 每天最多可结算的修炼次数
+const MAX_DOWN_ROLLS = 24 * 60 / cdtime_xiuxian
+// 每次修炼的收益区间
+const rollMin = (xdata.xiuxian_up ?? 5) * down_rate
+const rollMax = ((xdata.xiuxian_up ?? 5) + (xdata.xiuxian_ave ?? 10)) * down_rate
 const MAX_DOWN_SECONDS = 24 * 3600
 
 const aniPath = './plugins/wind-plugin/config/ani.yaml'
@@ -79,17 +83,23 @@ async function downState (user_id) {
   return { start, seconds, remain }
 }
 
-function downRollMinutes (user, minutes) {
-  const cd = xdata.cdtime_xiuxian ?? 1
+/** 闭关秒数可折算的修炼次数（受修炼冷却限制，每天最多 MAX_DOWN_ROLLS 次） */
+function downRolls (seconds) {
+  return Math.min(MAX_DOWN_ROLLS, Math.max(0, seconds) / (cdtime_xiuxian * 60))
+}
+
+/** 按闭关秒数结算收益 */
+function downRollSeconds (seconds) {
+  const rolls = downRolls(seconds)
+  const whole = Math.floor(rolls)
   const up = xdata.xiuxian_up ?? 5
   const ave = xdata.xiuxian_ave ?? 10
-  const whole = Math.floor(minutes)
   let total = 0
   for (let i = 0; i < whole; i++) {
-    total += (up + ave * Math.random()) / cd * down_rate
+    total += (up + ave * Math.random()) * down_rate
   }
-  const frac = minutes - whole
-  if (frac > 0) total += frac * (up + ave * Math.random()) / cd * down_rate
+  const frac = rolls - whole
+  if (frac > 0) total += frac * (up + ave * Math.random()) * down_rate
   return total
 }
 
@@ -134,10 +144,8 @@ export class xiuxianExtra extends plugin {
       return e.reply('你上次闭关已完成，请先发送 #确认闭关 出关')
     }
     await redis.set(key, JSON.stringify({ start: Date.now(), seconds }))
-    const low = perMinuteMin
-    const high = perMinuteMax
-    const minutes = seconds / 60
-    return e.reply(`已开始闭关 ${formatTime(seconds)}，预计获得 ${Math.round(low * minutes)}~${Math.round(high * minutes)} 灵力\n发送 #确认闭关 出关`)
+    const rolls = downRolls(seconds)
+    return e.reply(`已开始闭关 ${formatTime(seconds)}，预计获得 ${Math.round(rollMin * rolls)}~${Math.round(rollMax * rolls)} 灵力\n发送 #确认闭关 出关`)
   }
 
   async downEnd (e) {
@@ -147,8 +155,7 @@ export class xiuxianExtra extends plugin {
     const state = await downState(ctx.user_id)
     if (!state) return e.reply('你还没有开始闭关，发送 #闭关 2小时 开始')
     if (state.remain > 0) return e.reply(`闭关尚未结束，还需${formatTime(state.remain)}\n若强行打断，发送 #打断闭关，但只能获得5成灵力`)
-    const minutes = state.seconds / 60
-    const gain = Math.round(downRollMinutes(ctx.user, minutes))
+    const gain = Math.round(downRollSeconds(state.seconds))
     ctx.user.experience += gain
     await ctx.user.save()
     await redis.del(key)
@@ -163,8 +170,7 @@ export class xiuxianExtra extends plugin {
     if (!state) return e.reply('你还没有开始闭关，发送 #闭关 2小时 开始')
     if (state.remain <= 0) return e.reply('闭关已经完成，发送 #确认闭关 可领取全部灵力')
     const elapsed = Math.max(0, Math.min(state.seconds, state.seconds - state.remain))
-    const full = Math.round(downRollMinutes(ctx.user, elapsed / 60))
-    const gain = Math.round(full * 0.5)
+    const gain = Math.round(downRollSeconds(elapsed) * 0.5)
     ctx.user.experience += gain
     await ctx.user.save()
     await redis.del(key)
@@ -177,10 +183,10 @@ export class xiuxianExtra extends plugin {
     const day = new Date().toLocaleDateString('zh-CN', { timeZone: 'Asia/Shanghai' })
     const key = `wind:checkin:${ctx.user_id}:${day}`
     if (await redis.get(key)) return e.reply('今天已经修炼打卡过了，明天再来吧')
-    const gain = 20 + Math.round(20 * Math.random())
+    const gain = Math.round((10 + 10 * Math.random()) * down_rate)
     ctx.user.experience += gain
     await ctx.user.save()
-    await redis.set(key, '1', { EX: 86400 })
+    await redis.set(key, '1', { EX: 26 * 3600 })
     return e.reply(`修炼打卡成功！\n${resultText(ctx.user, gain)}`)
   }
 
@@ -190,23 +196,15 @@ export class xiuxianExtra extends plugin {
     const down = await downState(ctx.user_id)
     if (down && down.remain > 0) return e.reply(`你正在闭关中，还需${formatTime(down.remain)}，闭关期间无法清理妖兽`)
     const key = `wind:ani-cd:${ctx.user_id}`
-    if (await redis.get(key)) return e.reply(`你刚清理过妖兽，还需${formatTime(await redis.ttl(key))}`)
+    if (await redis.get(key)) return e.reply('刚清理过妖兽，先调息一会儿再来吧')
     await redis.set(key, '1', { EX: cdtime_ani })
-    // 妖兽等级围绕玩家境界上下浮动
-    const bossLevel = Math.max(0, ctx.user.level + Math.floor(Math.random() * 5) - 2)
-    const boss = BOSS_NAMES[Math.floor(Math.random() * BOSS_NAMES.length)]
-    const winRate = Math.min(0.95, Math.max(0.25, 0.6 + (ctx.user.level - bossLevel) * 0.02))
-    const win = Math.random() < winRate
-    if (!win) {
-      return e.reply(`你遇到了${boss}（境界${bossLevel}），鏖战后不敌撤退，未能获得灵力。\n稍作休整后再来吧`)
-    }
-    const gain = Math.round(30 + bossLevel * 5 + Math.round(15 * Math.random()))
+    const gain = Math.round((5 + 10 * Math.random()) * down_rate)
     ctx.user.experience += gain
     await ctx.user.save()
-    return e.reply(`你清理了${boss}（境界${bossLevel}），获胜！\n${resultText(ctx.user, gain)}`)
+    return e.reply(`你清理了一只妖兽！\n${resultText(ctx.user, gain)}`)
   }
 
   async aniList (e) {
-    return e.reply(`可清理的妖兽：${BOSS_NAMES.join('、')}\n妖兽境界会围绕你的境界上下浮动，清理冷却${Math.floor(cdtime_ani / 60)}分钟。\n发送 #清理妖兽 挑战一只`)
+    return e.reply(`可清理的妖兽：${BOSS_NAMES.join('、')}\n清理冷却${Math.floor(cdtime_ani / 60)}分钟。\n发送 #清理妖兽 清理一只`)
   }
 }
